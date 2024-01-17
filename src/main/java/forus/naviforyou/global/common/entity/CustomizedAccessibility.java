@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Customized_Accessibility extends BaseEntity {
+public class CustomizedAccessibility extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +30,7 @@ public class Customized_Accessibility extends BaseEntity {
     @BatchSize(size = 100)
     @Builder.Default
     @OneToMany(mappedBy = "customizedAccessibility", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<User_Customized> userCustomizedList = new ArrayList<>();
+    private List<UserCustomized> userCustomizedList = new ArrayList<>();
 
     @BatchSize(size = 100)
     @Builder.Default

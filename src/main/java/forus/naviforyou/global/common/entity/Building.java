@@ -39,6 +39,6 @@ public class Building extends BaseEntity {
     @BatchSize(size = 100)
     @Builder.Default
     @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Customized_Accessibility> customizedAccessibilityList = new ArrayList<>();
+    private List<CustomizedAccessibility> customizedAccessibilityList = new ArrayList<>();
 
 }

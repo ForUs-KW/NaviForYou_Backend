@@ -25,5 +25,5 @@ public class Alter extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customized_id")
-    private Customized_Accessibility customizedAccessibility;
+    private CustomizedAccessibility customizedAccessibility;
 }
