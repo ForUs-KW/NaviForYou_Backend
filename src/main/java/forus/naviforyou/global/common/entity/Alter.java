@@ -2,13 +2,13 @@ package forus.naviforyou.global.common.entity;
 
 import forus.naviforyou.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Builder
+@AllArgsConstructor
 public class Alter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
