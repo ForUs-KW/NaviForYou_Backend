@@ -1,12 +1,14 @@
 package forus.naviforyou.global.common.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,4 +19,9 @@ public class Accessibility {
     private Long id;
 
     private String name;
+
+    @BatchSize(size = 100)
+    @Builder.Default
+    @OneToMany(mappedBy = "accessibility", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Customized_Accessibility> customizedAccessibilityList = new ArrayList<>();
 }

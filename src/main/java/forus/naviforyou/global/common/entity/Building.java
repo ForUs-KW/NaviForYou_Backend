@@ -3,8 +3,13 @@ package forus.naviforyou.global.common.entity;
 import forus.naviforyou.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,5 +35,10 @@ public class Building extends BaseEntity {
 
     @Column(name = "pos_y")
     private Float posY;
+
+    @BatchSize(size = 100)
+    @Builder.Default
+    @OneToMany(mappedBy = "building", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Customized_Accessibility> customizedAccessibilityList = new ArrayList<>();
 
 }
