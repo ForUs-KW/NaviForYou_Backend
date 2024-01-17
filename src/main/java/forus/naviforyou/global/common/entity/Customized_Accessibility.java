@@ -32,4 +32,9 @@ public class Customized_Accessibility extends BaseEntity {
     @OneToMany(mappedBy = "customizedAccessibility", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User_Customized> userCustomizedList = new ArrayList<>();
 
+    @BatchSize(size = 100)
+    @Builder.Default
+    @OneToMany(mappedBy = "customizedAccessibility", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Alter> alterList = new ArrayList<>();
+
 }

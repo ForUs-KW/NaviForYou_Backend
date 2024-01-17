@@ -36,4 +36,9 @@ public class User extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<User_Customized> userCustomizedList = new ArrayList<>();
+
+    @BatchSize(size = 100)
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Alter> alterList = new ArrayList<>();
 }
