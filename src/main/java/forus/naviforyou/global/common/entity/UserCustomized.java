@@ -1,8 +1,9 @@
 package forus.naviforyou.global.common.entity;
 
 import forus.naviforyou.global.common.BaseEntity;
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 
 @Entity
 @Getter

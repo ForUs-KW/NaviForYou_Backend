@@ -3,7 +3,7 @@ package forus.naviforyou.global.common.entity;
 import forus.naviforyou.global.common.BaseEntity;
 import forus.naviforyou.global.common.entity.enums.MemberType;
 import forus.naviforyou.global.common.entity.enums.Role;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 

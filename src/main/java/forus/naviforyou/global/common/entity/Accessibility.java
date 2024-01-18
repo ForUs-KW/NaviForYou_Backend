@@ -1,6 +1,6 @@
 package forus.naviforyou.global.common.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
