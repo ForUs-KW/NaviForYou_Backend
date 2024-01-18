@@ -1,29 +1,32 @@
 package forus.naviforyou.global.common.entity;
 
-import forus.naviforyou.global.common.BaseEntity;
-import javax.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+import javax.persistence.Column;
+
+@Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class Alter extends BaseEntity {
+@Document(collection = "alters")
+public class Alter {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String content;
 
     @Column(name = "img_URL")
     private String imgURL;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @DBRef
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customized_id")
+    @DBRef
     private CustomizedAccessibility customizedAccessibility;
 }
+
+
