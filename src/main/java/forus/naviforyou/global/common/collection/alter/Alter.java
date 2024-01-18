@@ -1,5 +1,8 @@
-package forus.naviforyou.global.common.entity;
+package forus.naviforyou.global.common.collection.alter;
 
+import forus.naviforyou.global.common.collection.building.Building;
+import forus.naviforyou.global.common.collection.enums.Accessibility;
+import forus.naviforyou.global.common.collection.member.Member;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -17,16 +20,17 @@ public class Alter {
     @Id
     private String id;
 
+    private String writer;
+
     private String content;
 
-    @Column(name = "img_URL")
     private String imgURL;
 
-    @DBRef
-    private Member member;
+    private Accessibility accessibility;
 
     @DBRef
-    private CustomizedAccessibility customizedAccessibility;
+    private Building building;
+
 }
 
 
