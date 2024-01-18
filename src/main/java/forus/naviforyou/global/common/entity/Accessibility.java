@@ -1,26 +1,27 @@
 package forus.naviforyou.global.common.entity;
 
-import javax.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Document(collection = "accessibilities")
 public class Accessibility {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String name;
 
-    @BatchSize(size = 100)
+    @DBRef
     @Builder.Default
-    @OneToMany(mappedBy = "accessibility", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CustomizedAccessibility> customizedAccessibilityList = new ArrayList<>();
+
 }
