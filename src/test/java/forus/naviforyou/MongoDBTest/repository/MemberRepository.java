@@ -1,6 +1,6 @@
 package forus.naviforyou.MongoDBTest.repository;
 
-import forus.naviforyou.global.common.entity.Member;
+import forus.naviforyou.global.common.collection.member.Member;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

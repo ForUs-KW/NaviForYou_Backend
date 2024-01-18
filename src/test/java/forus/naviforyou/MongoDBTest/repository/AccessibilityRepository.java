@@ -1,7 +1,6 @@
 package forus.naviforyou.MongoDBTest.repository;
 
-import forus.naviforyou.global.common.entity.Accessibility;
-import forus.naviforyou.global.common.entity.Alter;
+import forus.naviforyou.global.common.collection.Accessibility;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface AccessibilityRepository extends MongoRepository<Accessibility, String> {

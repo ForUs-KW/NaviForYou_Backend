@@ -1,7 +1,6 @@
 package forus.naviforyou.MongoDBTest.repository;
 
-import forus.naviforyou.global.common.entity.Accessibility;
-import forus.naviforyou.global.common.entity.Building;
+import forus.naviforyou.global.common.collection.building.Building;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface BuildingRepository extends MongoRepository<Building, String> {

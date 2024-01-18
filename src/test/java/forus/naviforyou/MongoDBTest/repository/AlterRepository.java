@@ -1,6 +1,6 @@
 package forus.naviforyou.MongoDBTest.repository;
 
-import forus.naviforyou.global.common.entity.Alter;
+import forus.naviforyou.global.common.collection.alter.Alter;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
