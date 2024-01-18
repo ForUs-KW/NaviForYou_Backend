@@ -21,6 +21,6 @@ public class Accessibility {
 
     @BatchSize(size = 100)
     @Builder.Default
-    @OneToMany(mappedBy = "accessibility", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "accessibility", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CustomizedAccessibility> customizedAccessibilityList = new ArrayList<>();
 }

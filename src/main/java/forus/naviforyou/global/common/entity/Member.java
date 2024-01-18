@@ -33,11 +33,11 @@ public class Member extends BaseEntity {
 
     @BatchSize(size = 100)
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserCustomized> userCustomizedList = new ArrayList<>();
 
     @BatchSize(size = 100)
     @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Alter> alterList = new ArrayList<>();
 }
