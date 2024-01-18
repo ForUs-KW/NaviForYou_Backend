@@ -10,34 +10,34 @@ import org.hibernate.annotations.BatchSize;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-public class Member extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Document("members")
+public class Member {
+    @Id
+    private String id;
     private String email;
     private String phone;
     private String nickname;
-
-    @Enumerated(value = EnumType.STRING)
     private Role role;
-
-    @Column(name = "member_type")
-    @Enumerated(value = EnumType.STRING)
     private MemberType memberType;
 
-    @BatchSize(size = 100)
-    @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @DBRef
     private List<UserCustomized> userCustomizedList = new ArrayList<>();
 
-    @BatchSize(size = 100)
-    @Builder.Default
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @DBRef
     private List<Alter> alterList = new ArrayList<>();
+
 }
+
+
