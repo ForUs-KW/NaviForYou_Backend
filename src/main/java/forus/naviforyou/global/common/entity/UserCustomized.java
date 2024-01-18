@@ -2,24 +2,25 @@ package forus.naviforyou.global.common.entity;
 
 import forus.naviforyou.global.common.BaseEntity;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-
-@Entity
-@Getter
+@Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserCustomized extends BaseEntity {
+@Document("userCustomized")
+public class UserCustomized {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customized_id")
+    @DBRef
     private CustomizedAccessibility customizedAccessibility;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @DBRef
     private Member member;
+
 }
+
+
