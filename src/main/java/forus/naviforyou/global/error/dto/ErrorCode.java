@@ -38,8 +38,14 @@ public enum ErrorCode {
      * Member : 3XXX
      */
     NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 3000, "해당 이메일이 존재하지 않습니다." ),
-    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다.");
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다."),
 
+    /**
+     * OAUTH : 4XXX
+     */
+    GET_OAUTH_TOKEN_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 토큰 요청에 실패했습니다.")
+
+    ;
     private final HttpStatus status;
     private final int code;
     private final String message;
