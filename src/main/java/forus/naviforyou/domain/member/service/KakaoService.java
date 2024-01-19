@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forus.naviforyou.domain.member.dto.kakao.KakaoResProfileInfo;
 import forus.naviforyou.domain.member.dto.kakao.KakaoResToken;
+import forus.naviforyou.domain.member.dto.kakao.KakaoSignUp;
 import forus.naviforyou.domain.member.dto.request.KakaoReq;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
+import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -34,17 +37,32 @@ public class KakaoService {
     @Value("${kakao.redirect.url}")
     private String KAKAO_REDIRECT_URL;
 
-    public TokenRes kakaoLogin(KakaoReq kakaoReq) {
+    @Transactional
+    public TokenRes KakaoLogin(KakaoReq kakaoReq) {
         //code 이용 하여 oAuthAccessToken 얻어옴
         KakaoResToken kaKaoOAuthToken = getKakaoToken(kakaoReq.getCode());
         //oAuthAccessToken 으로 nickname 가져옴
         String nickname = getKakaoUserInfo(kaKaoOAuthToken);
+        // 해당 nickname 으로 된 계정이 있는지 확인
+        // 없다면 회원가입 후 로그인
+        if (memberService.checkEmail(nickname).equals(true)) {
+
+            memberService.kakaoSignUp(
+                    KakaoSignUp.builder()
+                            .nickname(nickname)
+                            .email(nickname)
+                            .password("12345")
+                            .build()
+            );
+        }
+
         // 있다면 로그인
-        LogInReq logInReq = LogInReq.builder()
+        return memberService.logIn(
+                LogInReq.builder()
                 .email(nickname)
                 .password("12345")
-                .build();
-        return memberService.logIn(logInReq);
+                .build()
+        );
     }
 
     private KakaoResToken getKakaoToken(String code) {

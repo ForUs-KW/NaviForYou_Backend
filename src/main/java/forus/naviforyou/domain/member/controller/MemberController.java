@@ -33,7 +33,7 @@ public class MemberController {
 
     @PostMapping("/kakao")
     public ResponseEntity<?> kakao(@RequestBody KakaoReq kakaoReq){
-        TokenRes tokenRes = kakaoService.kakaoLogin(kakaoReq);
+        TokenRes tokenRes = kakaoService.KakaoLogin(kakaoReq);
         return BaseResponse.ok(tokenRes);
     }
 }
