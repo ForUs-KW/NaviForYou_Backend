@@ -1,5 +1,6 @@
 package forus.naviforyou.global.config;
 
+import forus.naviforyou.global.common.Constants;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable().cors().disable();
         http
                 .authorizeRequests()
-                .anyRequest().permitAll(); // 모든 경로 허용
-        ;
+                .antMatchers(Constants.PERMIT_URIS).permitAll() // 특정 경로 허용
+                .anyRequest().authenticated();
+
     }
     @Bean
     public BCryptPasswordEncoder encodePassword() {

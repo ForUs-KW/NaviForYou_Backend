@@ -1,5 +1,6 @@
 package forus.naviforyou.global.config.jwt;
 
+import forus.naviforyou.global.common.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +32,11 @@ public class JwtFilter extends GenericFilterBean {
 
         String requestURI = httpServletRequest.getRequestURI();
         String jwt = resolveToken(httpServletRequest);
+
+        if(Arrays.asList(Constants.PERMIT_URIS).contains(requestURI)){
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
 
         if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
             Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
