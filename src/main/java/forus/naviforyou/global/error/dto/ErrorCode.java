@@ -39,7 +39,7 @@ public enum ErrorCode {
      */
     NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 3000, "해당 이메일이 존재하지 않습니다." ),
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다."),
-
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, 3002, "이미 사용중인 이메일 입니다."),
     /**
      * OAUTH : 4XXX
      */
