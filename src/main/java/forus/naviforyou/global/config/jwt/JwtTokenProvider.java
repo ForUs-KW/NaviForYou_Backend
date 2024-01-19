@@ -1,8 +1,10 @@
 package forus.naviforyou.global.config.jwt;
 
+import forus.naviforyou.global.common.service.CustomMemberDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,8 +24,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtTokenProvider implements InitializingBean{
 
+    private final CustomMemberDetailsService memberDetailsService;
     private static final String AUTHORITIES_KEY = "auth";
     @Value("${jwt.secret}")
     private String secretKey;
@@ -67,14 +71,9 @@ public class JwtTokenProvider implements InitializingBean{
                 .parseClaimsJws(token)
                 .getBody();
 
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
+        UserDetails principal = memberDetailsService.loadUserByUsername(claims.getSubject());
 
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
     }
 
     // 토큰의 유효성 검증을 수행
