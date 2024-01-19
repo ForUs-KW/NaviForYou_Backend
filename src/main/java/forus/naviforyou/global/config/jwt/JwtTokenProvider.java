@@ -35,9 +35,10 @@ public class JwtTokenProvider implements InitializingBean{
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        validityTime *= 1000L;
     }
 
     public String createToken(Authentication authentication) {
