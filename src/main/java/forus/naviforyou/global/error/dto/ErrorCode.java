@@ -10,7 +10,6 @@ public enum ErrorCode {
     /**
      * Common : 1XXX
      */
-
     BAD_REQUEST(HttpStatus.BAD_REQUEST, 1000, "잘못된 요청입니다\n다시 한 번 확인해주세요"),
 
     NOT_FOUND(HttpStatus.NOT_FOUND, 1001, "리소스를 찾을 수 없음"),
@@ -23,7 +22,13 @@ public enum ErrorCode {
 
     INVALID_TYPE_VALUE(HttpStatus.BAD_REQUEST, 1005, "유효하지 않은 값 타입"),
 
-    FORBIDDEN(HttpStatus.FORBIDDEN, 1006,"접근 권한이 없습니다.");
+    FORBIDDEN(HttpStatus.FORBIDDEN, 1006,"접근 권한이 없습니다."),
+
+    /**
+     * Member : 2XXX
+     */
+    NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 2000, "해당 이메일이 존재하지 않습니다." ),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,2001 , "아이디와 비밀번호가 일치하지 않습니다.");
 
     private final HttpStatus status;
     private final int code;
