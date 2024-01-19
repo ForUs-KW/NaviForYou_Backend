@@ -2,9 +2,9 @@ package forus.naviforyou.domain.member.service;
 
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.repository.MemberRepository;
-import forus.naviforyou.global.common.entity.Member;
-import forus.naviforyou.global.common.entity.enums.MemberType;
-import forus.naviforyou.global.common.entity.enums.Role;
+import forus.naviforyou.global.common.collection.enums.MemberType;
+import forus.naviforyou.global.common.collection.enums.Role;
+import forus.naviforyou.global.common.collection.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,5 +1,6 @@
-package forus.naviforyou.global.common.entity;
+package forus.naviforyou.global.common.collection;
 
+import forus.naviforyou.global.common.collection.member.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

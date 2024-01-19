@@ -1,7 +1,8 @@
 package forus.naviforyou.global.common.service;
 
 import forus.naviforyou.domain.member.repository.MemberRepository;
-import forus.naviforyou.global.common.entity.Member;
+
+import forus.naviforyou.global.common.collection.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
