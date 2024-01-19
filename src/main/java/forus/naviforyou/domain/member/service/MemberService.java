@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.member.service;
 
+import forus.naviforyou.domain.member.dto.kakao.KakaoSignUp;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
@@ -72,5 +73,17 @@ public class MemberService {
         );
 
         return false;
+    }
+
+    public void kakaoSignUp(KakaoSignUp signUpReq){
+        memberRepository.save(
+                Member.builder()
+                        .nickname(signUpReq.getNickname())
+                        .email(signUpReq.getEmail())
+                        .password(passwordEncoder.encode(signUpReq.getPassword()))
+                        .memberType(MemberType.KAKAO)
+                        .role(Role.ROLE_USER)
+                        .build()
+        );
     }
 }
