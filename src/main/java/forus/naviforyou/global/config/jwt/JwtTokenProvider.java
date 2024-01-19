@@ -1,5 +1,6 @@
 package forus.naviforyou.global.config.jwt;
 
+import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.service.CustomMemberDetailsService;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
@@ -26,7 +27,6 @@ import java.util.stream.Collectors;
 public class JwtTokenProvider implements InitializingBean{
 
     private final CustomMemberDetailsService memberDetailsService;
-    private static final String AUTHORITIES_KEY = "auth";
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -54,7 +54,7 @@ public class JwtTokenProvider implements InitializingBean{
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities) // 정보 저장
+                .claim(Constants.JWT_AUTHORITIES_KEY, authorities) // 정보 저장
                 .signWith(key, SignatureAlgorithm.HS512) // 사용할 암호화 알고리즘과 , signature 에 들어갈 secret값 세팅
                 .setExpiration(validity) // set Expire Time 해당 옵션 안넣으면 expire안함
                 .compact();
