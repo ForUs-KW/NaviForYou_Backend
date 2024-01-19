@@ -25,10 +25,20 @@ public enum ErrorCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, 1006,"접근 권한이 없습니다."),
 
     /**
-     * Member : 2XXX
+     * JWT : 2XXX
      */
-    NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 2000, "해당 이메일이 존재하지 않습니다." ),
-    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,2001 , "아이디와 비밀번호가 일치하지 않습니다.");
+    INVALID_JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, 2000, "유효하지 않은 JWT 서명입니다."),
+    INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 2001, "유효하지 않은 JWT 토큰입니다."),
+
+    EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 2001, "만료된 JWT 토큰입니다."),
+
+    UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, 2002, "지원하지 않는 JWT 토큰입니다."),
+
+    /**
+     * Member : 3XXX
+     */
+    NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 3000, "해당 이메일이 존재하지 않습니다." ),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다.");
 
     private final HttpStatus status;
     private final int code;

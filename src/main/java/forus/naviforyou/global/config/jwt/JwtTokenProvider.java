@@ -1,6 +1,8 @@
 package forus.naviforyou.global.config.jwt;
 
 import forus.naviforyou.global.common.service.CustomMemberDetailsService;
+import forus.naviforyou.global.error.dto.ErrorCode;
+import forus.naviforyou.global.error.exception.BaseException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,14 +13,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -82,18 +80,13 @@ public class JwtTokenProvider implements InitializingBean{
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-
-            log.info("잘못된 JWT 서명입니다.");
+            throw new BaseException(ErrorCode.INVALID_JWT_SIGNATURE);
         } catch (ExpiredJwtException e) {
-
-            log.info("만료된 JWT 토큰입니다.");
+            throw new BaseException(ErrorCode.EXPIRED_JWT_TOKEN);
         } catch (UnsupportedJwtException e) {
-
-            log.info("지원되지 않는 JWT 토큰입니다.");
+            throw new BaseException(ErrorCode.UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
-
-            log.info("JWT 토큰이 잘못되었습니다.");
+            throw new BaseException(ErrorCode.INVALID_JWT_TOKEN);
         }
-        return false;
     }
 }
