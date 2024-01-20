@@ -1,4 +1,4 @@
-rnpackage forus.naviforyou.domain.member.service;
+package forus.naviforyou.domain.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -8,6 +8,8 @@ import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.domain.member.dto.google.GoogleResInfo;
 import forus.naviforyou.domain.member.dto.google.GoogleResToken;
+import forus.naviforyou.global.error.dto.ErrorCode;
+import forus.naviforyou.global.error.exception.BaseException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,8 +72,6 @@ public class GoogleService {
         ResponseEntity<String> response = restTemplate
                 .postForEntity("https://oauth2.googleapis.com/token", request, String.class);
 
-        System.out.println("[getGoogleProfile] code로 인증을 받은뒤 응답받은 token 값 : {}"+response);
-
         ObjectMapper objectMapper = new ObjectMapper();
         GoogleResToken oAuthToken = null;
         try {
@@ -101,16 +101,15 @@ public class GoogleService {
                 googleProfileRequest,
                 String.class
         );
-        System.out.println("[google] 구글 프로필 response :{}"+googleProfileResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
         GoogleResInfo oAuthToken = null;
         try {
             oAuthToken = objectMapper.readValue(googleProfileResponse.getBody(), GoogleResInfo.class);
         } catch (JsonMappingException e) {
-            e.printStackTrace();
+            throw new BaseException(ErrorCode.GET_OAUTH_USER_INFO_FAILED);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new BaseException(ErrorCode.GET_OAUTH_USER_INFO_FAILED);
         }
 
 
