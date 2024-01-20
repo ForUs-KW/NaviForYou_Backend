@@ -70,8 +70,6 @@ public class GoogleService {
         ResponseEntity<String> response = restTemplate
                 .postForEntity("https://oauth2.googleapis.com/token", request, String.class);
 
-        System.out.println("[getGoogleProfile] code로 인증을 받은뒤 응답받은 token 값 : {}"+response);
-
         ObjectMapper objectMapper = new ObjectMapper();
         GoogleResToken oAuthToken = null;
         try {
@@ -101,7 +99,6 @@ public class GoogleService {
                 googleProfileRequest,
                 String.class
         );
-        System.out.println("[google] 구글 프로필 response :{}"+googleProfileResponse);
 
         ObjectMapper objectMapper = new ObjectMapper();
         GoogleResInfo oAuthToken = null;
