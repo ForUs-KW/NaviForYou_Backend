@@ -43,7 +43,7 @@ public class KakaoService {
         String nickname = getKakaoUserInfo(kaKaoOAuthToken);
         // 해당 nickname 으로 된 계정이 있는지 확인
         // 없다면 회원가입 후 로그인
-        if (memberService.checkEmail(nickname).equals(true)) {
+        if (memberService.duplicateEmail(nickname).equals(false)) {
 
             memberService.kakaoSignUp(
                     KakaoSignUp.builder()

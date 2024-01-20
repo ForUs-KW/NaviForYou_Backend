@@ -67,7 +67,7 @@ public class MemberService {
                 .build();
     }
 
-    public Boolean checkEmail(String email) {
+    public Boolean duplicateEmail(String email) {
         return memberRepository.existsByEmail(email);
     }
 
