@@ -45,7 +45,11 @@ public enum ErrorCode {
      * OAUTH : 4XXX
      */
     GET_OAUTH_TOKEN_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 토큰 요청에 실패했습니다."),
-    GET_OAUTH_USER_INFO_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 사용자 정보를 가져오는데 실패했습니다.")
+    GET_OAUTH_USER_INFO_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 사용자 정보를 가져오는데 실패했습니다."),
+    /**
+     * MAIL : 5XXX
+     */
+    UNABLE_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "메일을 보낼 수 없습니다.")
 
     ;
     private final HttpStatus status;
