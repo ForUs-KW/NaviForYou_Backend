@@ -39,17 +39,19 @@ public class KakaoService {
     public TokenRes KakaoLogin(String code) {
         //code 이용 하여 oAuthAccessToken 얻어옴
         KakaoResToken kaKaoOAuthToken = getKakaoToken(code);
-        //oAuthAccessToken 으로 nickname 가져옴
-        String nickname = getKakaoUserInfo(kaKaoOAuthToken);
-        // 해당 nickname 으로 된 계정이 있는지 확인
+        //oAuthAccessToken 으로 KakaoResProfileInfo 가져옴
+        KakaoResProfileInfo kakaoProfile = getKakaoUserInfo(kaKaoOAuthToken);
+        String email = kakaoProfile.getKakaoAccount().getEmail();
+        String id = kakaoProfile.getId().toString();
+        // 해당 profile 으로 된 계정이 있는지 확인
         // 없다면 회원가입 후 로그인
-        if (memberService.duplicateEmail(nickname).equals(false)) {
+        if (memberService.duplicateEmail(email).equals(false)) {
 
             memberService.kakaoSignUp(
                     KakaoSignUp.builder()
-                            .nickname(nickname)
-                            .email(nickname)
-                            .password("12345")
+                            .nickname(kakaoProfile.getProperties().getNickname())
+                            .email(email)
+                            .password(id)
                             .build()
             );
         }
@@ -57,8 +59,8 @@ public class KakaoService {
         // 있다면 로그인
         return memberService.logIn(
                 LogInReq.builder()
-                .email(nickname)
-                .password("12345")
+                .email(email)
+                .password(id)
                 .build()
         );
     }
@@ -102,7 +104,7 @@ public class KakaoService {
 
     }
 
-    private String getKakaoUserInfo(KakaoResToken kakaoResToken) {
+    private KakaoResProfileInfo getKakaoUserInfo(KakaoResToken kakaoResToken) {
         try {
             // HTTP Header 생성
             HttpHeaders headers = new HttpHeaders();
@@ -119,12 +121,12 @@ public class KakaoService {
                     String.class
             );
 
-
+            log.info("Kakao response={}",response.getBody());
             ObjectMapper objectMapper = new ObjectMapper();
             KakaoResProfileInfo kakaoResProfileInfo = objectMapper.readValue(response.getBody(), KakaoResProfileInfo.class);
             log.info("KakaoResProfileInfo={}",kakaoResProfileInfo);
 
-            return kakaoResProfileInfo.getProperties().getNickname();
+            return kakaoResProfileInfo;
         } catch (JsonProcessingException e) {
             log.info("GET_OAUTH_USER_INFO_FAILED: ",e);
             throw new BaseException(ErrorCode.GET_OAUTH_USER_INFO_FAILED);
