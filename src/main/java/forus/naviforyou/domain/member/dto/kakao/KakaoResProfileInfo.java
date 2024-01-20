@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.member.dto.kakao;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -30,6 +31,7 @@ public class KakaoResProfileInfo {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class KakaoAccount {
         @JsonProperty("profile_nickname_needs_agreement")
         private boolean profileNicknameNeedsAgreement;
@@ -42,6 +44,7 @@ public class KakaoResProfileInfo {
     }
 
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class KakaoProfile {
         @JsonProperty("nickname")
         private String nickname;
