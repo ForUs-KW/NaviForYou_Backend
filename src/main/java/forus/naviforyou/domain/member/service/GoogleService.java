@@ -1,4 +1,4 @@
-rnpackage forus.naviforyou.domain.member.service;
+package forus.naviforyou.domain.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
