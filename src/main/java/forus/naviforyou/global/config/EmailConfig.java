@@ -10,34 +10,34 @@ import java.util.Properties;
 
 @Configuration
 public class EmailConfig {
-    @Value("${spring.mail.host}")
+    @Value("${mail.host}")
     private String host;
 
-    @Value("${spring.mail.port}")
+    @Value("${mail.port}")
     private int port;
 
-    @Value("${spring.mail.username}")
+    @Value("${mail.username}")
     private String username;
 
-    @Value("${spring.mail.password}")
+    @Value("${mail.password}")
     private String password;
 
-    @Value("${spring.mail.properties.mail.smtp.auth}")
+    @Value("${mail.properties.mail.smtp.auth}")
     private boolean auth;
 
-    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    @Value("${mail.properties.mail.smtp.starttls.enable}")
     private boolean starttlsEnable;
 
-    @Value("${spring.mail.properties.mail.smtp.starttls.required}")
+    @Value("${mail.properties.mail.smtp.starttls.required}")
     private boolean starttlsRequired;
 
-    @Value("${spring.mail.properties.mail.smtp.connectiontimeout}")
+    @Value("${mail.properties.mail.smtp.connectiontimeout}")
     private int connectionTimeout;
 
-    @Value("${spring.mail.properties.mail.smtp.timeout}")
+    @Value("${mail.properties.mail.smtp.timeout}")
     private int timeout;
 
-    @Value("${spring.mail.properties.mail.smtp.writetimeout}")
+    @Value("${mail.properties.mail.smtp.writetimeout}")
     private int writeTimeout;
 
     @Bean
