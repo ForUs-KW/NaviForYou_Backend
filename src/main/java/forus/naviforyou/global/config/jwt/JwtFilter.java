@@ -21,8 +21,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtFilter extends GenericFilterBean {
-
-    public static final String AUTHORIZATION_HEADER = "Authorization";
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -49,7 +47,7 @@ public class JwtFilter extends GenericFilterBean {
 
     // Request Header 에서 토큰 정보를 꺼내오기 위한 메소드
     private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        String bearerToken = request.getHeader(Constants.JWT_AUTHORITIES_KEY);
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
