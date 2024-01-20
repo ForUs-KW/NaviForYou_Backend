@@ -71,6 +71,10 @@ public class MemberService {
         return memberRepository.existsByEmail(email);
     }
 
+    public Boolean duplicateNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
     public void kakaoSignUp(KakaoSignUp signUpReq){
         memberRepository.save(
                 Member.builder()

@@ -45,6 +45,18 @@ public class MemberController {
         );
     }
 
+    @GetMapping("/nicknameDuplicate")
+    private ResponseEntity<?> nicknameDuplicate(String nickname){
+        if(memberService.duplicateNickname(nickname)){
+            throw new BaseException(ErrorCode.DUPLICATE_NICKNAME);
+        }
+        return BaseResponse.ok(
+                DuplicateRes.builder()
+                        .result(true)
+                        .build()
+        );
+    }
+
     @GetMapping("/kakao")
     public ResponseEntity<?> kakao(String code){
         TokenRes tokenRes = kakaoService.KakaoLogin(code);
