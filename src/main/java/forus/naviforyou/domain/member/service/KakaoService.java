@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import forus.naviforyou.domain.member.dto.kakao.KakaoResProfileInfo;
 import forus.naviforyou.domain.member.dto.kakao.KakaoResToken;
 import forus.naviforyou.domain.member.dto.kakao.KakaoSignUp;
-import forus.naviforyou.domain.member.dto.request.KakaoReq;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
-import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
@@ -38,9 +36,9 @@ public class KakaoService {
     private String KAKAO_REDIRECT_URL;
 
     @Transactional
-    public TokenRes KakaoLogin(KakaoReq kakaoReq) {
+    public TokenRes KakaoLogin(String code) {
         //code 이용 하여 oAuthAccessToken 얻어옴
-        KakaoResToken kaKaoOAuthToken = getKakaoToken(kakaoReq.getCode());
+        KakaoResToken kaKaoOAuthToken = getKakaoToken(code);
         //oAuthAccessToken 으로 nickname 가져옴
         String nickname = getKakaoUserInfo(kaKaoOAuthToken);
         // 해당 nickname 으로 된 계정이 있는지 확인
@@ -94,10 +92,11 @@ public class KakaoService {
             KakaoResToken kakaoResToken = objectMapper.readValue(response.getBody(), KakaoResToken.class);
 
 
-            log.info("확인용 Kakao Token ={}",kakaoResToken.toString());
+            log.info("Kakao Token ={}",kakaoResToken);
 
             return kakaoResToken;
         } catch (JsonProcessingException e) {
+            log.info("GET_OAUTH_TOKEN_FAILED: ",e);
             throw new BaseException(ErrorCode.GET_OAUTH_TOKEN_FAILED);
         }
 
@@ -120,13 +119,15 @@ public class KakaoService {
                     String.class
             );
 
+
             ObjectMapper objectMapper = new ObjectMapper();
             KakaoResProfileInfo kakaoResProfileInfo = objectMapper.readValue(response.getBody(), KakaoResProfileInfo.class);
-            log.info("확인용 kakaoResProfileNickName={}",kakaoResProfileInfo.getProperties().getNickname());
+            log.info("KakaoResProfileInfo={}",kakaoResProfileInfo);
 
             return kakaoResProfileInfo.getProperties().getNickname();
         } catch (JsonProcessingException e) {
-            throw new BaseException(ErrorCode.GET_OAUTH_TOKEN_FAILED);
+            log.info("GET_OAUTH_USER_INFO_FAILED: ",e);
+            throw new BaseException(ErrorCode.GET_OAUTH_USER_INFO_FAILED);
         }
     }
 

@@ -2,9 +2,13 @@ package forus.naviforyou.domain.member.dto.kakao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class KakaoResProfileInfo {
     @JsonProperty("id")
     private Long id;
@@ -18,7 +22,11 @@ public class KakaoResProfileInfo {
     @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
 
-    @Data
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     public static class Properties {
         @JsonProperty("nickname")
         private String nickname;
@@ -30,7 +38,11 @@ public class KakaoResProfileInfo {
         private String thumbnailImage;
     }
 
-    @Data
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @ToString
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class KakaoAccount {
         @JsonProperty("profile_nickname_needs_agreement")
