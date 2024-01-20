@@ -102,8 +102,6 @@ public class NaverService {
     public NaverResInfo getUserInfo(String accessToken) {
         String response = requestUserInfo(accessToken);
 
-        System.out.println(response);
-
         try {
             JsonNode jsonNode = objectMapper.readTree(response);
 
@@ -114,9 +112,9 @@ public class NaverService {
 
             return NaverResInfo.of(email, nickname, phoneNumber,id);
         } catch (JsonMappingException e) {
-            e.printStackTrace();
+            System.out.println(response);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            System.out.println(response);
         }
         return NaverResInfo.of();
     }

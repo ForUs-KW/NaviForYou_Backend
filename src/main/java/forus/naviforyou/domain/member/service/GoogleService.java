@@ -8,6 +8,8 @@ import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.domain.member.dto.google.GoogleResInfo;
 import forus.naviforyou.domain.member.dto.google.GoogleResToken;
+import forus.naviforyou.global.error.dto.ErrorCode;
+import forus.naviforyou.global.error.exception.BaseException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,9 +107,9 @@ public class GoogleService {
         try {
             oAuthToken = objectMapper.readValue(googleProfileResponse.getBody(), GoogleResInfo.class);
         } catch (JsonMappingException e) {
-            e.printStackTrace();
+            throw new BaseException(ErrorCode.GET_OAUTH_USER_INFO_FAILED);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new BaseException(ErrorCode.GET_OAUTH_USER_INFO_FAILED);
         }
 
 
