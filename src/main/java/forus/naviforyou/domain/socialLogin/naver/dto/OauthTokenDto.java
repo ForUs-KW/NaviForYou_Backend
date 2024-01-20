@@ -1,4 +1,4 @@
-package forus.naviforyou.global.socialLogin.naver.dto;
+package forus.naviforyou.domain.socialLogin.naver.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

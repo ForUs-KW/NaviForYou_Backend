@@ -1,9 +1,10 @@
-package forus.naviforyou.global.socialLogin.naver.controller;
+package forus.naviforyou.domain.socialLogin.naver.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import forus.naviforyou.domain.socialLogin.naver.dto.MemberInfoOauthDto;
+import forus.naviforyou.domain.socialLogin.naver.dto.MemberTokenDto;
 import forus.naviforyou.global.common.BaseResponse;
-import forus.naviforyou.global.socialLogin.naver.dto.MemberInfoOauthDto;
-import forus.naviforyou.global.socialLogin.naver.service.NaverUserServiceImpl;
+import forus.naviforyou.domain.socialLogin.naver.service.NaverUserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class NaverUserController {
     public ResponseEntity getUserTokenDto(@RequestParam String code,
                                           @RequestParam(required = false) String state) throws JsonProcessingException{
 
-        MemberInfoOauthDto userTokenDto = naverUserService.getUserToken(code, state);
+        MemberTokenDto userTokenDto = naverUserService.getUserToken(code, state);
         return baseResponse.ok(userTokenDto);
 
     }

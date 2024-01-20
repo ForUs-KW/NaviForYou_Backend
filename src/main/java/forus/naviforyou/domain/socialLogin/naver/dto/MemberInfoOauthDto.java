@@ -1,17 +1,21 @@
-package forus.naviforyou.global.socialLogin.naver.dto;
+package forus.naviforyou.domain.socialLogin.naver.dto;
 
 import lombok.*;
 
-@Getter
-@Setter
+//@Getter
+//@Setter
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@ToString
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class MemberInfoOauthDto {
 
     private String email;
     private String nickname;
-    private String phoneNumber;
+    private String phone;
 
     private MemberInfoOauthDto(String email, String nickname){
         this.email = email;

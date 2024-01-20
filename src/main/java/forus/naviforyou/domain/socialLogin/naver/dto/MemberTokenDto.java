@@ -1,6 +1,7 @@
-package forus.naviforyou.global.socialLogin.naver.dto;
+package forus.naviforyou.domain.socialLogin.naver.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import forus.naviforyou.global.common.collection.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,8 +31,8 @@ public class MemberTokenDto {
         this.roles = roles;
     }
 
-//    static public UserTokenDto of(User user) {
-//        return new UserTokenDto(user.getId(), user.getEmail(), user.getNickname(), user.getRoles());
+//    static public MemberTokenDto of(Member member) {
+//        return new MemberTokenDto(member.getId(), member.getEmail(), member.getNickname(), member.getRole());
 //    }
 
     static public MemberTokenDto of(){
