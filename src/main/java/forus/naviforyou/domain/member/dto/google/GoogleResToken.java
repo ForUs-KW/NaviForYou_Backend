@@ -1,10 +1,9 @@
-package forus.naviforyou.domain.socialLogin.google.dto;
+package forus.naviforyou.domain.member.dto.google;
 
 import lombok.Data;
 
 @Data
-public class GoogleOAuthToken {
-    // JSON의 key값의 이름과 일치해야함
+public class GoogleResToken {
     private String access_token;
     private String expires_in;
     private String refresh_token;

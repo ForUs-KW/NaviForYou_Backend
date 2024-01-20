@@ -1,4 +1,4 @@
-package forus.naviforyou.domain.socialLogin.naver.dto;
+package forus.naviforyou.domain.member.dto.naver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Setter
-public class OauthTokenDto {
+public class NaverResToken {
 
     @JsonProperty("access_token")
     @Getter
