@@ -68,11 +68,7 @@ public class MemberService {
     }
 
     public Boolean checkEmail(String email) {
-        memberRepository.findByEmail(email).orElseThrow(
-                () -> new BaseException(ErrorCode.DUPLICATE_EMAIL)
-        );
-
-        return false;
+        return memberRepository.existsByEmail(email);
     }
 
     public void kakaoSignUp(KakaoSignUp signUpReq){
