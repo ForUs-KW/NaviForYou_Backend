@@ -6,8 +6,9 @@ import lombok.*;
 
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 public class KakaoResProfileInfo {
     @JsonProperty("id")
@@ -24,8 +25,8 @@ public class KakaoResProfileInfo {
 
     @Getter
     @Builder
-    @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @ToString
     public static class Properties {
         @JsonProperty("nickname")
@@ -40,34 +41,12 @@ public class KakaoResProfileInfo {
 
     @Getter
     @Builder
-    @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     @ToString
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class KakaoAccount {
-        @JsonProperty("profile_nickname_needs_agreement")
-        private boolean profileNicknameNeedsAgreement;
-
-        @JsonProperty("profile_image_needs_agreement")
-        private boolean profileImageNeedsAgreement;
-
-        @JsonProperty("profile")
-        private KakaoProfile kakaoProfile;
-    }
-
-    @Data
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class KakaoProfile {
-        @JsonProperty("nickname")
-        private String nickname;
-
-        @JsonProperty("thumbnail_image_url")
-        private String thumbnailImageUrl;
-
-        @JsonProperty("profile_image_url")
-        private String profileImageUrl;
-
-        @JsonProperty("is_default_image")
-        private boolean isDefaultImage;
+        @JsonProperty("email")
+        private String email;
     }
 }
