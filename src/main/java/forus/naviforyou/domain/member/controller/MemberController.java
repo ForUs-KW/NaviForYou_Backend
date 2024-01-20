@@ -57,6 +57,16 @@ public class MemberController {
         );
     }
 
+    @GetMapping("/sendEmailCode")
+    private ResponseEntity<?> checkEmailCode(String email){
+        memberService.sendEmailCode(email);
+        return BaseResponse.ok(
+                DuplicateRes.builder()
+                        .result(true)
+                        .build()
+        );
+    }
+
     @GetMapping("/kakao")
     public ResponseEntity<?> kakao(String code){
         TokenRes tokenRes = kakaoService.KakaoLogin(code);

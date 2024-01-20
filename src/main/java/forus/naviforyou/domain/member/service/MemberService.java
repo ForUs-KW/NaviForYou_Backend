@@ -20,11 +20,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Random;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
+    private final MailService mailService;
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -85,5 +88,24 @@ public class MemberService {
                         .role(Role.ROLE_USER)
                         .build()
         );
+    }
+
+    public void sendEmailCode(String email) {
+        String title = "회원 가입 인증 이메일 입니다.";
+        String content =
+                "인증번호 : " + makeRandomNumber() +
+                        "<br>" +
+                        "인증번호를 제대로 입력해주세요";
+        mailService.mailSend(email,title,content);
+    }
+
+    private String makeRandomNumber() {
+        Random r = new Random();
+        StringBuilder randomNumber = new StringBuilder();
+        for(int i = 0; i < 6; i++) {
+            randomNumber.append(r.nextInt(10));
+        }
+
+        return randomNumber.toString();
     }
 }
