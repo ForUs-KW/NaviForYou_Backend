@@ -1,6 +1,5 @@
 package forus.naviforyou.domain.member.controller;
 
-import forus.naviforyou.domain.member.dto.request.KakaoReq;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
@@ -31,9 +30,9 @@ public class MemberController {
         return BaseResponse.ok(token);
     }
 
-    @PostMapping("/kakao")
-    public ResponseEntity<?> kakao(@RequestBody KakaoReq kakaoReq){
-        TokenRes tokenRes = kakaoService.KakaoLogin(kakaoReq);
+    @GetMapping("/kakao")
+    public ResponseEntity<?> kakao(String code){
+        TokenRes tokenRes = kakaoService.KakaoLogin(code);
         return BaseResponse.ok(tokenRes);
     }
 }
