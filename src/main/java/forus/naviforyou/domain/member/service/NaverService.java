@@ -1,12 +1,10 @@
-package forus.naviforyou.domain.socialLogin.naver.service;
+package forus.naviforyou.domain.member.service;
 
-import forus.naviforyou.domain.member.repository.MemberRepository;
-import forus.naviforyou.domain.socialLogin.naver.dto.MemberInfoOauthDto;
-import forus.naviforyou.domain.socialLogin.naver.dto.MemberTokenDto;
-import forus.naviforyou.global.common.collection.enums.MemberType;
-import forus.naviforyou.global.common.collection.enums.Role;
-import forus.naviforyou.global.common.collection.member.Member;
-import forus.naviforyou.domain.socialLogin.naver.dto.OauthTokenDto;
+import forus.naviforyou.domain.member.dto.request.OAuthSignUp;
+import forus.naviforyou.domain.member.dto.request.LogInReq;
+import forus.naviforyou.domain.member.dto.response.TokenRes;
+import forus.naviforyou.domain.member.dto.naver.NaverResInfo;
+import forus.naviforyou.domain.member.dto.naver.NaverResToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,16 +24,13 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
-public class NaverUserServiceImpl implements NaverUserService{
+public class NaverService {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     @Autowired
     private RestTemplate restTemplate;
 
@@ -71,13 +66,13 @@ public class NaverUserServiceImpl implements NaverUserService{
         return params;
     }
 
-    public MemberTokenDto getUserToken(String code, String state) {
+    public TokenRes naverLogin(String code, String state) {
+
         String accessToken = getAccessToken(code, state);
-        MemberInfoOauthDto userInfoOauthDto = getUserInfo(accessToken);
+        NaverResInfo userInfoOauthDto = getUserInfo(accessToken);
+        TokenRes UserInfo = setUserTokenDto(userInfoOauthDto);
 
-//        return userInfoOauthDto;
-
-        return setUserTokenDto(userInfoOauthDto);
+        return UserInfo;
     }
 
     public String getAccessToken(String authorizationCode, String state) {
@@ -97,15 +92,17 @@ public class NaverUserServiceImpl implements NaverUserService{
                 .postForEntity(getTokenUrl(), request, String.class);
 
         try {
-            return objectMapper.readValue(response.getBody(), OauthTokenDto.class).getAccessToken();
+            return objectMapper.readValue(response.getBody(), NaverResToken.class).getAccessToken();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public MemberInfoOauthDto getUserInfo(String accessToken) {
+    public NaverResInfo getUserInfo(String accessToken) {
         String response = requestUserInfo(accessToken);
+
+        System.out.println(response);
 
         try {
             JsonNode jsonNode = objectMapper.readTree(response);
@@ -113,14 +110,15 @@ public class NaverUserServiceImpl implements NaverUserService{
             String email = jsonNode.get("response").get("email").asText();
             String nickname = jsonNode.get("response").get("nickname").asText();
             String phoneNumber = jsonNode.get("response").get("mobile").asText();
+            String id = jsonNode.get("response").get("id").asText();
 
-            return MemberInfoOauthDto.of(email, nickname, phoneNumber);
+            return NaverResInfo.of(email, nickname, phoneNumber,id);
         } catch (JsonMappingException e) {
             e.printStackTrace();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return MemberInfoOauthDto.of();
+        return NaverResInfo.of();
     }
 
     public String requestUserInfo(String accessToken) {
@@ -136,46 +134,26 @@ public class NaverUserServiceImpl implements NaverUserService{
         return response;
     }
 
-    public MemberTokenDto setUserTokenDto(MemberInfoOauthDto userInfoOauthDto) {
-        Optional<Member> optionalUser = memberRepository.findByEmail(userInfoOauthDto.getEmail());
-        Member member;
+    public TokenRes setUserTokenDto(NaverResInfo userInfoOauthDto) {
 
-        if (optionalUser.isPresent()) {
-            member = optionalUser.get();
-        } else {
-            memberRepository.save(
-                    Member.builder()
+        if (memberService.duplicateEmail(userInfoOauthDto.getEmail()).equals(false)) {
+
+            memberService.naverSignUp(
+                    OAuthSignUp.builder()
                             .nickname(userInfoOauthDto.getNickname())
                             .email(userInfoOauthDto.getEmail())
-                            .phone(userInfoOauthDto.getPhone())
-                            .password("naver-password")
-                            .memberType(MemberType.GENERAL)
-                            .role(Role.ROLE_USER)
-                            .memberType(MemberType.GENERAL)
-                            .build());
+                            .password("naver")
+                            .build()
+            );
         }
 
-        MemberTokenDto userTokenDto = MemberTokenDto.of(member);
-        setTokens(userTokenDto);
-        return userTokenDto;
+        return memberService.logIn(
+                LogInReq.builder()
+                        .email(userInfoOauthDto.getEmail())
+                        .password("naver")
+                        .build()
+        );
     }
-
-//    public void setTokens(UserTokenDto userTokenDto) {
-//        Map<String, Object> claims = new HashMap<>();
-//        claims.put("username", userTokenDto.getEmail());
-//        claims.put("roles", userTokenDto.getRoles());
-//
-//        String subject = userTokenDto.getEmail();
-//        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-//        Date accessTokenExpiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-//        Date refreshTokenExpiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-//
-//        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, accessTokenExpiration, base64EncodedSecretKey);
-//        String refreshToken = jwtTokenizer.generateRefreshToken(subject, refreshTokenExpiration, base64EncodedSecretKey);
-//
-//        userTokenDto.setAccessToken(accessToken);
-//        userTokenDto.setRefreshToken(refreshToken);
-//    }
 
     public String generateState() {
         SecureRandom random = new SecureRandom();
