@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forus.naviforyou.domain.member.dto.kakao.KakaoResProfileInfo;
 import forus.naviforyou.domain.member.dto.kakao.KakaoResToken;
-import forus.naviforyou.domain.member.dto.kakao.KakaoSignUp;
+import forus.naviforyou.domain.member.dto.request.OAuthSignUp;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.global.error.dto.ErrorCode;
@@ -48,7 +48,7 @@ public class KakaoService {
         if (memberService.duplicateEmail(email).equals(false)) {
 
             memberService.kakaoSignUp(
-                    KakaoSignUp.builder()
+                    OAuthSignUp.builder()
                             .nickname(kakaoProfile.getProperties().getNickname())
                             .email(email)
                             .password(id)

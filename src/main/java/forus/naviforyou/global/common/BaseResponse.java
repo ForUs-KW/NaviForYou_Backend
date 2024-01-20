@@ -1,9 +1,11 @@
 package forus.naviforyou.global.common;
 
 import lombok.Getter;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@Configuration
 @Getter
 public class BaseResponse<T>{
     public static <T> ResponseEntity<T> ok(T data) {
