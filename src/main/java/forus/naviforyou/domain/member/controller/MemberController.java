@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.member.controller;
 
+import forus.naviforyou.domain.member.dto.request.CheckSingUpCodeReq;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.DuplicateRes;
@@ -58,8 +59,18 @@ public class MemberController {
     }
 
     @GetMapping("/sendEmailCode")
-    private ResponseEntity<?> checkEmailCode(String email){
+    private ResponseEntity<?> sendEmailCode(String email){
         memberService.sendEmailCode(email);
+        return BaseResponse.ok(
+                DuplicateRes.builder()
+                        .result(true)
+                        .build()
+        );
+    }
+
+    @PostMapping("/checkEmailCode")
+    private ResponseEntity<?> checkEmailCode(@RequestBody CheckSingUpCodeReq req){
+        memberService.checkEmailCode(req);
         return BaseResponse.ok(
                 DuplicateRes.builder()
                         .result(true)

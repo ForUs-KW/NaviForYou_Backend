@@ -49,7 +49,12 @@ public enum ErrorCode {
     /**
      * MAIL : 5XXX
      */
-    UNABLE_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "메일을 보낼 수 없습니다.")
+    UNABLE_TO_SEND_EMAIL(HttpStatus.INTERNAL_SERVER_ERROR, 5001, "메일을 보낼 수 없습니다."),
+    /**
+     * VERIFICATION : 6XXX
+     */
+    EXPIRED_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6000, "코드 유효기간이 만료 되었습니다."),
+    INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6001, "코드가 일치하지 않습니다")
 
     ;
     private final HttpStatus status;

@@ -1,6 +1,7 @@
 package forus.naviforyou.domain.member.service;
 
 import forus.naviforyou.domain.member.dto.kakao.KakaoSignUp;
+import forus.naviforyou.domain.member.dto.request.CheckSingUpCodeReq;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
@@ -106,7 +107,21 @@ public class MemberService {
                         "<br> 인증번호를 제대로 입력해주세요";
 
         mailService.mailSend(email,title,content);
-        redisService.setValues(email+SIGN_UP_FLAG, code, Duration.ofMillis(CODE_MINUTE));
+        redisService.setValues(email+SIGN_UP_FLAG, code, Duration.ofMinutes(CODE_MINUTE));
+    }
+
+    public void checkEmailCode(CheckSingUpCodeReq req){
+        String key = req.getEmail()+SIGN_UP_FLAG;
+        String code = req.getCode();
+
+        if(!redisService.hasKey(key)){
+            throw new BaseException(ErrorCode.EXPIRED_VERIFICATION_CODE);
+        }
+
+        if(!code.equals(redisService.getValues(key))){
+            throw new BaseException(ErrorCode.INCORRECT_VERIFICATION_CODE);
+        }
+        redisService.deleteValues(key);
     }
 
     private String makeRandomNumber() {
