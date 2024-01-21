@@ -103,7 +103,7 @@ public class MemberService {
         String title = "회원 가입 인증 이메일 입니다.";
         String content =
                 "인증번호 : " +  code +
-                        "<br> 유효기가은 " + CODE_MINUTE + "입니다." +
+                        "<br> 유효시간은 " + CODE_MINUTE + "분 입니다." +
                         "<br> 인증번호를 제대로 입력해주세요";
 
         mailService.mailSend(email,title,content);
