@@ -1,7 +1,7 @@
 package forus.naviforyou.domain.member.service;
 
-import forus.naviforyou.domain.member.dto.kakao.KakaoSignUp;
 import forus.naviforyou.domain.member.dto.request.CheckSingUpCodeReq;
+import forus.naviforyou.domain.member.dto.request.OAuthSignUp;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
@@ -86,7 +86,7 @@ public class MemberService {
         return memberRepository.existsByNickname(nickname);
     }
 
-    public void kakaoSignUp(KakaoSignUp signUpReq){
+    public void kakaoSignUp(OAuthSignUp signUpReq){
         memberRepository.save(
                 Member.builder()
                         .nickname(signUpReq.getNickname())
@@ -97,6 +97,31 @@ public class MemberService {
                         .build()
         );
     }
+
+    public void googleSignUp(OAuthSignUp signUpReq){
+        memberRepository.save(
+                Member.builder()
+                        .nickname(signUpReq.getNickname())
+                        .email(signUpReq.getEmail())
+                        .password(passwordEncoder.encode(signUpReq.getPassword()))
+                        .memberType(MemberType.GOOGLE)
+                        .role(Role.ROLE_USER)
+                        .build()
+        );
+    }
+
+    public void naverSignUp(OAuthSignUp signUpReq){
+        memberRepository.save(
+                Member.builder()
+                        .nickname(signUpReq.getNickname())
+                        .email(signUpReq.getEmail())
+                        .password(passwordEncoder.encode(signUpReq.getPassword()))
+                        .memberType(MemberType.NAVER)
+                        .role(Role.ROLE_USER)
+                        .build()
+        );
+    }
+
 
     public void sendEmailCode(String email) {
         String code = makeRandomNumber();

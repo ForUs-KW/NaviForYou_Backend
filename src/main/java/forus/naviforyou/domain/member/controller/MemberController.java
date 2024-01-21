@@ -5,8 +5,10 @@ import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.DuplicateRes;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
+import forus.naviforyou.domain.member.service.GoogleService;
 import forus.naviforyou.domain.member.service.KakaoService;
 import forus.naviforyou.domain.member.service.MemberService;
+import forus.naviforyou.domain.member.service.NaverService;
 import forus.naviforyou.global.common.BaseResponse;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
@@ -21,6 +23,9 @@ public class MemberController {
 
     private final MemberService memberService;
     private final KakaoService kakaoService;
+    private final NaverService naverService;
+    private final GoogleService googleService;
+
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody SignUpReq signUpReq){
@@ -29,7 +34,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    private ResponseEntity<?> signUp(@RequestBody LogInReq logInReq){
+    private ResponseEntity<?> login(@RequestBody LogInReq logInReq){
         TokenRes token = memberService.logIn(logInReq);
         return BaseResponse.ok(token);
     }
@@ -81,6 +86,18 @@ public class MemberController {
     @GetMapping("/kakao")
     public ResponseEntity<?> kakao(String code){
         TokenRes tokenRes = kakaoService.KakaoLogin(code);
+        return BaseResponse.ok(tokenRes);
+    }
+
+    @GetMapping("/naver")
+    public ResponseEntity<?> naver(String code,String state){
+        TokenRes tokenRes = naverService.naverLogin(code,state);
+        return BaseResponse.ok(tokenRes);
+    }
+
+    @GetMapping("/google")
+    public ResponseEntity<?> google(String code,String state){
+        TokenRes tokenRes = googleService.googleLogin(code,state);
         return BaseResponse.ok(tokenRes);
     }
 }

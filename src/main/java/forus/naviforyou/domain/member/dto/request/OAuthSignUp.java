@@ -1,4 +1,4 @@
-package forus.naviforyou.domain.member.dto.kakao;
+package forus.naviforyou.domain.member.dto.request;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class KakaoSignUp {
+public class OAuthSignUp {
     private String nickname;
     private String email;
     private String password;
