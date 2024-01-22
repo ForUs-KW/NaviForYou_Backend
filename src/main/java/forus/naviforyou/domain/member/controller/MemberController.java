@@ -1,9 +1,6 @@
 package forus.naviforyou.domain.member.controller;
 
-import forus.naviforyou.domain.member.dto.request.CheckCodeReq;
-import forus.naviforyou.domain.member.dto.request.DeleteReq;
-import forus.naviforyou.domain.member.dto.request.LogInReq;
-import forus.naviforyou.domain.member.dto.request.SignUpReq;
+import forus.naviforyou.domain.member.dto.request.*;
 import forus.naviforyou.domain.member.dto.response.DeleteRes;
 import forus.naviforyou.domain.member.dto.response.DuplicateRes;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
@@ -127,6 +124,16 @@ public class MemberController {
     @PostMapping("/searchPassword/checkCode")
     public ResponseEntity<?> searchPwdChkCode(@RequestBody CheckCodeReq req){
         memberService.checkEmailCode(req);
+        return BaseResponse.ok(
+                DeleteRes.builder()
+                        .result(true)
+                        .build()
+        );
+    }
+
+    @PostMapping("/searchPassword/change")
+    public ResponseEntity<?> searchPwdChange(@RequestBody ChangePwdReq req){
+        memberService.changePwd(req);
         return BaseResponse.ok(
                 DeleteRes.builder()
                         .result(true)
