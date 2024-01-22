@@ -114,4 +114,24 @@ public class MemberController {
                         .build()
         );
     }
+
+    @GetMapping("/searchPassword/sendCode")
+    public ResponseEntity<?> searchPwdChkCode(@RequestParam String email){
+        memberService.sendEmailCode(email);
+        return BaseResponse.ok(
+                DeleteRes.builder()
+                        .result(true)
+                        .build()
+        );
+    }
+    @PostMapping("/searchPassword/checkCode")
+    public ResponseEntity<?> searchPwdChkCode(@RequestBody CheckCodeReq req){
+        memberService.checkEmailCode(req);
+        return BaseResponse.ok(
+                DeleteRes.builder()
+                        .result(true)
+                        .build()
+        );
+    }
+
 }
