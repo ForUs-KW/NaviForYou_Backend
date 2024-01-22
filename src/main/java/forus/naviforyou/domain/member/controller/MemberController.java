@@ -1,8 +1,10 @@
 package forus.naviforyou.domain.member.controller;
 
 import forus.naviforyou.domain.member.dto.request.CheckSingUpCodeReq;
+import forus.naviforyou.domain.member.dto.request.DeleteReq;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
+import forus.naviforyou.domain.member.dto.response.DeleteRes;
 import forus.naviforyou.domain.member.dto.response.DuplicateRes;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.domain.member.service.GoogleService;
@@ -10,10 +12,12 @@ import forus.naviforyou.domain.member.service.KakaoService;
 import forus.naviforyou.domain.member.service.MemberService;
 import forus.naviforyou.domain.member.service.NaverService;
 import forus.naviforyou.global.common.BaseResponse;
+import forus.naviforyou.global.common.collection.member.Member;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -99,5 +103,15 @@ public class MemberController {
     public ResponseEntity<?> google(String code,String state){
         TokenRes tokenRes = googleService.googleLogin(code,state);
         return BaseResponse.ok(tokenRes);
+    }
+
+    @PostMapping("/delete")
+    private ResponseEntity<?> delete(@RequestBody DeleteReq deleteReq, @AuthenticationPrincipal Member member){
+        memberService.delete(deleteReq.getPwd(), member);
+        return BaseResponse.ok(
+                DeleteRes.builder()
+                        .result(true)
+                        .build()
+        );
     }
 }
