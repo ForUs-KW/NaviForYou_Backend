@@ -1,6 +1,6 @@
 package forus.naviforyou.domain.member.service;
 
-import forus.naviforyou.domain.member.dto.request.CheckSingUpCodeReq;
+import forus.naviforyou.domain.member.dto.request.CheckCodeReq;
 import forus.naviforyou.domain.member.dto.request.OAuthSignUp;
 import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
@@ -135,7 +135,7 @@ public class MemberService {
         redisService.setValues(email+SIGN_UP_FLAG, code, Duration.ofMinutes(CODE_MINUTE));
     }
 
-    public void checkEmailCode(CheckSingUpCodeReq req){
+    public void checkEmailCode(CheckCodeReq req){
         String key = req.getEmail()+SIGN_UP_FLAG;
         String code = req.getCode();
 

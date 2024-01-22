@@ -6,7 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class CheckSingUpCodeReq {
+public class CheckCodeReq {
     private String email;
     private String code;
 }
