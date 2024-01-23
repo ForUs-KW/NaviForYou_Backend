@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.myPage.controller;
 
+import forus.naviforyou.domain.myPage.dto.request.ChangePwdReq;
 import forus.naviforyou.domain.myPage.dto.reponse.ResultRes;
 import forus.naviforyou.domain.myPage.dto.request.DeleteReq;
 import forus.naviforyou.domain.myPage.dto.request.MyPageReq;
@@ -28,6 +29,14 @@ public class MyPageController {
     @PostMapping("/delete")
     public ResponseEntity<?> delete(@RequestBody DeleteReq deleteReq, @AuthenticationPrincipal Member member){
         myPageService.delete(deleteReq.getPwd(), member);
+        return BaseResponse.ok(
+                new ResultRes(true)
+        );
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePwdReq req, @AuthenticationPrincipal Member member){
+        myPageService.changePwd(req.getNewPassword(), member);
         return BaseResponse.ok(
                 new ResultRes(true)
         );
