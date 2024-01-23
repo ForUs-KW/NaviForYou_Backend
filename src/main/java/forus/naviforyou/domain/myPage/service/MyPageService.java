@@ -22,4 +22,10 @@ public class MyPageService {
 
         memberRepository.delete(member);
     }
+
+    public void checkPassword(Member member, String password) {
+        if(!member.getPassword().equals(passwordEncoder.encode(password))){
+            throw new BaseException(ErrorCode.WRONG_PASSWORD);
+        }
+    }
 }
