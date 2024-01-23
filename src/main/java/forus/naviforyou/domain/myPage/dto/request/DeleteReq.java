@@ -1,4 +1,4 @@
-package forus.naviforyou.domain.member.dto.request;
+package forus.naviforyou.domain.myPage.dto.request;
 
 import lombok.*;
 

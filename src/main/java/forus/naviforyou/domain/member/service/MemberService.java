@@ -157,13 +157,6 @@ public class MemberService {
         return randomNumber.toString();
     }
 
-    public void delete(String pwd, Member member) {
-        if(!passwordEncoder.encode(pwd).equals(member.getPassword())){
-            throw new BaseException(ErrorCode.WRONG_PASSWORD);
-        }
-
-        memberRepository.delete(member);
-    }
 
     @Transactional
     public void changePwd(ChangePwdReq req) {
