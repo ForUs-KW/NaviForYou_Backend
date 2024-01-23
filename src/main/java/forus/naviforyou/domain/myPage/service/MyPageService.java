@@ -7,6 +7,7 @@ import forus.naviforyou.global.error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +28,12 @@ public class MyPageService {
         if(!member.getPassword().equals(passwordEncoder.encode(password))){
             throw new BaseException(ErrorCode.WRONG_PASSWORD);
         }
+    }
+
+    @Transactional
+    public void changePwd(String newPwd, Member member) {
+       member.setPassword(passwordEncoder.encode(newPwd));
+
+        memberRepository.save(member);
     }
 }
