@@ -31,15 +31,12 @@ public class JwtFilter extends GenericFilterBean {
         String requestURI = httpServletRequest.getRequestURI();
         String jwt = resolveToken(httpServletRequest);
 
-        if(Arrays.asList(Constants.PERMIT_URIS).contains(requestURI)){
-            filterChain.doFilter(servletRequest, servletResponse);
-            return;
-        }
-
-        if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+        if(Arrays.asList(Constants.AUTHENTICATED_URIS).contains(requestURI)) {
+            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+            }
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
