@@ -26,5 +26,7 @@ public class Item {
     @JsonProperty("category")
     private String category;
 
+    private Double distance;
+
 
 }

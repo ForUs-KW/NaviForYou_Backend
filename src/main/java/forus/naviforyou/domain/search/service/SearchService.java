@@ -2,6 +2,7 @@ package forus.naviforyou.domain.search.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import forus.naviforyou.domain.search.dto.request.SearchReq;
 import forus.naviforyou.domain.search.dto.response.Item;
 import forus.naviforyou.domain.search.dto.response.SearchRes;
 import forus.naviforyou.global.error.dto.ErrorCode;
@@ -36,11 +37,12 @@ public class SearchService {
     @Value("${social.naver.params.clientSecret}")
     private String clientSecret;
 
-    public SearchRes searchInfo(String name){
-        SearchRes searchRes = getSearchInfo(name);
-        log.info("a");
-        SearchRes searchInfo = removeTags(searchRes);
-        log.info("a");
+    private static final double KATECH_FACTOR = 0.00001;
+
+    public SearchRes searchInfo(SearchReq searchReq, String name){
+        SearchRes searchInfo = getSearchInfo(name);
+        searchInfo = removeTags(searchInfo);
+        searchInfo = calculateDistance(searchInfo,searchReq.getX(),searchReq.getY());
         return searchInfo;
     }
 
@@ -92,6 +94,21 @@ public class SearchService {
         Document doc = Jsoup.parse(html);
         Element body = doc.body();
         return body.text();
+    }
+
+    public SearchRes calculateDistance(SearchRes searchRes,double x1, double y1){
+        for (Item item : searchRes.getItems()){
+            double x2 = Double.parseDouble(item.getMapx());
+            double y2 = Double.parseDouble(item.getMapy());
+
+            // KATECH 좌표계 거리 계산
+            double deltaX = (x1 - x2) * KATECH_FACTOR;
+            double deltaY = (y1 - y2) * KATECH_FACTOR;
+
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            item.setDistance(distance);
+        }
+        return searchRes;
     }
 
 }
