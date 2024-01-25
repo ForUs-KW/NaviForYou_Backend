@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class SearchController {
 
     private final SearchService searchService;
-    @GetMapping("/basic/{name}")
+    @GetMapping("/{name}")
     public ResponseEntity<?> getSearch(@RequestBody SearchReq searchReq, @PathVariable String name){
         SearchRes searchRes = searchService.searchInfo(searchReq , name);
         return BaseResponse.ok(searchRes);
