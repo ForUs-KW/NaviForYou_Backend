@@ -44,7 +44,13 @@ public enum ErrorCode {
      * OAUTH : 4XXX
      */
     GET_OAUTH_TOKEN_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 토큰 요청에 실패했습니다."),
-    GET_OAUTH_USER_INFO_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 사용자 정보를 가져오는데 실패했습니다.")
+    GET_OAUTH_USER_INFO_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 사용자 정보를 가져오는데 실패했습니다."),
+
+
+    /**
+     * search : 7XXX
+     */
+    NO_SUCH_SEARCH(HttpStatus.NOT_FOUND, 7000, "해당 검색 결과가 존재하지 않습니다.")
 
     ;
     private final HttpStatus status;

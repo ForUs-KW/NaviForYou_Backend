@@ -1,6 +1,6 @@
 package forus.naviforyou.domain.search.controller;
 
-import forus.naviforyou.domain.member.dto.request.SignUpReq;
+import forus.naviforyou.domain.search.dto.response.SearchRes;
 import forus.naviforyou.domain.search.service.SearchService;
 import forus.naviforyou.global.common.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +14,11 @@ public class SearchController {
 
     private final SearchService searchService;
     @GetMapping("/basic/{name}")
-    public String getSearch(@PathVariable String name){
-        System.out.println(searchService.naver(name));
-        return searchService.naver(name);
+    public ResponseEntity<?> getSearch(@PathVariable String name){
+        SearchRes searchRes = searchService.getSearchInfo(name);
+//        System.out.println(searchRes);
+        return BaseResponse.ok(searchRes);
     }
-//    public ResponseEntity<?> signUp(@RequestBody SignUpReq signUpReq){
-//        memberService.signUp(signUpReq);
-//        return BaseResponse.ok("회원가입 성공");
-//    }
+
+
 }
