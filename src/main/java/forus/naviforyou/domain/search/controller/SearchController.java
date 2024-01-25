@@ -15,8 +15,7 @@ public class SearchController {
     private final SearchService searchService;
     @GetMapping("/basic/{name}")
     public ResponseEntity<?> getSearch(@PathVariable String name){
-        SearchRes searchRes = searchService.getSearchInfo(name);
-//        System.out.println(searchRes);
+        SearchRes searchRes = searchService.searchInfo(name);
         return BaseResponse.ok(searchRes);
     }
 
