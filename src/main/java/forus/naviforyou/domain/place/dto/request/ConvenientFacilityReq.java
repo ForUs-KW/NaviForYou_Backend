@@ -8,8 +8,6 @@ import lombok.*;
 @Getter
 public class ConvenientFacilityReq {
     private String buildingName;
-    private String siDoName;
-    private String cggName;
     private String roadAddrName;
 
 }
