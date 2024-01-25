@@ -38,7 +38,7 @@ public enum ErrorCode {
      * Member : 3XXX
      */
     NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 3000, "해당 이메일이 존재하지 않습니다." ),
-    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다."),
+    WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "비밀번호가 일치하지 않습니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, 3002, "이미 사용중인 이메일 입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, 3003, "이미 사용중인 닉네임 입니다."),
     /**
@@ -54,9 +54,9 @@ public enum ErrorCode {
      * VERIFICATION : 6XXX
      */
     EXPIRED_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6000, "코드 유효기간이 만료 되었습니다."),
-    INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6001, "코드가 일치하지 않습니다")
-
+    INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6001, "코드가 일치하지 않습니다"),
     ;
+
     private final HttpStatus status;
     private final int code;
     private final String message;
