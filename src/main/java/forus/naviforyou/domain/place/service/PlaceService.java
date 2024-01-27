@@ -1,6 +1,5 @@
 package forus.naviforyou.domain.place.service;
 
-import forus.naviforyou.domain.place.dto.publicData.ManagementFacilityIdRes;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
 import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Slf4j
 @Service
@@ -44,13 +45,20 @@ public class PlaceService {
                 .encode()
                 .build();
 
+        URI uri = encodeReservedWord(uriComponents.toUri().toString());
         RestTemplate restTemplate = new RestTemplate();
         RequestEntity<Void> req = RequestEntity
-                .get(uriComponents.toUri())
+                .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
         log.info("ManagementFacilityId Response = {}",result);
         return "test";
+    }
+
+    private URI encodeReservedWord(String uri) {
+        uri = uri.contains("%252B") ? uri.replace("%252B", "%2B") : uri;
+        uri = uri.contains("%252F") ? uri.replace("%252F", "%2F") : uri;
+        return UriComponentsBuilder.fromUriString(uri).build(true).toUri();
     }
 
 
