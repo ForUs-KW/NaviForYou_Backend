@@ -2,6 +2,7 @@ package forus.naviforyou.domain.findRoute.controller;
 
 
 import forus.naviforyou.domain.findRoute.dto.request.WalkRouteReq;
+import forus.naviforyou.domain.findRoute.dto.response.WalkRouteRes;
 import forus.naviforyou.domain.findRoute.service.FindRouteService;
 import forus.naviforyou.global.common.BaseResponse;
 import lombok.Getter;
@@ -22,8 +23,8 @@ public class FindRouteController {
 
     @GetMapping("/walk")
     public ResponseEntity<?> getWalkRoute(@RequestBody WalkRouteReq response){
-        findRouteService.getWalkRoute(response);
+        WalkRouteRes walkRouteRes = findRouteService.getWalkRoute(response);
 
-        return BaseResponse.ok("작업중 보행자 루트");
+        return BaseResponse.ok(walkRouteRes);
     }
 }

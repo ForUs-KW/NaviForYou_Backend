@@ -60,7 +60,12 @@ public enum ErrorCode {
     /**
      * search : 7XXX
      */
-    NO_SUCH_SEARCH(HttpStatus.NOT_FOUND, 7000, "해당 검색 결과가 존재하지 않습니다.")
+    NO_SUCH_SEARCH(HttpStatus.NOT_FOUND, 7000, "해당 검색 결과가 존재하지 않습니다."),
+
+    /**
+     * search : 8XXX
+     */
+    NO_MAPPING_ROUTE(HttpStatus.NOT_FOUND, 8000, "경로 입력이 올바르지 않습니다.")
 
     ;
     private final HttpStatus status;
