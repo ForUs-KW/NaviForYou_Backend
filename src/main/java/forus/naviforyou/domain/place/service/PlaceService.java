@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.place.service;
 
+import forus.naviforyou.domain.place.dto.publicData.ManagementFacilityIdRes;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
 import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +10,8 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
@@ -35,25 +34,26 @@ public class PlaceService {
         return null;
     }
 
-    private String getManagementFacilityId(String buildingName, String roadAddress){
-        URI uri = UriComponentsBuilder
+    private String getManagementFacilityId(String buildingName, String roadAddress) {
+        UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(managementFacilityIdUrl)
-                .queryParam("numOfRows",1)
                 .queryParam("serviceKey",serviceKey)
-                .queryParam("faclNm", buildingName)
-                .queryParam("roadNm", roadAddress)
-                .encode(StandardCharsets.UTF_8)
-                .build()
-                .toUri();
-        RestTemplate restTemplate = new RestTemplate();
-        RequestEntity<Void> req = RequestEntity
-                .get(uri)
+                .queryParam("numOfRows",1)
+                .queryParam("faclNm",buildingName)
+                .queryParam("roadNm",roadAddress)
+                .encode()
                 .build();
 
+        RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<Void> req = RequestEntity
+                .get(uriComponents.toUri())
+                .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
         log.info("ManagementFacilityId Response = {}",result);
         return "test";
     }
+
+
 
 
 }
