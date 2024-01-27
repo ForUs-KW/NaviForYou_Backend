@@ -41,10 +41,12 @@ public class FindRouteService {
 
         String responseBody = responseEntity.getBody();
 
+        System.out.println("API 응답: " + responseBody);
+
+
         responseBody = setCoordinates(walkRouteRes, responseBody); // coordinates 따로 세팅
 
 
-        System.out.println("API 응답: " + responseBody);
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
