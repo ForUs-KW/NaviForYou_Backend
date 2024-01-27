@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.place.service;
 
+import forus.naviforyou.domain.place.dto.publicData.ManagementFacilityIdRes;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
 import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URI;
 
 @Slf4j
@@ -35,7 +40,7 @@ public class PlaceService {
         return null;
     }
 
-    private String getManagementFacilityId(String buildingName, String roadAddress) {
+    private ManagementFacilityIdRes getManagementFacilityId(String buildingName, String roadAddress) {
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(managementFacilityIdUrl)
                 .queryParam("serviceKey",serviceKey)
@@ -51,8 +56,7 @@ public class PlaceService {
                 .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-        log.info("ManagementFacilityId Response = {}",result);
-        return "test";
+        return parsingManagementFacilityId(result.getBody());
     }
 
     private URI encodeReservedWord(String uri) {
@@ -61,7 +65,20 @@ public class PlaceService {
         return UriComponentsBuilder.fromUriString(uri).build(true).toUri();
     }
 
+    private ManagementFacilityIdRes parsingManagementFacilityId(String apiXml){
+        ManagementFacilityIdRes managementFacilityId = null;
+        try {
+            log.info("apiXml Response = {}",apiXml);
 
+            InputStream stream = new ByteArrayInputStream(apiXml.getBytes());
+            JAXBContext context = JAXBContext.newInstance(ManagementFacilityIdRes.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            managementFacilityId = (ManagementFacilityIdRes)unmarshaller.unmarshal(stream);
+        }catch (Exception e){
+            log.info("parsingManagementFacilityId error: ",e);
+        }
+        return managementFacilityId;
+    }
 
 
 }
