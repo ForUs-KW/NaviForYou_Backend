@@ -1,6 +1,7 @@
 package forus.naviforyou.domain.place.service;
 
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
+import forus.naviforyou.domain.place.dto.publicData.BuildingFacilityListDto;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
 import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
 import lombok.RequiredArgsConstructor;
@@ -95,9 +96,24 @@ public class PlaceService {
                 .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-
-        log.info("getBuildingFacilityList = {}",result);
+        parsingBuildingFacilityList(result.getBody());
     }
 
+    private BuildingFacilityListDto parsingBuildingFacilityList(String xml){
+        BuildingFacilityListDto facilityListDto = null;
+        try {
+            log.info("Xml BuildingFacilityList = {}",xml);
+
+            InputStream stream = new ByteArrayInputStream(xml.getBytes());
+            JAXBContext context = JAXBContext.newInstance(BuildingFacilityListDto.class);
+            Unmarshaller unmarshaller = context.createUnmarshaller();
+            facilityListDto = (BuildingFacilityListDto)unmarshaller.unmarshal(stream);
+
+            log.info("Parsing BuildingFacilityList={} ",facilityListDto);
+        }catch (Exception e){
+            log.info("Parsing BuildingFacilityList error: ",e);
+        }
+        return facilityListDto;
+    }
 
 }
