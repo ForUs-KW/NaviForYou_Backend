@@ -1,8 +1,6 @@
 package forus.naviforyou.domain.place.dto.publicData;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -18,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class ManagementFacilityIdRes {
+public class BuildingIdDto {
 
     @XmlElement(name = "totalCount")
     private int totalCount;
