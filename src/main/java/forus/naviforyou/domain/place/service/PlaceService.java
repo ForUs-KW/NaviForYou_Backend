@@ -34,8 +34,9 @@ public class PlaceService {
     private String conventionFacilityUrl;
 
     public ConvenientFacilityRes getConvenientFacility(ConvenientFacilityReq convenientFacilityReq) {
-        if(getManagementFacilityId(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName()) != null){
-
+        ManagementFacilityIdRes managementBuildingId = getManagementFacilityId(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
+        if(managementBuildingId != null){
+            getBuildingFacilityList(managementBuildingId.getFacilityId());
         }
         return null;
     }
@@ -78,6 +79,24 @@ public class PlaceService {
             log.info("parsingManagementFacilityId error: ",e);
         }
         return managementFacilityId;
+    }
+
+    private void getBuildingFacilityList(String managementBuildingId){
+        UriComponents uriComponents = UriComponentsBuilder
+                .fromUriString(conventionFacilityUrl)
+                .queryParam("serviceKey",serviceKey)
+                .queryParam("wfcltId",managementBuildingId)
+                .encode()
+                .build();
+
+        URI uri = encodeReservedWord(uriComponents.toUri().toString());
+        RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<?> req = RequestEntity
+                .get(uri)
+                .build();
+        ResponseEntity<String> result = restTemplate.exchange(req, String.class);
+
+        log.info("getBuildingFacilityList = {}",result);
     }
 
 
