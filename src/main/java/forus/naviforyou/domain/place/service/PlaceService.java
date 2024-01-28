@@ -1,6 +1,6 @@
 package forus.naviforyou.domain.place.service;
 
-import forus.naviforyou.domain.place.dto.publicData.ManagementFacilityIdRes;
+import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
 import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
 import lombok.RequiredArgsConstructor;
@@ -27,23 +27,23 @@ public class PlaceService {
     @Value("${social.publicData.params.serviceKey}")
     private String serviceKey;
 
-    @Value("${social.publicData.path.managementFacilityIdUrl}")
-    private String managementFacilityIdUrl;
+    @Value("${social.publicData.path.buildingIdUrl}")
+    private String buildingIdUrl;
 
-    @Value("${social.publicData.path.conventionFacilityUrl}")
-    private String conventionFacilityUrl;
+    @Value("${social.publicData.path.facilityListUrl}")
+    private String facilityListUrl;
 
     public ConvenientFacilityRes getConvenientFacility(ConvenientFacilityReq convenientFacilityReq) {
-        ManagementFacilityIdRes managementBuildingId = getManagementFacilityId(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
+        BuildingIdDto managementBuildingId = getBuildingId(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
         if(managementBuildingId != null){
             getBuildingFacilityList(managementBuildingId.getFacilityId());
         }
         return null;
     }
 
-    private ManagementFacilityIdRes getManagementFacilityId(String buildingName, String roadAddress) {
+    private BuildingIdDto getBuildingId(String buildingName, String roadAddress) {
         UriComponents uriComponents = UriComponentsBuilder
-                .fromUriString(managementFacilityIdUrl)
+                .fromUriString(buildingIdUrl)
                 .queryParam("serviceKey",serviceKey)
                 .queryParam("numOfRows",1)
                 .queryParam("faclNm",buildingName)
@@ -57,7 +57,7 @@ public class PlaceService {
                 .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-        return parsingManagementFacilityId(result.getBody());
+        return parsingBuildingId(result.getBody());
     }
 
     private URI encodeReservedWord(String uri) {
@@ -66,26 +66,26 @@ public class PlaceService {
         return UriComponentsBuilder.fromUriString(uri).build(true).toUri();
     }
 
-    private ManagementFacilityIdRes parsingManagementFacilityId(String apiXml){
-        ManagementFacilityIdRes managementFacilityId = null;
+    private BuildingIdDto parsingBuildingId(String xml){
+        BuildingIdDto buildingIdDto = null;
         try {
-            log.info("apiXml Response = {}",apiXml);
+            log.info("apiXml Response = {}",xml);
 
-            InputStream stream = new ByteArrayInputStream(apiXml.getBytes());
-            JAXBContext context = JAXBContext.newInstance(ManagementFacilityIdRes.class);
+            InputStream stream = new ByteArrayInputStream(xml.getBytes());
+            JAXBContext context = JAXBContext.newInstance(BuildingIdDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            managementFacilityId = (ManagementFacilityIdRes)unmarshaller.unmarshal(stream);
+            buildingIdDto = (BuildingIdDto)unmarshaller.unmarshal(stream);
         }catch (Exception e){
             log.info("parsingManagementFacilityId error: ",e);
         }
-        return managementFacilityId;
+        return buildingIdDto;
     }
 
-    private void getBuildingFacilityList(String managementBuildingId){
+    private void getBuildingFacilityList(String buildingId){
         UriComponents uriComponents = UriComponentsBuilder
-                .fromUriString(conventionFacilityUrl)
+                .fromUriString(facilityListUrl)
                 .queryParam("serviceKey",serviceKey)
-                .queryParam("wfcltId",managementBuildingId)
+                .queryParam("wfcltId",buildingId)
                 .encode()
                 .build();
 
