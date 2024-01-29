@@ -11,4 +11,5 @@ public class CarRouteReq {
     private double startY;
     private double endX;
     private double endY;
+    private String trafficInfo; // 추가 ?
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CarRouteRes {
 
-    private String type;
+//    private String type;
     private List<Feature> features;
 
 
@@ -58,8 +58,8 @@ public class CarRouteRes {
         private String description;
         private String nextRoadName;
         private int turnType;
-        private String pointType;
-        private int lineIndex;
+//        private String pointType;
+//        private int lineIndex;
         private int distance;
         private int time;
         private int roadType;
