@@ -1,7 +1,9 @@
 package forus.naviforyou.domain.findRoute.controller;
 
 
+import forus.naviforyou.domain.findRoute.dto.request.TravelRouteReq;
 import forus.naviforyou.domain.findRoute.dto.request.WalkRouteReq;
+import forus.naviforyou.domain.findRoute.dto.response.TravelRouteRes;
 import forus.naviforyou.domain.findRoute.dto.response.WalkRouteRes;
 import forus.naviforyou.domain.findRoute.service.FindRouteService;
 import forus.naviforyou.global.common.BaseResponse;
@@ -26,5 +28,12 @@ public class FindRouteController {
         WalkRouteRes walkRouteRes = findRouteService.getWalkRoute(response);
 
         return BaseResponse.ok(walkRouteRes);
+    }
+
+    @GetMapping("/travel")
+    public ResponseEntity<?> getTravelRoute(@RequestBody TravelRouteReq response){
+        TravelRouteRes travelRouteReq = findRouteService.getTravelRoute(response);
+
+        return BaseResponse.ok(travelRouteReq);
     }
 }

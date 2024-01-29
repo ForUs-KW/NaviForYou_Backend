@@ -2,7 +2,9 @@ package forus.naviforyou.domain.findRoute.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import forus.naviforyou.domain.findRoute.dto.request.TravelRouteReq;
 import forus.naviforyou.domain.findRoute.dto.request.WalkRouteReq;
+import forus.naviforyou.domain.findRoute.dto.response.TravelRouteRes;
 import forus.naviforyou.domain.findRoute.dto.response.WalkRouteRes;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
@@ -41,12 +43,7 @@ public class FindRouteService {
 
         String responseBody = responseEntity.getBody();
 
-        System.out.println("API 응답: " + responseBody);
-
-
         responseBody = setCoordinates(walkRouteRes, responseBody); // coordinates 따로 세팅
-
-
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -57,7 +54,6 @@ public class FindRouteService {
 
         return walkRouteRes;
     }
-
 
     public String setCoordinates(WalkRouteRes walkRouteRes, String responseBody) {
 
@@ -91,6 +87,49 @@ public class FindRouteService {
         }
 
         return modifiedJsonString;
+
+    }
+
+    public TravelRouteRes getTravelRoute(TravelRouteReq travelRouteReq){
+        String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
+        TravelRouteRes walkRouteRes = parseTravelRoute(routeRes); // 파싱
+        System.out.println(walkRouteRes);
+        return  walkRouteRes;
+    }
+
+    public String invokeTravelRoute(TravelRouteReq travelRouteReq) {
+
+        TravelRouteReq walkRouteRes = null;
+
+        // API endpoint URL
+        String apiUrl = "https://apis.openapi.sk.com/transit/routes";
+        String apiKey = appKey;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", "application/json");
+        headers.set("Content-Type", "application/json");
+        headers.set("appKey", apiKey);
+
+        HttpEntity<TravelRouteReq> requestEntity = new HttpEntity<>(travelRouteReq, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
+
+        String responseBody = responseEntity.getBody();
+
+        System.out.println("API 응답: " + responseBody);
+
+        return responseBody;
+    }
+    public TravelRouteRes parseTravelRoute(String responseBody){
+        TravelRouteRes walkRouteRes = null;
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            walkRouteRes = objectMapper.readValue(responseBody, TravelRouteRes.class);
+        } catch (Exception e) {
+            throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
+        }
+
+        return walkRouteRes;
 
     }
 }
