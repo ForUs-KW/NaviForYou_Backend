@@ -28,4 +28,8 @@ public class BuildingFacilityListDto {
         private Set<String> conventionFacilityList;
     }
 
+    public Set<String> getConventionFacilityList(){
+        return facilityId.getConventionFacilityList();
+    }
+
 }

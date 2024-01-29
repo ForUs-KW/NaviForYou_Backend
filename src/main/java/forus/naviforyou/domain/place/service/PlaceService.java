@@ -3,7 +3,7 @@ package forus.naviforyou.domain.place.service;
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.publicData.BuildingFacilityListDto;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
-import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
+import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +19,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -34,12 +35,14 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public ConvenientFacilityRes getConvenientFacility(ConvenientFacilityReq convenientFacilityReq) {
+    public BuildingFacilityListRes getConvenientFacility(ConvenientFacilityReq convenientFacilityReq) {
+        BuildingFacilityListRes res = new BuildingFacilityListRes(convenientFacilityReq.getBuildingName());
         BuildingIdDto managementBuildingId = getBuildingIdApi(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
         if(managementBuildingId != null){
-            getBuildingFacilityListApi(managementBuildingId.getFacilityId());
+            getBuildingFacilityList(managementBuildingId.getFacilityId(), res);
+
         }
-        return null;
+        return res;
     }
 
     private BuildingIdDto getBuildingIdApi(String buildingName, String roadAddress) {
@@ -82,7 +85,45 @@ public class PlaceService {
         return buildingIdDto;
     }
 
-    private void getBuildingFacilityListApi(String buildingId){
+
+    private void getBuildingFacilityList(String facilityId, BuildingFacilityListRes res) {
+        Set<String> buildingFacilityListApi = getBuildingFacilityListApi(facilityId);
+
+        for (String facility : buildingFacilityListApi) {
+            switch (facility){
+                case "승강설비":
+                    res.setLiftingFacilities(true);
+                    break;
+                case "대변기":
+                    res.setToilets(true);
+                    break;
+                case "복도":
+                    res.setHallways(true);
+                    break;
+                case "소변기":
+                    res.setUrinals(true);
+                    break;
+                case "일반사항":
+                    res.setGeneralInformation(true);
+                    break;
+                case "장애인전용주차구역":
+                    res.setDisabledParkingArea(true);
+                    break;
+                case "주출입구 높이차이 제거":
+                    res.setNoHeightDifferenceMainEntrance(true);
+                    break;
+                case "출입구(문)":
+                    res.setDoor(true);
+                    break;
+                case "해당시설 층수":
+                    res.setBuildingFloors(true);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    private Set<String> getBuildingFacilityListApi(String buildingId){
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(facilityListUrl)
                 .queryParam("serviceKey",serviceKey)
@@ -96,7 +137,7 @@ public class PlaceService {
                 .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-        parsingBuildingFacilityList(result.getBody());
+        return parsingBuildingFacilityList(result.getBody()).getConventionFacilityList();
     }
 
     private BuildingFacilityListDto parsingBuildingFacilityList(String xml){

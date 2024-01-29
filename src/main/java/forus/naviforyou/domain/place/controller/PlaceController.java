@@ -1,7 +1,7 @@
 package forus.naviforyou.domain.place.controller;
 
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
-import forus.naviforyou.domain.place.dto.response.ConvenientFacilityRes;
+import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
 import forus.naviforyou.domain.place.service.PlaceService;
 import forus.naviforyou.global.common.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class PlaceController {
 
     @PostMapping("/convenientFacility")
     public ResponseEntity<?> getConvenientFacility(@RequestBody ConvenientFacilityReq convenientFacilityReq){
-        ConvenientFacilityRes res = placeService.getConvenientFacility(convenientFacilityReq);
+        BuildingFacilityListRes res = placeService.getConvenientFacility(convenientFacilityReq);
         return BaseResponse.ok(res);
     }
 
