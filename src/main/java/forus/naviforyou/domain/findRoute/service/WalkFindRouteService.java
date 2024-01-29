@@ -29,7 +29,6 @@ public class WalkFindRouteService {
 
         WalkRouteRes walkRouteRes = null;
 
-        // API endpoint URL
         String apiUrl = "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1";
         String apiKey = appKey;
 

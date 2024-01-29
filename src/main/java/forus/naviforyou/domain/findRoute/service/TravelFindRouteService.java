@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.findRoute.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forus.naviforyou.domain.findRoute.dto.request.TravelRouteReq;
 import forus.naviforyou.domain.findRoute.dto.response.TravelRouteRes;
@@ -8,10 +9,7 @@ import forus.naviforyou.global.error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,21 +46,43 @@ public class TravelFindRouteService {
 
         String responseBody = responseEntity.getBody();
 
-//        System.out.println("API 응답: " + responseBody);
-
         return responseBody;
     }
     public TravelRouteRes parseTravelRoute(String responseBody){
+
         TravelRouteRes walkRouteRes = null;
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            walkRouteRes = objectMapper.readValue(responseBody, TravelRouteRes.class);
-        } catch (Exception e) {
-            throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
-        }
+        if (responseBody.contains("status")){
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode jsonNode = objectMapper.readTree(responseBody);
 
+                int status = jsonNode.get("result").get("status").asInt();
+                handleStatus(status);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                walkRouteRes = objectMapper.readValue(responseBody, TravelRouteRes.class);
+            } catch (Exception e) {
+                throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
+            }
+        }
         return walkRouteRes;
 
+    }
+
+    public void handleStatus(int status){
+        switch (status) {
+            case 11:
+                throw new BaseException(ErrorCode.NO_CLOSER_DISTANCE);
+
+            default:
+                throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
+        }
     }
 }

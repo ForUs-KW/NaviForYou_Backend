@@ -52,8 +52,6 @@ public class CarFindRouteService {
 
         String responseBody = responseEntity.getBody();
 
-        System.out.println("API 응답: " + responseBody);
-
         return responseBody;
     }
 
@@ -70,8 +68,7 @@ public class CarFindRouteService {
 
             carRouteRes = objectMapper.readValue(responseBody, CarRouteRes.class);
         } catch (Exception e) {
-            e.printStackTrace();
-//            throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
+            throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
         }
 
         return carRouteRes;
