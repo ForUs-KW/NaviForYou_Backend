@@ -35,14 +35,14 @@ public class PlaceService {
     private String facilityListUrl;
 
     public ConvenientFacilityRes getConvenientFacility(ConvenientFacilityReq convenientFacilityReq) {
-        BuildingIdDto managementBuildingId = getBuildingId(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
+        BuildingIdDto managementBuildingId = getBuildingIdApi(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
         if(managementBuildingId != null){
-            getBuildingFacilityList(managementBuildingId.getFacilityId());
+            getBuildingFacilityListApi(managementBuildingId.getFacilityId());
         }
         return null;
     }
 
-    private BuildingIdDto getBuildingId(String buildingName, String roadAddress) {
+    private BuildingIdDto getBuildingIdApi(String buildingName, String roadAddress) {
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(buildingIdUrl)
                 .queryParam("serviceKey",serviceKey)
@@ -82,7 +82,7 @@ public class PlaceService {
         return buildingIdDto;
     }
 
-    private void getBuildingFacilityList(String buildingId){
+    private void getBuildingFacilityListApi(String buildingId){
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(facilityListUrl)
                 .queryParam("serviceKey",serviceKey)
