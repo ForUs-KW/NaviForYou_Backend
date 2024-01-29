@@ -13,10 +13,7 @@ import forus.naviforyou.domain.findRoute.service.WalkFindRouteService;
 import forus.naviforyou.global.common.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/app/findRoute")
@@ -28,10 +25,9 @@ public class FindRouteController {
     private final TravelFindRouteService travelFindRouteService;
 
 
-    @GetMapping("/walk")
-    public ResponseEntity<?> getWalkRoute(@RequestBody WalkRouteReq response){
-        WalkRouteRes walkRouteRes = walkFindRouteService.getWalkRoute(response);
-
+    @GetMapping("/walk") // walk?stairs=False
+    public ResponseEntity<?> getWalkRoute(@RequestParam(name = "stairs", defaultValue = "True") boolean includeStairs , @RequestBody WalkRouteReq response){
+        WalkRouteRes walkRouteRes = walkFindRouteService.getWalkRoute(includeStairs,response);
         return BaseResponse.ok(walkRouteRes);
     }
 

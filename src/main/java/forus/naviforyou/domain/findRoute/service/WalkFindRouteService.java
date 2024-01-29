@@ -3,6 +3,7 @@ package forus.naviforyou.domain.findRoute.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forus.naviforyou.domain.findRoute.dto.request.WalkRouteReq;
+import forus.naviforyou.domain.findRoute.dto.response.TravelRouteRes;
 import forus.naviforyou.domain.findRoute.dto.response.WalkRouteRes;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
@@ -25,7 +26,17 @@ public class WalkFindRouteService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public WalkRouteRes getWalkRoute(WalkRouteReq walkRouteReq) {
+    public WalkRouteRes getWalkRoute(Boolean includeStairs , WalkRouteReq walkRouteReq){
+
+        if(!includeStairs){
+            walkRouteReq.setSearchOption(30);
+        }
+
+        WalkRouteRes walkRouteRes = parseWalkRoute(walkRouteReq);
+        return  walkRouteRes;
+    }
+
+    public WalkRouteRes parseWalkRoute(WalkRouteReq walkRouteReq) {
 
         WalkRouteRes walkRouteRes = null;
 
