@@ -35,9 +35,9 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public BuildingFacilityListRes getConvenientFacility(ConvenientFacilityReq convenientFacilityReq) {
-        BuildingFacilityListRes res = new BuildingFacilityListRes(convenientFacilityReq.getBuildingName());
-        BuildingIdDto managementBuildingId = getBuildingIdApi(convenientFacilityReq.getBuildingName(), convenientFacilityReq.getRoadAddrName());
+    public BuildingFacilityListRes getConvenientFacility(ConvenientFacilityReq req) {
+        BuildingFacilityListRes res = new BuildingFacilityListRes(req);
+        BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
         if(managementBuildingId != null){
             getBuildingFacilityList(managementBuildingId.getFacilityId(), res);
 
