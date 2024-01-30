@@ -1,11 +1,15 @@
 package forus.naviforyou.domain.place.dto.response;
 
+import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
+import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
 @Setter
 @Getter
 public class BuildingFacilityListRes {
-    private String buildingName;
+
+    private Location location;
+    private String roadAddress;
     private Boolean liftingFacilities;
     private Boolean toilets;
     private Boolean hallways;
@@ -17,8 +21,9 @@ public class BuildingFacilityListRes {
     private Boolean door;
     private Boolean buildingFloors;
 
-    public BuildingFacilityListRes(String name) {
-        buildingName = name;
+    public BuildingFacilityListRes(ConvenientFacilityReq req) {
+        location = req.getLocation();
+        roadAddress = req.getRoadAddress();
         liftingFacilities = false;
         toilets = false;
         hallways = false;
