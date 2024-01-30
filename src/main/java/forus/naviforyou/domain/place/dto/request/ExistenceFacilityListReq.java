@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ConvenientFacilityReq {
+public class ExistenceFacilityListReq {
     private String buildingName;
     private Location location;
     private String roadAddress;

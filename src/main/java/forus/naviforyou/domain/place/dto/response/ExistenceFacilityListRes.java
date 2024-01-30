@@ -1,12 +1,12 @@
 package forus.naviforyou.domain.place.dto.response;
 
-import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
+import forus.naviforyou.domain.place.dto.request.ExistenceFacilityListReq;
 import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
 @Setter
 @Getter
-public class BuildingFacilityListRes {
+public class ExistenceFacilityListRes {
 
     private Location location;
     private String roadAddress;
@@ -16,15 +16,8 @@ public class BuildingFacilityListRes {
     private Boolean slide;
     private Boolean bump;
 
-    /**
-    private Boolean buildingFloors; //건물 층수
-    private Boolean hallways; //복도
-    private Boolean urinals;  //소변기
-    private Boolean generalInformation; //일반 정보
-    private Boolean door; // 문
-    */
 
-    public BuildingFacilityListRes(ConvenientFacilityReq req) {
+    public ExistenceFacilityListRes(ExistenceFacilityListReq req) {
         location = req.getLocation();
         roadAddress = req.getRoadAddress();
         elevator = false;

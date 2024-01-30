@@ -1,10 +1,10 @@
 package forus.naviforyou.domain.place.service;
 
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
-import forus.naviforyou.domain.place.dto.publicData.BuildingFacilityListDto;
-import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
+import forus.naviforyou.domain.place.dto.publicData.ExistenceFacilityListDto;
+import forus.naviforyou.domain.place.dto.request.ExistenceFacilityListReq;
 import forus.naviforyou.domain.place.dto.request.EditFacilityReq;
-import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
+import forus.naviforyou.domain.place.dto.response.ExistenceFacilityListRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
@@ -43,11 +43,11 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public BuildingFacilityListRes getConvenientFacility(ConvenientFacilityReq req) {
-        BuildingFacilityListRes res = new BuildingFacilityListRes(req);
+    public ExistenceFacilityListRes getExistenceFacilityList(ExistenceFacilityListReq req) {
+        ExistenceFacilityListRes res = new ExistenceFacilityListRes(req);
         BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
         if(managementBuildingId != null){
-            getBuildingFacilityList(managementBuildingId.getFacilityId(), res);
+            getExistenceFacilityList(managementBuildingId.getFacilityId(), res);
 
         }
         return res;
@@ -94,8 +94,8 @@ public class PlaceService {
     }
 
 
-    private void getBuildingFacilityList(String facilityId, BuildingFacilityListRes res) {
-        List<String> buildingFacilityListApi = getBuildingFacilityListApi(facilityId);
+    private void getExistenceFacilityList(String facilityId, ExistenceFacilityListRes res) {
+        List<String> buildingFacilityListApi = getExistenceFacilityListApi(facilityId);
 
         for (String facility : buildingFacilityListApi) {
             switch (facility) {
@@ -109,7 +109,7 @@ public class PlaceService {
             }
         }
     }
-    private List<String> getBuildingFacilityListApi(String buildingId){
+    private List<String> getExistenceFacilityListApi(String buildingId){
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(facilityListUrl)
                 .queryParam("serviceKey",serviceKey)
@@ -123,18 +123,18 @@ public class PlaceService {
                 .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-        return parsingBuildingFacilityList(result.getBody()).getConventionFacilityList();
+        return parsingExistenceFacilityList(result.getBody()).getConventionFacilityList();
     }
 
-    private BuildingFacilityListDto parsingBuildingFacilityList(String xml){
-        BuildingFacilityListDto facilityListDto = null;
+    private ExistenceFacilityListDto parsingExistenceFacilityList(String xml){
+        ExistenceFacilityListDto facilityListDto = null;
         try {
             log.info("Xml BuildingFacilityList = {}",xml);
 
             InputStream stream = new ByteArrayInputStream(xml.getBytes());
-            JAXBContext context = JAXBContext.newInstance(BuildingFacilityListDto.class);
+            JAXBContext context = JAXBContext.newInstance(ExistenceFacilityListDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            facilityListDto = (BuildingFacilityListDto)unmarshaller.unmarshal(stream);
+            facilityListDto = (ExistenceFacilityListDto)unmarshaller.unmarshal(stream);
 
             log.info("Parsing BuildingFacilityList={} ",facilityListDto);
         }catch (Exception e){
@@ -143,7 +143,7 @@ public class PlaceService {
         return facilityListDto;
     }
 
-    public void editConvenientFacility(EditFacilityReq req) {
+    public void editFacility(EditFacilityReq req) {
         Building building = buildingRepository.findByLocation(req.getLocation()).orElse(null);
         if (building == null){
             building = Building.builder()
