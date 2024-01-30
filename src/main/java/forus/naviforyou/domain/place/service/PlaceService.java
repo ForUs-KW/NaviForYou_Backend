@@ -176,6 +176,7 @@ public class PlaceService {
         int editUserNum = building.getUserUpdateList().getOrDefault(Accessibility.valueOf(req.getFacilityName()),0) + flag;
         if(editUserNum * flag > Constants.EDIT_USER_NUM){
             building.getAccessibilityList().put(Accessibility.valueOf(req.getFacilityName()),req.getEdit());
+            building.getUserUpdateList().remove(Accessibility.valueOf(req.getFacilityName()));
         }else {
             building.getUserUpdateList().put(Accessibility.valueOf(req.getFacilityName()),editUserNum);
         }
