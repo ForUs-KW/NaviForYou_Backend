@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -48,9 +49,26 @@ public class PlaceService {
         BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
         if(managementBuildingId != null){
             getExistenceFacilityList(managementBuildingId.getFacilityId(), res);
-
         }
+
+        buildingRepository.findByLocation(req.getLocation())
+                .ifPresent(building -> reflectDBFacilityList(building, res));
+
         return res;
+    }
+
+    private void reflectDBFacilityList(Building building, ExistenceFacilityListRes res) {
+        for (Map.Entry<Accessibility, Boolean> facility : building.getAccessibilityList().entrySet()) {
+            Boolean value = facility.getValue();
+            switch (facility.getKey()){
+                case PARKING -> res.setParking(value);
+                case BUMP -> res.setBump(value);
+                case ELEVATOR -> res.setElevator(value);
+                case SLIDE -> res.setSlide(value);
+                case TOILET -> res.setToilets(value);
+                default -> {}
+            }
+        }
     }
 
     private BuildingIdDto getBuildingIdApi(String buildingName, String roadAddress) {
