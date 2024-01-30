@@ -3,8 +3,11 @@ package forus.naviforyou.domain.place.service;
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.publicData.BuildingFacilityListDto;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
+import forus.naviforyou.domain.place.dto.request.EditFacilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
+import forus.naviforyou.global.common.collection.building.Building;
+import forus.naviforyou.global.common.collection.enums.Accessibility;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -136,6 +139,24 @@ public class PlaceService {
             log.info("Parsing BuildingFacilityList error: ",e);
         }
         return facilityListDto;
+    }
+
+    public void editConvenientFacility(EditFacilityReq req) {
+        Building building = buildingRepository.findByLocation(req.getLocation()).orElse(null);
+        if (building == null){
+            building = Building.builder()
+                    .roadAddress(req.getRoadAddress())
+                    .location(req.getLocation())
+                    .build();
+        }
+
+
+        building.getUserUpdateList().put(Accessibility.valueOf(req.getFacilityName()),
+                building.getUserUpdateList().getOrDefault(req.getFacilityName(),0)
+                        + (req.getEdit() ? 1 : -1)
+        );
+
+        buildingRepository.save(building);
     }
 
 }

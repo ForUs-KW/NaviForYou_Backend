@@ -1,9 +1,11 @@
 package forus.naviforyou.domain.place.controller;
 
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
+import forus.naviforyou.domain.place.dto.request.EditFacilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
 import forus.naviforyou.domain.place.service.PlaceService;
 import forus.naviforyou.global.common.BaseResponse;
+import forus.naviforyou.global.common.BaseResultRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,12 @@ public class PlaceController {
     public ResponseEntity<?> getConvenientFacility(@RequestBody ConvenientFacilityReq convenientFacilityReq){
         BuildingFacilityListRes res = placeService.getConvenientFacility(convenientFacilityReq);
         return BaseResponse.ok(res);
+    }
+
+    @PostMapping("/convenientFacility/edit")
+    public ResponseEntity<?> editConvenientFacility(@RequestBody EditFacilityReq req){
+        placeService.editConvenientFacility(req);
+        return BaseResponse.ok(new BaseResultRes(true));
     }
 
 }
