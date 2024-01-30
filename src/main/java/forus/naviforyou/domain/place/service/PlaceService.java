@@ -3,7 +3,10 @@ package forus.naviforyou.domain.place.service;
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.publicData.BuildingFacilityListDto;
 import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
+import forus.naviforyou.domain.place.dto.request.EditFacilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
+import forus.naviforyou.domain.place.repository.BuildingRepository;
+import forus.naviforyou.global.common.collection.building.Building;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +28,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
+
+    private final BuildingRepository buildingRepository;
 
     @Value("${social.publicData.params.serviceKey}")
     private String serviceKey;
@@ -91,15 +96,15 @@ public class PlaceService {
 
         for (String facility : buildingFacilityListApi) {
             switch (facility) {
-                case "승강설비" -> res.setLiftingFacilities(true);
+                case "승강설비" -> res.setElevator(true);
                 case "대변기" -> res.setToilets(true);
                 case "복도" -> res.setHallways(true);
                 case "소변기" -> res.setUrinals(true);
                 case "일반사항" -> res.setGeneralInformation(true);
-                case "장애인전용주차구역" -> res.setDisabledParkingArea(true);
-                case "주출입구 높이차이 제거" -> res.setNoHeightDifferenceMainEntrance(true);
+                case "장애인전용주차구역" -> res.setParkingArea(true);
+                case "주출입구 높이차이 제거" -> res.setBump(true);
                 case "출입구(문)", "주출입문" -> res.setDoor(true);
-                case "주출입구 접근로" -> res.setMainEntranceAccessRoad(true);
+                case "주출입구 접근로" -> res.setSlide(true);
                 case "해당시설 층수" -> res.setBuildingFloors(true);
                 default -> {
                 }
