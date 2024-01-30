@@ -6,6 +6,7 @@ import forus.naviforyou.domain.place.dto.request.ConvenientFacilityReq;
 import forus.naviforyou.domain.place.dto.request.EditFacilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingFacilityListRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
+import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
 import forus.naviforyou.global.common.collection.enums.Accessibility;
 import lombok.RequiredArgsConstructor;
@@ -150,11 +151,15 @@ public class PlaceService {
                     .build();
         }
 
+        int flag = req.getEdit() ? 1 : -1;
+        int editUserNum = building.getUserUpdateList().getOrDefault(Accessibility.valueOf(req.getFacilityName()),0) + flag;
+        if(editUserNum * flag > Constants.EDIT_USER_NUM){
+            building.getAccessibilityList().put(Accessibility.valueOf(req.getFacilityName()),req.getEdit());
+        }else {
+            building.getUserUpdateList().put(Accessibility.valueOf(req.getFacilityName()),editUserNum);
+        }
 
-        building.getUserUpdateList().put(Accessibility.valueOf(req.getFacilityName()),
-                building.getUserUpdateList().getOrDefault(req.getFacilityName(),0)
-                        + (req.getEdit() ? 1 : -1)
-        );
+
 
         buildingRepository.save(building);
     }
