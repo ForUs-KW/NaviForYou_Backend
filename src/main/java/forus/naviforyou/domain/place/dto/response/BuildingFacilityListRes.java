@@ -10,29 +10,27 @@ public class BuildingFacilityListRes {
 
     private Location location;
     private String roadAddress;
-    private Boolean liftingFacilities;
+    private Boolean elevator;
     private Boolean toilets;
-    private Boolean hallways;
-    private Boolean urinals;
-    private Boolean generalInformation;
-    private Boolean disabledParkingArea;
-    private Boolean mainEntranceAccessRoad;
-    private Boolean noHeightDifferenceMainEntrance;
-    private Boolean door;
-    private Boolean buildingFloors;
+    private Boolean parking;
+    private Boolean slide;
+    private Boolean bump;
+
+    /**
+    private Boolean buildingFloors; //건물 층수
+    private Boolean hallways; //복도
+    private Boolean urinals;  //소변기
+    private Boolean generalInformation; //일반 정보
+    private Boolean door; // 문
+    */
 
     public BuildingFacilityListRes(ConvenientFacilityReq req) {
         location = req.getLocation();
         roadAddress = req.getRoadAddress();
-        liftingFacilities = false;
+        elevator = false;
         toilets = false;
-        hallways = false;
-        urinals = false;
-        generalInformation = false;
-        disabledParkingArea = false;
-        mainEntranceAccessRoad = false;
-        door = false;
-        buildingFloors  = false;
-        noHeightDifferenceMainEntrance =false;
+        parking = false;
+        slide = false;
+        bump =false;
     }
 }
