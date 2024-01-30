@@ -24,6 +24,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -148,6 +149,8 @@ public class PlaceService {
             building = Building.builder()
                     .roadAddress(req.getRoadAddress())
                     .location(req.getLocation())
+                    .userUpdateList(new HashMap<>())
+                    .accessibilityList(new HashMap<>())
                     .build();
         }
 
