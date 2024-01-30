@@ -3,7 +3,7 @@ package forus.naviforyou.domain.place.dto.publicData;
 import lombok.*;
 
 import javax.xml.bind.annotation.*;
-import java.util.Set;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "facInfoList")
@@ -23,13 +23,14 @@ public class BuildingFacilityListDto {
     @Builder
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
+    @ToString
     protected static class FacilityId{
         @XmlElement(name = "evalInfo")
-        private Set<String> conventionFacilityList;
+        private String conventionFacilityList;
     }
 
-    public Set<String> getConventionFacilityList(){
-        return facilityId.getConventionFacilityList();
+    public List<String> getConventionFacilityList(){
+        return List.of(facilityId.getConventionFacilityList().split(","));
     }
 
 }

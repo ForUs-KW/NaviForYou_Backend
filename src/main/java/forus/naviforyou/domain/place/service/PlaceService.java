@@ -19,7 +19,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.Set;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -87,43 +87,26 @@ public class PlaceService {
 
 
     private void getBuildingFacilityList(String facilityId, BuildingFacilityListRes res) {
-        Set<String> buildingFacilityListApi = getBuildingFacilityListApi(facilityId);
+        List<String> buildingFacilityListApi = getBuildingFacilityListApi(facilityId);
 
         for (String facility : buildingFacilityListApi) {
-            switch (facility){
-                case "승강설비":
-                    res.setLiftingFacilities(true);
-                    break;
-                case "대변기":
-                    res.setToilets(true);
-                    break;
-                case "복도":
-                    res.setHallways(true);
-                    break;
-                case "소변기":
-                    res.setUrinals(true);
-                    break;
-                case "일반사항":
-                    res.setGeneralInformation(true);
-                    break;
-                case "장애인전용주차구역":
-                    res.setDisabledParkingArea(true);
-                    break;
-                case "주출입구 높이차이 제거":
-                    res.setNoHeightDifferenceMainEntrance(true);
-                    break;
-                case "출입구(문)":
-                    res.setDoor(true);
-                    break;
-                case "해당시설 층수":
-                    res.setBuildingFloors(true);
-                    break;
-                default:
-                    break;
+            switch (facility) {
+                case "승강설비" -> res.setLiftingFacilities(true);
+                case "대변기" -> res.setToilets(true);
+                case "복도" -> res.setHallways(true);
+                case "소변기" -> res.setUrinals(true);
+                case "일반사항" -> res.setGeneralInformation(true);
+                case "장애인전용주차구역" -> res.setDisabledParkingArea(true);
+                case "주출입구 높이차이 제거" -> res.setNoHeightDifferenceMainEntrance(true);
+                case "출입구(문)", "주출입문" -> res.setDoor(true);
+                case "주출입구 접근로" -> res.setMainEntranceAccessRoad(true);
+                case "해당시설 층수" -> res.setBuildingFloors(true);
+                default -> {
+                }
             }
         }
     }
-    private Set<String> getBuildingFacilityListApi(String buildingId){
+    private List<String> getBuildingFacilityListApi(String buildingId){
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(facilityListUrl)
                 .queryParam("serviceKey",serviceKey)
