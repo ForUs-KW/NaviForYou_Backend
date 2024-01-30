@@ -1,5 +1,6 @@
 package forus.naviforyou.domain.place.dto.request;
 
+import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
 @Builder
@@ -8,6 +9,7 @@ import lombok.*;
 @Getter
 public class ConvenientFacilityReq {
     private String buildingName;
-    private String roadAddrName;
+    private Location location;
+    private String roadAddress;
 
 }
