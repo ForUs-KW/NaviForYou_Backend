@@ -6,6 +6,7 @@ import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.request.SignUpReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.domain.member.repository.MemberRepository;
+import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.enums.MemberType;
 import forus.naviforyou.global.common.collection.enums.Role;
 import forus.naviforyou.global.common.collection.member.Member;
@@ -39,8 +40,6 @@ public class MemberService {
 
     private final int CODE_LENGTH = 6;
     private final long CODE_MINUTE = 10;
-    private final String SIGN_UP_FLAG = "SIGNUP";
-
     public void signUp(SignUpReq signUpReq){
         memberRepository.save(
                 Member.builder()
@@ -132,11 +131,12 @@ public class MemberService {
                         "<br> 인증번호를 제대로 입력해주세요";
 
         mailService.mailSend(email,title,content);
-        redisService.setValues(email+SIGN_UP_FLAG, code, Duration.ofMinutes(CODE_MINUTE));
+        redisService.setValues(email+ Constants.SIGN_UP_FLAG, code, Duration.ofMinutes(CODE_MINUTE));
+
     }
 
     public void checkEmailCode(CheckSingUpCodeReq req){
-        String key = req.getEmail()+SIGN_UP_FLAG;
+        String key = req.getEmail()+Constants.SIGN_UP_FLAG;
         String code = req.getCode();
 
         if(!redisService.hasKey(key)){
