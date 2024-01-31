@@ -26,4 +26,14 @@ public class ExistenceFacilityListRes {
         slide = false;
         bump =false;
     }
+
+    public String facilityListToString(){
+        String facilityList = "";
+        if(elevator) facilityList += "ELEVATOR ";
+        if(toilets) facilityList += "TOILET ";
+        if(parking) facilityList += "PARKING ";
+        if(slide) facilityList += "SLIDE ";
+        if(bump) facilityList += "BUMP ";
+        return facilityList;
+    }
 }
