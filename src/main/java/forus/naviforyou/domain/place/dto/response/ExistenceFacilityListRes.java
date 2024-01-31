@@ -36,4 +36,18 @@ public class ExistenceFacilityListRes {
         if(bump) facilityList += "BUMP ";
         return facilityList;
     }
+
+    public void stringTofacilityList(String facilityList){
+        for(String facility : facilityList.split(" ")){
+            switch (facility){
+                case "ELEVATOR" -> elevator = true;
+                case "TOILET" -> toilets = true;
+                case "PARKING" -> parking = true;
+                case "SLIDE" -> slide = true;
+                case "BUMP" -> bump = true;
+                default -> {}
+            }
+        }
+
+    }
 }

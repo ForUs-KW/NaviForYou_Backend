@@ -189,4 +189,14 @@ public class PlaceService {
 
         buildingRepository.save(building);
     }
+
+    public ExistenceFacilityListRes getFacilityList(ExistenceFacilityListReq req, String member) {
+        String key = Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member;
+        if(redisService.hasKey(key)){
+            ExistenceFacilityListRes res = new ExistenceFacilityListRes(req);
+            res.stringTofacilityList(redisService.getValues(key));
+            return res;
+        }
+        return getExistenceFacilityList(req,member);
+    }
 }

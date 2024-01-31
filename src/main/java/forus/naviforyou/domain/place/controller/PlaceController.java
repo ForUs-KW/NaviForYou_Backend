@@ -20,8 +20,14 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @PostMapping("/convenientFacility")
-    public ResponseEntity<?> getExistenceFacilityList(@RequestBody ExistenceFacilityListReq req){
-        ExistenceFacilityListRes res = placeService.getExistenceFacilityList(req);
+    public ResponseEntity<?> getExistenceFacilityList(@RequestBody ExistenceFacilityListReq req, String member){
+        ExistenceFacilityListRes res = placeService.getExistenceFacilityList(req, member);
+        return BaseResponse.ok(res);
+    }
+
+    @PostMapping("/convenientFacility/editPage")
+    public ResponseEntity<?> getFacilityList(@RequestBody ExistenceFacilityListReq req, String member){
+        ExistenceFacilityListRes res = placeService.getFacilityList(req, member);
         return BaseResponse.ok(res);
     }
 
