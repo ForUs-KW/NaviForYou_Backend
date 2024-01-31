@@ -9,6 +9,7 @@ import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
 import forus.naviforyou.global.common.collection.enums.Accessibility;
+import forus.naviforyou.global.common.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ import java.util.Map;
 public class PlaceService {
 
     private final BuildingRepository buildingRepository;
+    private final RedisService redisService;
 
     @Value("${social.publicData.params.serviceKey}")
     private String serviceKey;
@@ -44,7 +47,7 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public ExistenceFacilityListRes getExistenceFacilityList(ExistenceFacilityListReq req) {
+    public ExistenceFacilityListRes getExistenceFacilityList(ExistenceFacilityListReq req, String member) {
         ExistenceFacilityListRes res = new ExistenceFacilityListRes(req);
         BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
         if(managementBuildingId != null){
@@ -54,6 +57,7 @@ public class PlaceService {
         buildingRepository.findByLocation(req.getLocation())
                 .ifPresent(building -> reflectDBFacilityList(building, res));
 
+        redisService.setValues(Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member, res.facilityListToString(), Duration.ofMinutes(10));
         return res;
     }
 
@@ -185,5 +189,4 @@ public class PlaceService {
 
         buildingRepository.save(building);
     }
-
 }
