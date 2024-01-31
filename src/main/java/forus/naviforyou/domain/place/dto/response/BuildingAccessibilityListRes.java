@@ -1,12 +1,12 @@
 package forus.naviforyou.domain.place.dto.response;
 
-import forus.naviforyou.domain.place.dto.request.ExistenceFacilityListReq;
+import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
 @Setter
 @Getter
-public class ExistenceFacilityListRes {
+public class BuildingAccessibilityListRes {
 
     private Location location;
     private String roadAddress;
@@ -17,7 +17,7 @@ public class ExistenceFacilityListRes {
     private Boolean bump;
 
 
-    public ExistenceFacilityListRes(ExistenceFacilityListReq req) {
+    public BuildingAccessibilityListRes(BuildingInfoReq req) {
         location = req.getLocation();
         roadAddress = req.getRoadAddress();
         elevator = false;
@@ -37,7 +37,7 @@ public class ExistenceFacilityListRes {
         return facilityList;
     }
 
-    public void stringTofacilityList(String facilityList){
+    public void stringToFacilityList(String facilityList){
         for(String facility : facilityList.split(" ")){
             switch (facility){
                 case "ELEVATOR" -> elevator = true;

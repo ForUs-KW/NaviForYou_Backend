@@ -6,13 +6,13 @@ import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
 @Getter
-public class ExistenceFacilityListReq {
+public class BuildingInfoReq {
     private final String buildingName;
     private final Location location;
     private final String roadAddress;
 
     @JsonCreator
-    public ExistenceFacilityListReq(
+    public BuildingInfoReq(
             @JsonProperty("buildingName") String buildingName,
             @JsonProperty("location") Location location,
             @JsonProperty("roadAddress") String roadAddress) {

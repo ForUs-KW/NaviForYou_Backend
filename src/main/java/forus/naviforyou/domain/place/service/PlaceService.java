@@ -1,10 +1,10 @@
 package forus.naviforyou.domain.place.service;
 
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
-import forus.naviforyou.domain.place.dto.publicData.ExistenceFacilityListDto;
-import forus.naviforyou.domain.place.dto.request.ExistenceFacilityListReq;
-import forus.naviforyou.domain.place.dto.request.EditFacilityReq;
-import forus.naviforyou.domain.place.dto.response.ExistenceFacilityListRes;
+import forus.naviforyou.domain.place.dto.publicData.BuildingAccessibilityListDto;
+import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
+import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
+import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
@@ -47,21 +47,21 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public ExistenceFacilityListRes getExistenceFacilityList(ExistenceFacilityListReq req, String member) {
-        ExistenceFacilityListRes res = new ExistenceFacilityListRes(req);
+    public BuildingAccessibilityListRes getBuildingAccessibilityList(BuildingInfoReq req, String member) {
+        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req);
         BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
         if(managementBuildingId != null){
-            getExistenceFacilityList(managementBuildingId.getFacilityId(), res);
+            getBuildingAccessibilityList(managementBuildingId.getFacilityId(), res);
         }
 
         buildingRepository.findByLocation(req.getLocation())
-                .ifPresent(building -> reflectDBFacilityList(building, res));
+                .ifPresent(building -> getBuildingAccessibilityListForDB(building, res));
 
         redisService.setValues(Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member, res.facilityListToString(), Duration.ofMinutes(10));
         return res;
     }
 
-    private void reflectDBFacilityList(Building building, ExistenceFacilityListRes res) {
+    private void getBuildingAccessibilityListForDB(Building building, BuildingAccessibilityListRes res) {
         for (Map.Entry<Accessibility, Boolean> facility : building.getAccessibilityList().entrySet()) {
             Boolean value = facility.getValue();
             switch (facility.getKey()){
@@ -116,8 +116,8 @@ public class PlaceService {
     }
 
 
-    private void getExistenceFacilityList(String facilityId, ExistenceFacilityListRes res) {
-        List<String> buildingFacilityListApi = getExistenceFacilityListApi(facilityId);
+    private void getBuildingAccessibilityList(String facilityId, BuildingAccessibilityListRes res) {
+        List<String> buildingFacilityListApi = getBuildingAccessibilityListApi(facilityId);
 
         for (String facility : buildingFacilityListApi) {
             switch (facility) {
@@ -131,7 +131,7 @@ public class PlaceService {
             }
         }
     }
-    private List<String> getExistenceFacilityListApi(String buildingId){
+    private List<String> getBuildingAccessibilityListApi(String buildingId){
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(facilityListUrl)
                 .queryParam("serviceKey",serviceKey)
@@ -145,18 +145,18 @@ public class PlaceService {
                 .get(uri)
                 .build();
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-        return parsingExistenceFacilityList(result.getBody()).getConventionFacilityList();
+        return parsingBuildingAccessibilityList(result.getBody()).getConventionFacilityList();
     }
 
-    private ExistenceFacilityListDto parsingExistenceFacilityList(String xml){
-        ExistenceFacilityListDto facilityListDto = null;
+    private BuildingAccessibilityListDto parsingBuildingAccessibilityList(String xml){
+        BuildingAccessibilityListDto facilityListDto = null;
         try {
             log.info("Xml BuildingFacilityList = {}",xml);
 
             InputStream stream = new ByteArrayInputStream(xml.getBytes());
-            JAXBContext context = JAXBContext.newInstance(ExistenceFacilityListDto.class);
+            JAXBContext context = JAXBContext.newInstance(BuildingAccessibilityListDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            facilityListDto = (ExistenceFacilityListDto)unmarshaller.unmarshal(stream);
+            facilityListDto = (BuildingAccessibilityListDto)unmarshaller.unmarshal(stream);
 
             log.info("Parsing BuildingFacilityList={} ",facilityListDto);
         }catch (Exception e){
@@ -165,24 +165,24 @@ public class PlaceService {
         return facilityListDto;
     }
 
-    public void editFacility(EditFacilityReq req) {
-        Building building = buildingRepository.findByLocation(req.getLocation()).orElse(null);
+    public void editBuildingAccessibility(EditAccessibilityReq req) {
+        Building building = buildingRepository.findByLocation(req.location()).orElse(null);
         if (building == null){
             building = Building.builder()
-                    .roadAddress(req.getRoadAddress())
-                    .location(req.getLocation())
+                    .roadAddress(req.roadAddress())
+                    .location(req.location())
                     .userUpdateList(new HashMap<>())
                     .accessibilityList(new HashMap<>())
                     .build();
         }
 
-        int flag = req.getEdit() ? 1 : -1;
-        int editUserNum = building.getUserUpdateList().getOrDefault(Accessibility.valueOf(req.getFacilityName()),0) + flag;
+        int flag = req.edit() ? 1 : -1;
+        int editUserNum = building.getUserUpdateList().getOrDefault(Accessibility.valueOf(req.facilityName()),0) + flag;
         if(editUserNum * flag > Constants.EDIT_USER_NUM){
-            building.getAccessibilityList().put(Accessibility.valueOf(req.getFacilityName()),req.getEdit());
-            building.getUserUpdateList().remove(Accessibility.valueOf(req.getFacilityName()));
+            building.getAccessibilityList().put(Accessibility.valueOf(req.facilityName()),req.edit());
+            building.getUserUpdateList().remove(Accessibility.valueOf(req.facilityName()));
         }else {
-            building.getUserUpdateList().put(Accessibility.valueOf(req.getFacilityName()),editUserNum);
+            building.getUserUpdateList().put(Accessibility.valueOf(req.facilityName()),editUserNum);
         }
 
 
@@ -190,13 +190,13 @@ public class PlaceService {
         buildingRepository.save(building);
     }
 
-    public ExistenceFacilityListRes getFacilityList(ExistenceFacilityListReq req, String member) {
+    public BuildingAccessibilityListRes getBuildingAccessibilityInfoList(BuildingInfoReq req, String member) {
         String key = Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member;
         if(redisService.hasKey(key)){
-            ExistenceFacilityListRes res = new ExistenceFacilityListRes(req);
-            res.stringTofacilityList(redisService.getValues(key));
+            BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req);
+            res.stringToFacilityList(redisService.getValues(key));
             return res;
         }
-        return getExistenceFacilityList(req,member);
+        return getBuildingAccessibilityList(req,member);
     }
 }
