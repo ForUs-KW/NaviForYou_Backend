@@ -6,9 +6,11 @@ import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
 import forus.naviforyou.domain.place.service.PlaceService;
 import forus.naviforyou.global.common.BaseResponse;
 import forus.naviforyou.global.common.BaseResultRes;
+import forus.naviforyou.global.common.collection.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -20,14 +22,14 @@ public class PlaceController {
     private final PlaceService placeService;
 
     @PostMapping("/convenientFacility")
-    public ResponseEntity<?> getBuildingAccessibilityList(@RequestBody BuildingInfoReq req, String member){
-        BuildingAccessibilityListRes res = placeService.getBuildingAccessibilityList(req, member);
+    public ResponseEntity<?> getBuildingAccessibilityList(@RequestBody BuildingInfoReq req, @AuthenticationPrincipal Member member){
+        BuildingAccessibilityListRes res = placeService.getBuildingAccessibilityList(req, member.getNickname());
         return BaseResponse.ok(res);
     }
 
     @PostMapping("/convenientFacility/editPage")
-    public ResponseEntity<?> getBuildingAccessibilityInfoList(@RequestBody BuildingInfoReq req, String member){
-        BuildingAccessibilityListRes res = placeService.getBuildingAccessibilityInfoList(req, member);
+    public ResponseEntity<?> getBuildingAccessibilityInfoList(@RequestBody BuildingInfoReq req, @AuthenticationPrincipal Member member){
+        BuildingAccessibilityListRes res = placeService.getBuildingAccessibilityInfoList(req, member.getNickname());
         return BaseResponse.ok(res);
     }
 
