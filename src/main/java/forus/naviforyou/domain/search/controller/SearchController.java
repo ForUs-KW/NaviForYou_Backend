@@ -17,7 +17,7 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @ApiOperation(tags = "2.search", value = "키워드 검색", notes = "검색하여 결과를 출력합니다")
+    @ApiOperation(tags = "5. search", value = "키워드 검색", notes = "검색하여 결과를 출력합니다")
 
     @GetMapping("/{name}")
     public ResponseEntity<?> getSearch(@RequestBody SearchReq searchReq, @PathVariable String name){

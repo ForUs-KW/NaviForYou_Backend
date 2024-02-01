@@ -29,7 +29,7 @@ public class FindRouteController {
     private final TravelFindRouteService travelFindRouteService;
 
 
-    @ApiOperation(tags = "5. Find Route", value = "보행자 길찾기", notes = "보행자용 길찾기 정보를 제공합니다")
+    @ApiOperation(tags = "1. Find Route", value = "보행자 길찾기", notes = "보행자용 길찾기 정보를 제공합니다")
 
     @GetMapping("/walk")
     public ResponseEntity<?> getWalkRoute(@RequestBody WalkRouteReq response){
@@ -38,7 +38,7 @@ public class FindRouteController {
         return BaseResponse.ok(walkRouteRes);
     }
 
-    @ApiOperation(tags = "5. Find Route", value = "대중교통 길찾기", notes = "대중교통 길찾기 정보를 제공합니다")
+    @ApiOperation(tags = "1. Find Route", value = "대중교통 길찾기", notes = "대중교통 길찾기 정보를 제공합니다")
     @GetMapping("/travel")
     public ResponseEntity<?> getTravelRoute(@RequestBody TravelRouteReq response){
         TravelRouteRes travelRouteReq =travelFindRouteService.getTravelRoute(response);
@@ -46,7 +46,7 @@ public class FindRouteController {
         return BaseResponse.ok(travelRouteReq);
     }
 
-    @ApiOperation(tags = "5. Find Route", value = "차량 길찾기", notes = "차량용 길찾기 정보를 제공합니다")
+    @ApiOperation(tags = "1. Find Route", value = "차량 길찾기", notes = "차량용 길찾기 정보를 제공합니다")
     @GetMapping("/car")
     public ResponseEntity<?> getCarRoute(@RequestBody CarRouteReq response){
         CarRouteRes carRouteReq =carFindRouteService.getCarRoute(response);

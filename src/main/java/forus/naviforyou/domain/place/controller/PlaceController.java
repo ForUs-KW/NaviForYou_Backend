@@ -21,7 +21,7 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
-    @ApiOperation(tags = "3.place", value = "편의 시설 정보", notes = "건물의 편의시설 정보를 가져옵니다")
+    @ApiOperation(tags = "4. place", value = "편의 시설 정보", notes = "건물의 편의시설 정보를 가져옵니다")
 
     @PostMapping("/convenientFacility")
     public ResponseEntity<?> getConvenientFacility(@RequestBody ConvenientFacilityReq convenientFacilityReq){
