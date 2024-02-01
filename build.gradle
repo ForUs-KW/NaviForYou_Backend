@@ -48,6 +48,12 @@ dependencies {
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	//xml
+	implementation 'javax.xml.bind:jaxb-api'
+	runtimeOnly 'com.sun.xml.bind:jaxb-impl:3.0.0'
+	implementation 'org.glassfish.jaxb:jaxb-runtime'
+	implementation 'javax.activation:activation:1.1.1'
 }
 
 tasks.named('test') {
