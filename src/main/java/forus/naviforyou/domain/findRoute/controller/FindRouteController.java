@@ -25,8 +25,8 @@ public class FindRouteController {
     private final TravelFindRouteService travelFindRouteService;
 
 
-    @GetMapping("/walk") // walk?stairs=False
-    public ResponseEntity<?> getWalkRoute(@RequestParam(name = "stairs", defaultValue = "True") boolean includeStairs , @RequestBody WalkRouteReq response){
+    @GetMapping("/walk") // walk?stairs=false
+    public ResponseEntity<?> getWalkRoute(@RequestParam(name = "stairs", defaultValue = "true") boolean includeStairs , @RequestBody WalkRouteReq response){
         WalkRouteRes walkRouteRes = walkFindRouteService.getWalkRoute(includeStairs,response);
         return BaseResponse.ok(walkRouteRes);
     }
