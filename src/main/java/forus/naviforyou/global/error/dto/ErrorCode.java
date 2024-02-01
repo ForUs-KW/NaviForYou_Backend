@@ -2,9 +2,12 @@ package forus.naviforyou.global.error.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 
 @Getter
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
 public enum ErrorCode {
     /**

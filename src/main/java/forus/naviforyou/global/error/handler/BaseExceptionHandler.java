@@ -20,6 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class BaseExceptionHandler {
 
+    @ExceptionHandler(BaseException.class)
+    protected ResponseEntity<BaseErrorResponse> handleBusinessException(
+            BaseException e,
+            HttpServletRequest request) {
+        log.error("BusinessException: {} - {}", e.getErrorCode().getMessage(), request.getRequestURL());
+        final ErrorCode errorCode = e.getErrorCode();
+        final BaseErrorResponse response = BaseErrorResponse.of(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(200));
+    }
+
+
     // HttpMessageConverter 에서 등록한 HttpMessageConverter binding 못 할 경우 발생 - @Valid, @Validated
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<BaseErrorResponse> handleMethodArgumentNotValidException(
@@ -62,13 +73,5 @@ public class BaseExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    @ExceptionHandler(BaseException.class)
-    protected ResponseEntity<BaseErrorResponse> handleBusinessException(
-            BaseException e,
-            HttpServletRequest request) {
-        log.error("BusinessException: {} - {}", e.getErrorCode().getMessage(), request.getRequestURL());
-        final ErrorCode errorCode = e.getErrorCode();
-        final BaseErrorResponse response = BaseErrorResponse.of(errorCode);
-        return new ResponseEntity<>(response, errorCode.getStatus());
-    }
+
 }
