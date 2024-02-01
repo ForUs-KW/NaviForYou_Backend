@@ -40,6 +40,7 @@ public enum ErrorCode {
     NO_SUCH_EMAIL(HttpStatus.NOT_FOUND, 3000, "해당 이메일이 존재하지 않습니다." ),
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, 3002, "이미 사용중인 이메일 입니다."),
+    DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, 3003, "이미 사용중인 닉네임 입니다."),
     /**
      * OAUTH : 4XXX
      */
@@ -59,7 +60,13 @@ public enum ErrorCode {
     /**
      * search : 7XXX
      */
-    NO_SUCH_SEARCH(HttpStatus.NOT_FOUND, 7000, "해당 검색 결과가 존재하지 않습니다.")
+    NO_SUCH_SEARCH(HttpStatus.NOT_FOUND, 7000, "해당 검색 결과가 존재하지 않습니다."),
+
+    /**
+     * search : 8XXX
+     */
+    NO_MAPPING_ROUTE(HttpStatus.NOT_FOUND, 8000, "경로 입력이 올바르지 않습니다."),
+    NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다")
 
     ;
     private final HttpStatus status;
