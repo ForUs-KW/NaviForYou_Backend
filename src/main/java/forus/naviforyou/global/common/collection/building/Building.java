@@ -25,6 +25,5 @@ public class Building {
 
     private Map<Accessibility, Integer> userUpdateList; // 유저가 수정한 {장애물,count} 리스트
 
-
 }
 

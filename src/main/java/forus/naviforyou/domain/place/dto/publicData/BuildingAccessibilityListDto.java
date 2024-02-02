@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString
-public class BuildingFacilityListDto {
+public class BuildingAccessibilityListDto {
 
     @XmlElement(name = "servList")
     private FacilityId facilityId;
