@@ -3,9 +3,7 @@ package forus.naviforyou.domain.place.dto.request;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import forus.naviforyou.global.common.collection.building.Location;
-import lombok.Getter;
 
-@Getter
 public record EditAccessibilityReq(String buildingName, String roadAddress, Location location, String facilityName, Boolean edit) {
     @JsonCreator
     public EditAccessibilityReq(
