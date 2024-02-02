@@ -7,6 +7,7 @@ import forus.naviforyou.domain.place.service.PlaceService;
 import forus.naviforyou.global.common.BaseResponse;
 import forus.naviforyou.global.common.BaseResultRes;
 import forus.naviforyou.global.common.collection.member.Member;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 public class PlaceController {
 
     private final PlaceService placeService;
+
+    @ApiOperation(tags = "4. place", value = "편의 시설 정보", notes = "건물의 편의시설 정보를 가져옵니다")
 
     @PostMapping("/convenientFacility")
     public ResponseEntity<?> getBuildingAccessibilityList(@RequestBody BuildingInfoReq req, @AuthenticationPrincipal Member member){

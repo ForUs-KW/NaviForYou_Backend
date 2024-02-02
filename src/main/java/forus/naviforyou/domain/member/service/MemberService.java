@@ -1,9 +1,6 @@
 package forus.naviforyou.domain.member.service;
 
-import forus.naviforyou.domain.member.dto.request.CheckSingUpCodeReq;
-import forus.naviforyou.domain.member.dto.request.OAuthSignUp;
-import forus.naviforyou.domain.member.dto.request.LogInReq;
-import forus.naviforyou.domain.member.dto.request.SignUpReq;
+import forus.naviforyou.domain.member.dto.request.*;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.domain.member.repository.MemberRepository;
 import forus.naviforyou.global.common.Constants;
@@ -22,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.Random;
@@ -157,5 +155,17 @@ public class MemberService {
         }
 
         return randomNumber.toString();
+    }
+
+
+    @Transactional
+    public void changePwd(ChangePwdReq req) {
+        Member member = memberRepository.findByEmail(req.getEmail()).orElseThrow(
+                () -> new BaseException(ErrorCode.NO_SUCH_EMAIL)
+        );
+
+        member.setPassword(passwordEncoder.encode(req.getNewPassword()));
+
+        memberRepository.save(member);
     }
 }

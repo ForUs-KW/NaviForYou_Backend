@@ -46,6 +46,7 @@ public enum ErrorCode {
      */
     GET_OAUTH_TOKEN_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 토큰 요청에 실패했습니다."),
     GET_OAUTH_USER_INFO_FAILED(HttpStatus.UNAUTHORIZED, 4000, "oAuth 사용자 정보를 가져오는데 실패했습니다."),
+
     /**
      * MAIL : 5XXX
      */
@@ -54,7 +55,18 @@ public enum ErrorCode {
      * VERIFICATION : 6XXX
      */
     EXPIRED_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6000, "코드 유효기간이 만료 되었습니다."),
-    INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6001, "코드가 일치하지 않습니다")
+    INCORRECT_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, 6001, "코드가 일치하지 않습니다"),
+
+    /**
+     * search : 7XXX
+     */
+    NO_SUCH_SEARCH(HttpStatus.NOT_FOUND, 7000, "해당 검색 결과가 존재하지 않습니다."),
+
+    /**
+     * search : 8XXX
+     */
+    NO_MAPPING_ROUTE(HttpStatus.NOT_FOUND, 8000, "경로 입력이 올바르지 않습니다."),
+    NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다")
 
     ;
     private final HttpStatus status;
