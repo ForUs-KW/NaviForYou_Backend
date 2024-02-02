@@ -1,6 +1,5 @@
 package forus.naviforyou.domain.place.dto.response;
 
-import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
@@ -17,9 +16,9 @@ public class BuildingAccessibilityListRes {
     private Boolean bump;
 
 
-    public BuildingAccessibilityListRes(BuildingInfoReq req) {
-        location = req.getLocation();
-        roadAddress = req.getRoadAddress();
+    public BuildingAccessibilityListRes(Location location, String roadAddress) {
+        this.location = location;
+        this.roadAddress = roadAddress;
         elevator = false;
         toilets = false;
         parking = false;

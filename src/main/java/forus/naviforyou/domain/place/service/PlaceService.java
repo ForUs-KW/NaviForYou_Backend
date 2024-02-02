@@ -48,7 +48,14 @@ public class PlaceService {
     private String facilityListUrl;
 
     public BuildingAccessibilityListRes getBuildingAccessibilityList(BuildingInfoReq req, String member) {
-        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req);
+        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.getLocation(), req.getBuildingName());
+        String key = Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member;
+
+        if(redisService.hasKey(key)) {
+            res.stringToFacilityList(redisService.getValues(key));
+            return res;
+        }
+
         BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
         if(managementBuildingId != null){
             getBuildingAccessibilityList(managementBuildingId.getFacilityId(), res);
@@ -57,7 +64,7 @@ public class PlaceService {
         buildingRepository.findByLocation(req.getLocation())
                 .ifPresent(building -> getBuildingAccessibilityListForDB(building, res));
 
-        redisService.setValues(Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member, res.facilityListToString(), Duration.ofMinutes(10));
+        redisService.setValues(key, res.facilityListToString(), Duration.ofMinutes(10));
         return res;
     }
 
@@ -165,7 +172,7 @@ public class PlaceService {
         return facilityListDto;
     }
 
-    public void editBuildingAccessibility(EditAccessibilityReq req) {
+    public void editBuildingAccessibility(EditAccessibilityReq req, String member) {
         Building building = buildingRepository.findByLocation(req.location()).orElse(null);
         if (building == null){
             building = Building.builder()
@@ -185,15 +192,18 @@ public class PlaceService {
             building.getUserUpdateList().put(Accessibility.valueOf(req.facilityName()),editUserNum);
         }
 
-
-
         buildingRepository.save(building);
+
+        String key = Constants.EDIT_FACILITY_FLAG + req.buildingName() + member;
+        if(redisService.hasKey(key)){
+            redisService.deleteValues(key);
+        }
     }
 
     public BuildingAccessibilityListRes getBuildingAccessibilityInfoList(BuildingInfoReq req, String member) {
         String key = Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member;
         if(redisService.hasKey(key)){
-            BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req);
+            BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.getLocation(), req.getRoadAddress());
             res.stringToFacilityList(redisService.getValues(key));
             return res;
         }

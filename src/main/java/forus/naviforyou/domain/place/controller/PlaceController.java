@@ -34,8 +34,8 @@ public class PlaceController {
     }
 
     @PostMapping("/convenientFacility/edit")
-    public ResponseEntity<?> editBuildingAccessibility(@RequestBody EditAccessibilityReq req){
-        placeService.editBuildingAccessibility(req);
+    public ResponseEntity<?> editBuildingAccessibility(@RequestBody EditAccessibilityReq req, @AuthenticationPrincipal Member member){
+        placeService.editBuildingAccessibility(req, member.getNickname());
         return BaseResponse.ok(new BaseResultRes(true));
     }
 
