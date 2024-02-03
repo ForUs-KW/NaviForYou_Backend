@@ -125,7 +125,7 @@ public class TravelRouteRes {
         private int distance;
         private Location start;
         private String route;
-        private String routeId;
+//        private String routeId; // 티맵 odsay 취급 달라 사용 불가
         private List<Lane> Lane;
         private Location end;
         private List<Step> steps;
