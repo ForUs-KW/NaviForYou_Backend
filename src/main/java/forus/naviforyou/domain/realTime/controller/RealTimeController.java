@@ -18,7 +18,7 @@ public class RealTimeController {
 
     @GetMapping("/bus")
     public ResponseEntity<?> getBusInfo() throws UnsupportedEncodingException {
-        busService.formalBus("a");
+        String data = busService.getStationByName("1,2","asd");
         return BaseResponse.ok("회원가입 성공");
     }
 }

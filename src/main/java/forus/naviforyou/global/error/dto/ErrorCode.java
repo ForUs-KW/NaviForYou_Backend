@@ -66,7 +66,12 @@ public enum ErrorCode {
      * search : 8XXX
      */
     NO_MAPPING_ROUTE(HttpStatus.NOT_FOUND, 8000, "경로 입력이 올바르지 않습니다."),
-    NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다")
+    NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다"),
+
+    /**
+     * real- time data : 9XXX
+     */
+    NO_MAPPING_DATA(HttpStatus.NOT_FOUND, 9000, "정보를 불러오지 못했습니다")
 
     ;
     private final HttpStatus status;
