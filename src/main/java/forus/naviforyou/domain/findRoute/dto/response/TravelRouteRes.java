@@ -124,8 +124,14 @@ public class TravelRouteRes {
         private int sectionTime;
         private int distance;
         private Location start;
+        private String route;
+        private String routeId;
+        private List<Lane> Lane;
         private Location end;
         private List<Step> steps;
+//        private List<PassShape> passShape;
+        private PassStopList passStopList;
+
 
     }
 
@@ -152,6 +158,51 @@ public class TravelRouteRes {
         private String description;
         private String linestring;
 
+    }
+
+//    @Getter
+//    @Setter
+//    @RequiredArgsConstructor
+//    @JsonIgnoreProperties(ignoreUnknown = true)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    public static class PassShape {
+//        private String passShape;
+//    }
+
+    // 양이 너무 많아서 완성 후 해제
+    @Getter
+    @Setter
+    @RequiredArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class PassStopList {
+        private List<Stations> stationList;
+    }
+
+    @Getter
+    @Setter
+    @RequiredArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class Stations{
+        private int index;
+        private String stationID;
+        private String stationName;
+        private String lon;
+        private String lat;
+    }
+
+    @Getter
+    @Setter
+    @RequiredArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class Lane{
+        private int service;
+        private String route;
+//        private String routeColor;
+        private String routId;
+//        private String type;
     }
 }
 

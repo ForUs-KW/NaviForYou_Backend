@@ -14,10 +14,7 @@ import forus.naviforyou.global.common.BaseResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/app/findRoute")
@@ -30,11 +27,9 @@ public class FindRouteController {
 
 
     @ApiOperation(tags = "1. Find Route", value = "보행자 길찾기", notes = "보행자용 길찾기 정보를 제공합니다")
-
-    @GetMapping("/walk")
-    public ResponseEntity<?> getWalkRoute(@RequestBody WalkRouteReq response){
-        WalkRouteRes walkRouteRes = walkFindRouteService.getWalkRoute(response);
-
+    @GetMapping("/walk") // walk?stairs=false
+    public ResponseEntity<?> getWalkRoute(@RequestParam(name = "stairs", defaultValue = "true") boolean includeStairs , @RequestBody WalkRouteReq response){
+        WalkRouteRes walkRouteRes = walkFindRouteService.getWalkRoute(includeStairs,response);
         return BaseResponse.ok(walkRouteRes);
     }
 
@@ -50,7 +45,6 @@ public class FindRouteController {
     @GetMapping("/car")
     public ResponseEntity<?> getCarRoute(@RequestBody CarRouteReq response){
         CarRouteRes carRouteReq =carFindRouteService.getCarRoute(response);
-
         return BaseResponse.ok(carRouteReq);
     }
 }

@@ -27,6 +27,9 @@ public class TravelFindRouteService {
 
     public TravelRouteRes getTravelRoute(TravelRouteReq travelRouteReq){
         String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
+
+        System.out.println(routeRes);
+
         TravelRouteRes walkRouteRes = parseTravelRoute(routeRes); // 파싱
         return  walkRouteRes;
     }
@@ -72,7 +75,8 @@ public class TravelFindRouteService {
                 ObjectMapper objectMapper = new ObjectMapper();
                 walkRouteRes = objectMapper.readValue(responseBody, TravelRouteRes.class);
             } catch (Exception e) {
-                throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
+                e.printStackTrace();
+//                throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
             }
         }
         return walkRouteRes;

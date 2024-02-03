@@ -77,16 +77,16 @@ public class MemberController {
         );
     }
 
-    @ApiOperation(tags = "2. Member", value = "이메일 코드 인증", notes = "이메일 코드 인증을 확인합니다")
-    @PostMapping("/checkEmailCode")
-    private ResponseEntity<?> checkEmailCode(@RequestBody CheckCodeReq req){
-        memberService.checkEmailCode(req);
-        return BaseResponse.ok(
-                DuplicateRes.builder()
-                        .result(true)
-                        .build()
-        );
-    }
+//    @ApiOperation(tags = "2. Member", value = "이메일 코드 인증", notes = "이메일 코드 인증을 확인합니다")
+//    @PostMapping("/checkEmailCode")
+//    private ResponseEntity<?> checkEmailCode(@RequestBody CheckCodeReq req){
+//        memberService.checkEmailCode(req);
+//        return BaseResponse.ok(
+//                DuplicateRes.builder()
+//                        .result(true)
+//                        .build()
+//        );
+//    }
 
     @ApiOperation(tags = "2. Member", value = "카카오 소셜 로그인 요청", notes = "카카오로 소셜 로그인 요청을 보냅니다")
     @GetMapping("/kakao")
@@ -121,16 +121,16 @@ public class MemberController {
         );
     }
 
-    @ApiOperation(tags = "2. Member", value = "비밀번호 확인", notes = "비밀번호를 확인합니다")
-    @PostMapping("/searchPassword/checkCode")
-    public ResponseEntity<?> searchPwdChkCode(@RequestBody CheckCodeReq req){
-        memberService.checkEmailCode(req);
-        return BaseResponse.ok(
-                DeleteRes.builder()
-                        .result(true)
-                        .build()
-        );
-    }
+//    @ApiOperation(tags = "2. Member", value = "비밀번호 확인", notes = "비밀번호를 확인합니다")
+//    @PostMapping("/searchPassword/checkCode")
+//    public ResponseEntity<?> searchPwdChkCode(@RequestBody CheckCodeReq req){
+//        memberService.checkEmailCode(req);
+//        return BaseResponse.ok(
+//                DeleteRes.builder()
+//                        .result(true)
+//                        .build()
+//        );
+//    }
 
     @ApiOperation(tags = "2. Member", value = "비밀번호 변경", notes = "비밀번호를 변경합니다")
     @PostMapping("/searchPassword/change")
