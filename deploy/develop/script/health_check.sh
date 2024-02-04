@@ -30,4 +30,3 @@ else
   echo "Monitor failed, website seems to be down."
   exit 1 # Failed
 fi
-출처: https://hello-startup.tistory.com/18 [Hello Startup:티스토리]

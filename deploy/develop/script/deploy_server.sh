@@ -38,4 +38,3 @@ fi
 # (4)
 echo "> Run application."
 nohup java -jar -Dspring.profiles.active=local $APPLICATION_JAR > /dev/null 2> /dev/null < /dev/null &
-출처: https://hello-startup.tistory.com/18 [Hello Startup:티스토리]
