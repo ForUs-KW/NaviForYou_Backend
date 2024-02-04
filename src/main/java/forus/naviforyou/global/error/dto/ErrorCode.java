@@ -71,7 +71,8 @@ public enum ErrorCode {
     /**
      * real- time data : 9XXX
      */
-    NO_MAPPING_DATA(HttpStatus.NOT_FOUND, 9000, "정보를 불러오지 못했습니다")
+    NO_MAPPING_STATION_NUM(HttpStatus.NOT_FOUND, 9000, "정류장 번호 정보를 불러오지 못했습니다"),
+    NO_MAPPING_STATION_INFO(HttpStatus.NOT_FOUND, 9000, "현재 정류장 정보를 불러오지 못했습니다"),
 
     ;
     private final HttpStatus status;
