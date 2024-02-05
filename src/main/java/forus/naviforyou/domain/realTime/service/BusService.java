@@ -105,7 +105,10 @@ public class BusService {
 
         String stationId = firstItemList.getElementsByTagName("arsId").item(0).getTextContent();
 
-        System.out.println(stationId);
+        if(stationId.equals("0")){
+            throw new BaseException(ErrorCode.NO_MAPPING_STATION_NUM);
+        }
+
         return stationId;
     }
 
@@ -114,7 +117,7 @@ public class BusService {
             String SERVICE_KEY = serviceKey;
             StringBuilder urlBuilder = new StringBuilder("http://ws.bus.go.kr/api/rest/stationinfo/getStationByUid");
             urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
-            urlBuilder.append("&" + URLEncoder.encode("arsId", "UTF-8") + "=" + stationId);
+            urlBuilder.append("&" + URLEncoder.encode("arsId", "UTF-8") + "=" + URLEncoder.encode(stationId, "UTF-8"));
 
 
             URL url = new URL(urlBuilder.toString());
