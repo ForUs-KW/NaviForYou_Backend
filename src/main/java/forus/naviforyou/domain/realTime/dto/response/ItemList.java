@@ -15,8 +15,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ItemList {
+    private String arsId;
+    private String busRouteAbrv;
+
     private String adirection;
     private String arrmsg1;
     private String arrmsg2;
+
 
 }
