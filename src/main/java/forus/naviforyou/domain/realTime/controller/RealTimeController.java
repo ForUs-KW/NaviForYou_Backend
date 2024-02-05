@@ -24,16 +24,33 @@ public class RealTimeController {
     @ApiOperation(tags = "6. Real Time", value = "실시간 버스 정류장 정보", notes = "정류장 좌표를 통해 실시간 버스 정보를 보여줍니다")
     @GetMapping("/busStation")
     public ResponseEntity<?> getBusInfo(@RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
-        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq);
+        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq,false);
         return BaseResponse.ok(stationInfoRes);
     }
 
-    @ApiOperation(tags = "6. Real Time", value = "실시간 버스 정류장 정보", notes = "정류장 좌표를 통해 실시간 버스 정보를 보여줍니다")
+    @ApiOperation(tags = "6. Real Time", value = "실시간 버스 정보 ", notes = "정류장 좌표와 버스 번호를 통해 원하는 버스 실시간 정보를 보여줍니다")
     @GetMapping("/busStation/detail")
     public ResponseEntity<?> getBusInfoDetail(@RequestParam String busXum , @RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
-        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq);
+        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq,false);
         List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busXum);
 
         return BaseResponse.ok(stationDetailInfoRes);
     }
+
+    @ApiOperation(tags = "6. Real Time", value = "실시간 저상버스 정류장 정보", notes = "정류장 좌표를 통해 실시간 저상 버스 정보를 보여줍니다")
+    @GetMapping("/lowBusStation")
+    public ResponseEntity<?> getLowBusInfo(@RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
+        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq,true);
+        return BaseResponse.ok(stationInfoRes);
+    }
+
+    @ApiOperation(tags = "6. Real Time", value = "실시간 저상버스 정보 ", notes = "정류장 좌표와 버스 번호를 통해 원하는 저상버스 실시간 정보를 보여줍니다")
+    @GetMapping("/lowBusStation/detail")
+    public ResponseEntity<?> getLowBusInfoDetail(@RequestParam String busXum , @RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
+        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq,true);
+        List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busXum);
+
+        return BaseResponse.ok(stationDetailInfoRes);
+    }
+
 }

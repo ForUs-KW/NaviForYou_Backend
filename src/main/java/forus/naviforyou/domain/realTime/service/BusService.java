@@ -43,6 +43,7 @@ import java.net.URLEncoder;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,16 +55,25 @@ public class BusService {
     @Value("${realtime.serviceKey}")
     private String serviceKey;
 
-    public List<ItemList> stationInfo(BusStationReq busStationReq){
+    public List<ItemList> stationInfo(BusStationReq busStationReq , Boolean lowStation){
 
         double doubleX = Double.parseDouble(busStationReq.getX());
         double doubleY = Double.parseDouble(busStationReq.getY());
-
         String stationId = getStationByName(doubleX,doubleY);
-        List<ItemList> stationInfoRes = getStationByUidItem(stationId);
 
+
+        List<ItemList> stationInfoRes;
+        if(lowStation){
+            stationInfoRes = getLowStationByUidItem(stationId);
+        }
+        else{
+            stationInfoRes = getStationByUidItem(stationId);
+        }
         return stationInfoRes;
+
     }
+
+
 
     public List<ItemList> filterBusInfoList(List<ItemList> busInfoList, String desiredId) {
         return busInfoList.stream()
@@ -83,7 +93,6 @@ public class BusService {
             urlBuilder.append("&" + URLEncoder.encode("radius", "UTF-8") + "=" + 100);
 
             URL url = new URL(urlBuilder.toString());
-            System.out.println(url.toString());
 
             RestTemplate restTemplate = new RestTemplate();
             RequestEntity<Void> req = RequestEntity
@@ -128,7 +137,31 @@ public class BusService {
 
 
             URL url = new URL(urlBuilder.toString());
-            System.out.println(url.toString());
+
+            RestTemplate restTemplate = new RestTemplate();
+            RequestEntity<Void> req = RequestEntity
+                    .get(url.toURI())
+                    .build();
+            ResponseEntity<String> result = restTemplate.exchange(req, String.class);
+
+
+            return parseXmlToJson(result.getBody());
+
+
+        }catch (Exception e) {
+            throw new BaseException(ErrorCode.NO_MAPPING_STATION_INFO);
+        }
+    }
+
+    public List<ItemList> getLowStationByUidItem(String stationId){
+        try{
+            String SERVICE_KEY = serviceKey;
+            StringBuilder urlBuilder = new StringBuilder("http://ws.bus.go.kr/api/rest/stationinfo/getLowStationByUid");
+            urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + "=" + serviceKey);
+            urlBuilder.append("&" + URLEncoder.encode("arsId", "UTF-8") + "=" + URLEncoder.encode(stationId, "UTF-8"));
+
+
+            URL url = new URL(urlBuilder.toString());
 
             RestTemplate restTemplate = new RestTemplate();
             RequestEntity<Void> req = RequestEntity
@@ -151,8 +184,6 @@ public class BusService {
 
         JSONObject json = XML.toJSONObject(xml);
 
-        System.out.println(json.toString());
-
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(json.toString());
@@ -162,14 +193,19 @@ public class BusService {
                     .path("msgBody")
                     .path("itemList");
 
-            List<ItemList> busInfoList = objectMapper.readValue(itemListNode.toString(),new TypeReference<List<ItemList>>() {});
-            return busInfoList;
+            if (itemListNode.isArray()) {
+                List<ItemList> busInfoList = objectMapper.readValue(itemListNode.toString(), new TypeReference<List<ItemList>>() {});
+                return busInfoList;
+            } else if (itemListNode.isObject()) {
+                ItemList busInfoItem = objectMapper.readValue(itemListNode.toString(), ItemList.class);
+                return Collections.singletonList(busInfoItem);
+            }
 
 
         } catch (Exception e) {
             throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
         }
-
+        return null;
 
     }
 
