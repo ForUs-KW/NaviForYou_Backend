@@ -133,7 +133,7 @@ public class MemberService {
 
     }
 
-    public void checkEmailCode(CheckSingUpCodeReq req){
+    public void checkEmailCode(CheckCodeReq req){
         String key = req.getEmail()+Constants.SIGN_UP_FLAG;
         String code = req.getCode();
 
