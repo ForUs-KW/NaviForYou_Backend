@@ -27,4 +27,13 @@ public class RealTimeController {
         List<ItemList> stationInfoRes = busService.stationInfo(busStationReq);
         return BaseResponse.ok(stationInfoRes);
     }
+
+    @ApiOperation(tags = "6. Real Time", value = "실시간 버스 정류장 정보", notes = "정류장 좌표를 통해 실시간 버스 정보를 보여줍니다")
+    @GetMapping("/busStation/detail")
+    public ResponseEntity<?> getBusInfoDetail(@RequestParam String busXum , @RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
+        List<ItemList> stationInfoRes = busService.stationInfo(busStationReq);
+        List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busXum);
+
+        return BaseResponse.ok(stationDetailInfoRes);
+    }
 }

@@ -44,6 +44,7 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -62,6 +63,12 @@ public class BusService {
         List<ItemList> stationInfoRes = getStationByUidItem(stationId);
 
         return stationInfoRes;
+    }
+
+    public List<ItemList> filterBusInfoList(List<ItemList> busInfoList, String desiredId) {
+        return busInfoList.stream()
+                .filter(item -> desiredId.equals(item.getBusRouteAbrv()))
+                .collect(Collectors.toList());
     }
 
     public String getStationByName(double doubleX , double doubleY) {
@@ -155,9 +162,6 @@ public class BusService {
                     .path("msgBody")
                     .path("itemList");
 
-            // itemListNode를 사용하여 필요한 작업 수행
-            System.out.println(itemListNode.toString());
-
             List<ItemList> busInfoList = objectMapper.readValue(itemListNode.toString(),new TypeReference<List<ItemList>>() {});
             return busInfoList;
 
@@ -168,6 +172,7 @@ public class BusService {
 
 
     }
+
 
 
 }
