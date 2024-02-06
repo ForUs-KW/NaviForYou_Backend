@@ -74,6 +74,11 @@ public enum ErrorCode {
     NO_MAPPING_STATION_NUM(HttpStatus.NOT_FOUND, 9000, "정류장 번호 정보를 불러오지 못했습니다"),
     NO_MAPPING_STATION_INFO(HttpStatus.NOT_FOUND, 9000, "현재 정류장 정보를 불러오지 못했습니다"),
 
+    /**
+     * find-route : 10XXX
+     */
+    NO_MAPPING_ROUTE_INFO(HttpStatus.NOT_FOUND, 9000, "일부 구간의 길찾기 정보가 존재 하지 않습니다"),
+
     ;
     private final HttpStatus status;
     private final int code;

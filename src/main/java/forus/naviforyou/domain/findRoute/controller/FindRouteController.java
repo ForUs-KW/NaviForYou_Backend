@@ -35,8 +35,8 @@ public class FindRouteController {
 
     @ApiOperation(tags = "1. Find Route", value = "대중교통 길찾기", notes = "대중교통 길찾기 정보를 제공합니다")
     @GetMapping("/travel")
-    public ResponseEntity<?> getTravelRoute(@RequestParam(name = "stairs", defaultValue = "false") boolean onlyLowBus , @RequestBody TravelRouteReq response){
-        TravelRouteRes travelRouteReq =travelFindRouteService.getTravelRoute(onlyLowBus,response);
+    public ResponseEntity<?> getTravelRoute(@RequestParam(name = "disabled", defaultValue = "false") boolean disabled , @RequestBody TravelRouteReq response){
+        TravelRouteRes travelRouteReq =travelFindRouteService.getTravelRoute(disabled,response);
         return BaseResponse.ok(travelRouteReq);
     }
 

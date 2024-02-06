@@ -128,7 +128,9 @@ public class TravelRouteRes {
 //        private String routeId; // 티맵 odsay 취급 달라 사용 불가
         private List<Lane> Lane;
         private Location end;
-        private List<Step> steps;
+//        private List<Step> steps; // 원본 -> walkRouteRes로 변경
+        private WalkRouteRes walkStep; // 걷는 경우에 해당
+
 //        private List<PassShape> passShape;
         private PassStopList passStopList;
 
@@ -142,8 +144,8 @@ public class TravelRouteRes {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Location {
         private String name;
-        private double lon;
-        private double lat;
+        private String lon;
+        private String lat;
 
     }
 

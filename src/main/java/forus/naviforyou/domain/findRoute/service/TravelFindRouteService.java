@@ -15,6 +15,9 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,13 +28,18 @@ public class TravelFindRouteService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public TravelRouteRes getTravelRoute(Boolean onlyLowBus , TravelRouteReq travelRouteReq){
+    public TravelRouteRes getTravelRoute(Boolean disabled , TravelRouteReq travelRouteReq){
 
         String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
         TravelRouteRes travelRouteRes = parseTravelRoute(routeRes); // 파싱
 
-        if(onlyLowBus){
+        if(disabled){
+            // 계단과 저상버스 정보 출력
+            // 1. 저상버스 : 일반인 길찾기에서 나타나는 버스의 번호가 현재 정류장에서 저상버스로 운행을 한다면 그대로 출력 만약에 없다면 그 루트 자체를 삭제
 
+
+            // 2. 계단 : 애초에 도보 길찾기만 계단 유무를 결정 => 대중교통 길찾기도 도보일 경우 도보길찾기의 형식으로 변경
+            travelRouteRes = handleWalkPart(travelRouteRes);
         }
 
 
@@ -97,57 +105,40 @@ public class TravelFindRouteService {
         }
     }
 
-    public String handleWalkPart(WalkRouteRes walkRouteRes, String responseBody){
+    public TravelRouteRes handleWalkPart(TravelRouteRes travelRouteRes){
 
-        String modifiedJsonString = null;
+        List<TravelRouteRes.Itinerary> itineraries = travelRouteRes.getMetaData().getPlan().getItineraries();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            JsonNode jsonNode = objectMapper.readTree(responseBody);
-
-            // legs 배열을 순회하면서 type이 "Point"인 경우 coordinates 값에 대괄호 추가
-            for (JsonNode legsNode : jsonNode.path("metadata").path("plan").path("iteraries").path("legs")) {
-                String mode = legsNode.path("mode").asText();
-
-                if ("WALK".equals(mode)) {
-
+        try{
+            for (TravelRouteRes.Itinerary itinerary : itineraries) {
+            List<TravelRouteRes.Leg> legs = itinerary.getLegs();
+            for (TravelRouteRes.Leg leg : legs) {
+                if (leg.getMode().equals("WALK")){
                     WalkRouteReq walkPartRouteReq = WalkRouteReq.builder()
-                            .startX(legsNode.path("start").path("lon").asText())
-                            .startY(legsNode.path("start").path("lat").asText())
-                            .endX(legsNode.path("end").path("lon").asText())
-                            .endY(legsNode.path("end").path("lon").asText())
-                            .reqCoordType("WGS84GEO")
-                            .resCoordType("EPSG3857")
-                            .startName(legsNode.path("start").path("name").asText())
-                            .endName(legsNode.path("end").path("name").asText())
-                            .build();
+                         .startX(leg.getStart().getLon())
+                         .startY(leg.getStart().getLat())
+                         .endX(leg.getEnd().getLon())
+                         .endY(leg.getEnd().getLat())
+                         .reqCoordType("WGS84GEO")
+                         .resCoordType("EPSG3857")
+                         .startName(leg.getStart().getName())
+                         .endName(leg.getEnd().getName())
+                         .build();
 
-                    WalkRouteRes walkPartRouteRes = walkFindRouteService.getWalkRoute(false , walkPartRouteReq);
-
-
-
-
-//                    legsNode.
-//                    JsonNode coordinatesNode = geometryNode.path("coordinates");
-//                    if (coordinatesNode.isArray()) {
-//                        double x = coordinatesNode.get(0).asDouble();
-//                        double y = coordinatesNode.get(1).asDouble();
-//
-//                        ((com.fasterxml.jackson.databind.node.ArrayNode) coordinatesNode).removeAll();
-//                        ((com.fasterxml.jackson.databind.node.ArrayNode) coordinatesNode).add(objectMapper.createArrayNode().add(x).add(y));
-//                    }
+                    WalkRouteRes walkPartRouteRes = walkFindRouteService.getWalkRoute(false, walkPartRouteReq);
+                    TravelRouteRes.Leg init_leg = new TravelRouteRes.Leg();
+                    leg.setSectionTime(init_leg.getSectionTime());
+                    leg.setDistance(init_leg.getDistance());
+                    leg.setWalkStep(walkPartRouteRes);
+                    }
                 }
             }
-
-            // 수정된 JsonNode를 문자열로 출력
-            modifiedJsonString = objectMapper.writeValueAsString(jsonNode);
-        } catch (Exception e) {
-            throw new BaseException(ErrorCode.NO_MAPPING_ROUTE);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.NO_MAPPING_ROUTE_INFO);
         }
 
 
 
-        return "작업중";
+        return travelRouteRes;
     }
 }
