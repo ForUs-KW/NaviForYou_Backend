@@ -74,10 +74,12 @@ public class BusService {
     }
 
 
+    public List<ItemList> filterBusInfoList(List<ItemList> busInfoList, String fullBusNum) {
 
-    public List<ItemList> filterBusInfoList(List<ItemList> busInfoList, String desiredId) {
+        String busNum = fullBusNum.contains(":") ? fullBusNum.substring(fullBusNum.indexOf(":") + 1) : fullBusNum;
+
         return busInfoList.stream()
-                .filter(item -> desiredId.equals(item.getBusRouteAbrv()))
+                .filter(item -> busNum.equals(item.getBusRouteAbrv()))
                 .collect(Collectors.toList());
     }
 
