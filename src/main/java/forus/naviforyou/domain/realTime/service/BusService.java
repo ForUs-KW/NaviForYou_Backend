@@ -62,14 +62,10 @@ public class BusService {
         String stationId = getStationByName(doubleX,doubleY);
 
 
-        List<ItemList> stationInfoRes;
         if(lowStation){
-            stationInfoRes = getLowStationByUidItem(stationId);
+            return getLowStationByUidItem(stationId);
         }
-        else{
-            stationInfoRes = getStationByUidItem(stationId);
-        }
-        return stationInfoRes;
+       return getStationByUidItem(stationId);
 
     }
 
