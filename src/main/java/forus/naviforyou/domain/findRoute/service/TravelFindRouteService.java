@@ -25,13 +25,17 @@ public class TravelFindRouteService {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public TravelRouteRes getTravelRoute(TravelRouteReq travelRouteReq){
+    public TravelRouteRes getTravelRoute(Boolean onlyLowBus , TravelRouteReq travelRouteReq){
+
         String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
+        TravelRouteRes travelRouteRes = parseTravelRoute(routeRes); // 파싱
 
-        System.out.println(routeRes);
+        if(onlyLowBus){
 
-        TravelRouteRes walkRouteRes = parseTravelRoute(routeRes); // 파싱
-        return  walkRouteRes;
+        }
+
+
+        return  travelRouteRes;
     }
 
     public String invokeTravelRoute(TravelRouteReq travelRouteReq) {
