@@ -33,15 +33,15 @@ public class TravelFindRouteService {
         String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
         TravelRouteRes travelRouteRes = parseTravelRoute(routeRes); // 파싱
 
+
         if(disabled){
-            // 계단과 저상버스 정보 출력
-            // 1. 저상버스 : 일반인 길찾기에서 나타나는 버스의 번호가 현재 정류장에서 저상버스로 운행을 한다면 그대로 출력 만약에 없다면 그 루트 자체를 삭제
+            // 1. 저상버스 필터링
 
+            // 2. 계단 필터링
+            travelRouteRes = handleWalkPart(travelRouteRes,false);
 
-            // 2. 계단 : 애초에 도보 길찾기만 계단 유무를 결정 => 대중교통 길찾기도 도보일 경우 도보길찾기의 형식으로 변경
-            travelRouteRes = handleWalkPart(travelRouteRes);
         }
-
+        travelRouteRes = handleWalkPart(travelRouteRes,true);
 
         return  travelRouteRes;
     }
@@ -105,15 +105,19 @@ public class TravelFindRouteService {
         }
     }
 
-    public TravelRouteRes handleWalkPart(TravelRouteRes travelRouteRes){
+    public TravelRouteRes handleWalkPart(TravelRouteRes travelRouteRes , Boolean includeStairs){
 
         List<TravelRouteRes.Itinerary> itineraries = travelRouteRes.getMetaData().getPlan().getItineraries();
 
         try{
+
+
+
             for (TravelRouteRes.Itinerary itinerary : itineraries) {
             List<TravelRouteRes.Leg> legs = itinerary.getLegs();
             for (TravelRouteRes.Leg leg : legs) {
                 if (leg.getMode().equals("WALK")){
+
                     WalkRouteReq walkPartRouteReq = WalkRouteReq.builder()
                          .startX(leg.getStart().getLon())
                          .startY(leg.getStart().getLat())
@@ -124,6 +128,10 @@ public class TravelFindRouteService {
                          .startName(leg.getStart().getName())
                          .endName(leg.getEnd().getName())
                          .build();
+
+                    if(!includeStairs){
+                        walkPartRouteReq.setSearchOption(30);
+                    }
 
                     WalkRouteRes walkPartRouteRes = walkFindRouteService.getWalkRoute(false, walkPartRouteReq);
                     TravelRouteRes.Leg init_leg = new TravelRouteRes.Leg();
