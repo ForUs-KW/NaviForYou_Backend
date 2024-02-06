@@ -22,20 +22,24 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
-    @ApiOperation(tags = "4. place", value = "편의 시설 정보", notes = "건물의 편의시설 정보를 가져옵니다")
+    @ApiOperation(tags = "4. place", value = "건물 정보", notes = "건물 정보를 가져옵니다")
 
-    @PostMapping("/convenientFacility")
+    @PostMapping
     public ResponseEntity<?> getBuildingAccessibilityList(@RequestBody BuildingInfoReq req, @AuthenticationPrincipal Member member){
         BuildingAccessibilityListRes res = placeService.getBuildingAccessibilityList(req, member.getNickname());
         return BaseResponse.ok(res);
     }
 
-    @PostMapping("/convenientFacility/editPage")
+
+
+    @ApiOperation(tags = "4. place", value = "편의 시설 정보", notes = "건물의 편의시설 정보를 가져옵니다")
+    @PostMapping("/convenientFacility")
     public ResponseEntity<?> getBuildingAccessibilityInfoList(@RequestBody BuildingInfoReq req, @AuthenticationPrincipal Member member){
         BuildingAccessibilityListRes res = placeService.getBuildingAccessibilityInfoList(req, member.getNickname());
         return BaseResponse.ok(res);
     }
 
+    @ApiOperation(tags = "4. place", value = "편의 시설 수정", notes = "건물의 편의시설 정보를 수정합니다")
     @PostMapping("/convenientFacility/edit")
     public ResponseEntity<?> editBuildingAccessibility(@RequestBody EditAccessibilityReq req, @AuthenticationPrincipal Member member){
         placeService.editBuildingAccessibility(req, member.getNickname());
