@@ -105,7 +105,7 @@ public class MemberController {
     @ApiOperation(tags = "2. Member", value = "구글 소셜 로그인 요청", notes = "구글로 소셜 로그인 요청을 보냅니다.")
     @GetMapping("/google")
     public ResponseEntity<?> google(String code){
-        TokenRes tokenRes = googleService.googleLogin(code,"state");
+        TokenRes tokenRes = googleService.googleLogin(code);
         return BaseResponse.ok(tokenRes);
     }
 
