@@ -4,7 +4,7 @@ import lombok.*;
 
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class BusStationReq {
     private String x ;

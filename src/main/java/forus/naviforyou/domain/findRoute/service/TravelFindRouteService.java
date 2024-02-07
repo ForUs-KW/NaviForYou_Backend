@@ -6,6 +6,9 @@ import forus.naviforyou.domain.findRoute.dto.request.TravelRouteReq;
 import forus.naviforyou.domain.findRoute.dto.request.WalkRouteReq;
 import forus.naviforyou.domain.findRoute.dto.response.TravelRouteRes;
 import forus.naviforyou.domain.findRoute.dto.response.WalkRouteRes;
+import forus.naviforyou.domain.realTime.dto.request.BusStationReq;
+import forus.naviforyou.domain.realTime.dto.response.ItemList;
+import forus.naviforyou.domain.realTime.service.BusService;
 import forus.naviforyou.global.error.dto.ErrorCode;
 import forus.naviforyou.global.error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +27,9 @@ import java.util.List;
 public class TravelFindRouteService {
     @Value("${tmap.app-key}")
     private String appKey;
+
     private final WalkFindRouteService walkFindRouteService;
+    private final BusService busService;
 
     private RestTemplate restTemplate = new RestTemplate();
 
@@ -33,13 +38,13 @@ public class TravelFindRouteService {
         String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
         TravelRouteRes travelRouteRes = parseTravelRoute(routeRes); // 파싱
 
-
         if(disabled){
             // 1. 저상버스 필터링
+            handleLowBus(travelRouteRes,true);
 
             // 2. 계단 필터링
             travelRouteRes = handleWalkPart(travelRouteRes,false);
-
+            return travelRouteRes;
         }
         travelRouteRes = handleWalkPart(travelRouteRes,true);
 
@@ -110,9 +115,6 @@ public class TravelFindRouteService {
         List<TravelRouteRes.Itinerary> itineraries = travelRouteRes.getMetaData().getPlan().getItineraries();
 
         try{
-
-
-
             for (TravelRouteRes.Itinerary itinerary : itineraries) {
             List<TravelRouteRes.Leg> legs = itinerary.getLegs();
             for (TravelRouteRes.Leg leg : legs) {
@@ -147,6 +149,41 @@ public class TravelFindRouteService {
 
 
 
+        return travelRouteRes;
+    }
+
+    public TravelRouteRes handleLowBus(TravelRouteRes travelRouteRes , Boolean lowBus){
+        List<TravelRouteRes.Itinerary> itineraries = travelRouteRes.getMetaData().getPlan().getItineraries();
+//        List<Integer> itinerariesToRemove = new ArrayList<>();
+        for (int i = 0; i < itineraries.size(); i++) {
+            TravelRouteRes.Itinerary itinerary = itineraries.get(i);
+            List<TravelRouteRes.Leg> legs = itinerary.getLegs();
+            for (TravelRouteRes.Leg leg : legs) {
+
+
+                if (leg.getMode().equals("BUS")) {
+                    BusStationReq busStationReq = new BusStationReq();
+                    busStationReq.setX(leg.getStart().getLon());
+                    busStationReq.setY(leg.getStart().getLat());
+                    String busNum = leg.getRoute();
+                    List<ItemList> stationInfoRes = busService.stationInfo(busStationReq, lowBus);
+
+                    if (stationInfoRes == null) {
+                        itineraries.remove(i);
+                        break;
+                    }
+
+                    List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busNum);
+                    if(stationDetailInfoRes.size()<1){
+                        itineraries.remove(i);
+                        break;
+                    }
+
+
+
+                }
+            }
+        }
         return travelRouteRes;
     }
 }
