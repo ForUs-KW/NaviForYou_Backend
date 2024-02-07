@@ -19,6 +19,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -39,10 +41,19 @@ public class SearchService {
 
     private static final double KATECH_FACTOR = 0.00001;
 
-    public SearchRes searchInfo(SearchReq searchReq, String name){
+    public SearchRes searchInfo(SearchReq searchReq, String name , String order){
+
+
         SearchRes searchInfo = getSearchInfo(name);
         searchInfo = removeTags(searchInfo);
         searchInfo = calculateDistance(searchInfo,searchReq.getX(),searchReq.getY());
+
+        if(order.equals("distance")){
+            List<Item> itemList = searchInfo.getItems();
+            itemList.sort(Comparator.comparingDouble(Item::getDistance));
+            searchInfo.setItems(itemList);
+        }
+
         return searchInfo;
     }
 
