@@ -78,8 +78,6 @@ public class BusService {
 
         String busNum = fullBusNum.contains(":") ? fullBusNum.substring(fullBusNum.indexOf(":") + 1) : fullBusNum;
 
-        System.out.println(busNum);
-
         return busInfoList.stream()
                 .filter(item -> busNum.equals(item.getBusRouteAbrv()))
                 .collect(Collectors.toList());

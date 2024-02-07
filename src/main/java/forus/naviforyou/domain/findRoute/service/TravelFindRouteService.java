@@ -153,13 +153,17 @@ public class TravelFindRouteService {
     }
 
     public TravelRouteRes handleLowBus(TravelRouteRes travelRouteRes , Boolean lowBus){
+
         List<TravelRouteRes.Itinerary> itineraries = travelRouteRes.getMetaData().getPlan().getItineraries();
-//        List<Integer> itinerariesToRemove = new ArrayList<>();
         for (int i = 0; i < itineraries.size(); i++) {
+            Boolean includeSubway = false;
             TravelRouteRes.Itinerary itinerary = itineraries.get(i);
             List<TravelRouteRes.Leg> legs = itinerary.getLegs();
             for (TravelRouteRes.Leg leg : legs) {
 
+                if (leg.getMode().equals("SUBWAY")){
+                    includeSubway = true;
+                }
 
                 if (leg.getMode().equals("BUS")) {
                     BusStationReq busStationReq = new BusStationReq();
@@ -167,23 +171,36 @@ public class TravelFindRouteService {
                     busStationReq.setY(leg.getStart().getLat());
                     String busNum = leg.getRoute();
                     List<ItemList> stationInfoRes = busService.stationInfo(busStationReq, lowBus);
-
-                    if (stationInfoRes == null) {
+                    if (stationInfoRes == null || stationInfoRes.isEmpty()) {
+                        System.out.println(busNum);
+                        changeCount(travelRouteRes, includeSubway);
                         itineraries.remove(i);
                         break;
                     }
+                    List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes, busNum);
+                    if (stationDetailInfoRes.isEmpty()) {
+                        System.out.println(busNum);
 
-                    List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busNum);
-                    if(stationDetailInfoRes.size()<1){
+                        changeCount(travelRouteRes, includeSubway);
                         itineraries.remove(i);
                         break;
                     }
-
-
-
                 }
             }
         }
         return travelRouteRes;
+    }
+
+    public void changeCount(TravelRouteRes travelRouteRes , Boolean includeSubway){
+
+        if(includeSubway){
+            int currentSubwayBusCount = travelRouteRes.getMetaData().getRequestParameters().getSubwayBusCount();
+            travelRouteRes.getMetaData().getRequestParameters().setSubwayBusCount(currentSubwayBusCount-1);
+
+        }
+        else {
+            int currentBusCount = travelRouteRes.getMetaData().getRequestParameters().getBusCount();
+            travelRouteRes.getMetaData().getRequestParameters().setBusCount(currentBusCount-1);
+        }
     }
 }
