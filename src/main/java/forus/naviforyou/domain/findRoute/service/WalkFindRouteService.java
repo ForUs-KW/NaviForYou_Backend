@@ -28,6 +28,9 @@ public class WalkFindRouteService {
 
     public WalkRouteRes getWalkRoute(Boolean includeStairs , WalkRouteReq walkRouteReq){
 
+        walkRouteReq.setReqCoordType("WGS84GEO");
+        walkRouteReq.setResCoordType("WGS84GEO");
+
         if(!includeStairs){
             walkRouteReq.setSearchOption(30);
         }
@@ -52,6 +55,7 @@ public class WalkFindRouteService {
         ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 
         String responseBody = responseEntity.getBody();
+        System.out.println(responseBody);
 
         responseBody = setCoordinates(walkRouteRes, responseBody); // coordinates 따로 세팅
 
@@ -81,8 +85,8 @@ public class WalkFindRouteService {
                 if ("Point".equals(type)) {
                     JsonNode coordinatesNode = geometryNode.path("coordinates");
                     if (coordinatesNode.isArray()) {
-                        double x = coordinatesNode.get(0).asDouble();
-                        double y = coordinatesNode.get(1).asDouble();
+                        String x = coordinatesNode.get(0).toString();
+                        String y = coordinatesNode.get(1).toString();
 
                         ((com.fasterxml.jackson.databind.node.ArrayNode) coordinatesNode).removeAll();
                         ((com.fasterxml.jackson.databind.node.ArrayNode) coordinatesNode).add(objectMapper.createArrayNode().add(x).add(y));

@@ -126,7 +126,7 @@ public class TravelFindRouteService {
                          .endX(leg.getEnd().getLon())
                          .endY(leg.getEnd().getLat())
                          .reqCoordType("WGS84GEO")
-                         .resCoordType("EPSG3857")
+                         .resCoordType("WGS84GEO")
                          .startName(leg.getStart().getName())
                          .endName(leg.getEnd().getName())
                          .build();
