@@ -41,6 +41,9 @@ public enum ErrorCode {
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, 3002, "이미 사용중인 이메일 입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, 3003, "이미 사용중인 닉네임 입니다."),
+    NO_SUCH_NAVER_USER(HttpStatus.BAD_REQUEST, 3004, "네이버 사용자를 불러올 수 없습니다"),
+    INVALID_NAVER_USER(HttpStatus.BAD_REQUEST, 3003, "유효하지 않은 네이버 사용자 입니다"),
+
     /**
      * OAUTH : 4XXX
      */

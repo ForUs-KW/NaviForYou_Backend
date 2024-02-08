@@ -35,6 +35,10 @@ public class TravelFindRouteService {
 
     public TravelRouteRes getTravelRoute(Boolean disabled , TravelRouteReq travelRouteReq){
 
+        travelRouteReq.setCount(10);
+        travelRouteReq.setLang(0);
+        travelRouteReq.setFormat("json");
+
         String routeRes = invokeTravelRoute(travelRouteReq); // 따옴
         TravelRouteRes travelRouteRes = parseTravelRoute(routeRes); // 파싱
 
@@ -172,15 +176,12 @@ public class TravelFindRouteService {
                     String busNum = leg.getRoute();
                     List<ItemList> stationInfoRes = busService.stationInfo(busStationReq, lowBus);
                     if (stationInfoRes == null || stationInfoRes.isEmpty()) {
-                        System.out.println(busNum);
                         changeCount(travelRouteRes, includeSubway);
                         itineraries.remove(i);
                         break;
                     }
                     List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes, busNum);
                     if (stationDetailInfoRes.isEmpty()) {
-                        System.out.println(busNum);
-
                         changeCount(travelRouteRes, includeSubway);
                         itineraries.remove(i);
                         break;

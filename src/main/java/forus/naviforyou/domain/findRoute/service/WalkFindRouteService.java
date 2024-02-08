@@ -55,8 +55,6 @@ public class WalkFindRouteService {
         ResponseEntity<String> responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, requestEntity, String.class);
 
         String responseBody = responseEntity.getBody();
-        System.out.println(responseBody);
-
         responseBody = setCoordinates(walkRouteRes, responseBody); // coordinates 따로 세팅
 
         try {
