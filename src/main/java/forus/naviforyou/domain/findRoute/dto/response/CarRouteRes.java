@@ -37,7 +37,7 @@ public class CarRouteRes {
     public static class Geometry {
 
         private String type;
-        private List<List<Double>> coordinates;
+        private List<List<String>> coordinates;
 
     }
 
