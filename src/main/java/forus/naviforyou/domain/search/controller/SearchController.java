@@ -20,8 +20,8 @@ public class SearchController {
     @ApiOperation(tags = "5. search", value = "키워드 검색", notes = "검색하여 결과를 출력합니다")
 
     @GetMapping("/{name}")
-    public ResponseEntity<?> getSearch(@RequestBody SearchReq searchReq, @PathVariable String name){
-        SearchRes searchRes = searchService.searchInfo(searchReq , name);
+    public ResponseEntity<?> getSearch(@RequestParam(name = "order", defaultValue = "accuracy") String order , @RequestBody SearchReq searchReq, @PathVariable String name){
+        SearchRes searchRes = searchService.searchInfo(searchReq , name , order);
         return BaseResponse.ok(searchRes);
     }
 
