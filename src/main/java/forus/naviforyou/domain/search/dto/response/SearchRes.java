@@ -1,8 +1,8 @@
 package forus.naviforyou.domain.search.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import forus.naviforyou.global.common.collection.building.Location;
 import lombok.*;
 
 import java.util.List;
@@ -31,35 +31,41 @@ public class SearchRes {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class Item {
-        @JsonProperty("id")
-        private String poiId;
+        private final String id;
 
-        @JsonProperty("name")
-        private String name;
+        private final String name;
 
-        @JsonProperty("noorLon")
-        private String x;
+        private final String roadAddress; // 도로명 주소
 
-        @JsonProperty("noorLat")
-        private String y;
+        private final String category; // 분류
 
-        private String roadAddress; // 도로명 주소
+        private final String distance; // 거리
 
-        @JsonProperty("lowerBizName")
-        private String lowerBizName; // 분류
+        private final Location location;
 
-        @JsonProperty("radius")
-        private String radius; // 분류
 
-        @JsonProperty("newAddressList")
-        private void unpackedRoadAddress(Map<String,Object> searchPoiInfo){
-            List<Map<String,Object>> newAddress = (List<Map<String, Object>>) searchPoiInfo.get("newAddress");
+        @JsonCreator
+        public Item(
+                @JsonProperty("id") String id,
+                @JsonProperty("name") String name,
+                @JsonSetter("lowerBizName") String category,
+                @JsonSetter("radius") String distance,
+                @JsonProperty("newAddressList") Map<String,List<Map<String,Object>>> searchPoiInfo,
+                @JsonProperty("noorLon") String x,
+                @JsonProperty("noorLat") String y
+        ){
+            this.id = id;
+            this.name = name;
+            this.category = category;
+            this.distance = distance;
+            List<Map<String,Object>> newAddress = searchPoiInfo.get("newAddress");
             this.roadAddress = (String) newAddress.get(0).get("fullAddressRoad");
+            this.location = Location.builder()
+                    .posX(Float.parseFloat(x))
+                    .posY(Float.parseFloat(y))
+                    .build();
         }
-
     }
 }
+
