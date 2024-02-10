@@ -6,7 +6,7 @@ import forus.naviforyou.domain.place.dto.publicData.BuildingAccessibilityListDto
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
-import forus.naviforyou.domain.place.dto.tmap.PoiBuildingInfo;
+import forus.naviforyou.domain.place.dto.tmap.BuildingInfo;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
@@ -55,7 +55,7 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public PoiBuildingInfo getBuildingInfo(BuildingInfoReq buildingInfoReq) {
+    public BuildingInfo getBuildingInfo(BuildingInfoReq buildingInfoReq) {
         URI uri = UriComponentsBuilder
                 .fromUriString("https://apis.openapi.sk.com/")
                 .path("tmap/pois/" + buildingInfoReq.poi())
@@ -74,10 +74,10 @@ public class PlaceService {
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
 
         log.info("result={}",result);
-        PoiBuildingInfo buildingInfoRes;
+        BuildingInfo buildingInfoRes;
         // 원하는 형태로 매핑
         try {
-            buildingInfoRes = new ObjectMapper().readValue(result.getBody(), PoiBuildingInfo.class);
+            buildingInfoRes = new ObjectMapper().readValue(result.getBody(), BuildingInfo.class);
         }
         catch (Exception e) {
             log.info("e:",e);
