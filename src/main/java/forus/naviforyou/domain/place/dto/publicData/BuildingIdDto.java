@@ -25,7 +25,7 @@ public class BuildingIdDto {
     private List<FacilityId> facilityIdList;
 
     public String getFacilityId(){
-        return facilityIdList.get(0).getId();
+        return (totalCount == 0)? null : facilityIdList.get(0).getId();
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
