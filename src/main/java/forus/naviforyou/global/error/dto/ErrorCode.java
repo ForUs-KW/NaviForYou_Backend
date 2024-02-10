@@ -72,9 +72,10 @@ public enum ErrorCode {
     NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다"),
 
     /**
-     * Building : 9XXX
+     * Place : 9XXX
      */
-    NO_SUCH_BUILDING(HttpStatus.NOT_FOUND, 9000, "해당 건물 정보가 존재하지 않습니다.")
+    NO_SUCH_BUILDING(HttpStatus.NOT_FOUND, 9000, "해당 건물 정보가 존재하지 않습니다."),
+    FAILED_CONVERT_LOCATION(HttpStatus.BAD_REQUEST,9001,"해당 좌표에 대한 주소를 불러오는데 실패했습니다.")
 
     ;
     private final HttpStatus status;
