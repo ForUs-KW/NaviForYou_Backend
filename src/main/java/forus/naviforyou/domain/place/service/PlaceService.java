@@ -55,7 +55,7 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public void getBuildingInfo(BuildingInfoReq buildingInfoReq) {
+    public PoiBuildingInfo getBuildingInfo(BuildingInfoReq buildingInfoReq) {
         URI uri = UriComponentsBuilder
                 .fromUriString("https://apis.openapi.sk.com/")
                 .path("tmap/pois/" + buildingInfoReq.poi())
@@ -73,16 +73,18 @@ public class PlaceService {
 
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
 
-
+        log.info("result={}",result);
+        PoiBuildingInfo buildingInfoRes;
         // 원하는 형태로 매핑
         try {
-            PoiBuildingInfo poiBuildingInfo = new ObjectMapper().readValue(result.getBody(), PoiBuildingInfo.class);
-
+            buildingInfoRes = new ObjectMapper().readValue(result.getBody(), PoiBuildingInfo.class);
         }
         catch (Exception e) {
             log.info("e:",e);
             throw new BaseException(ErrorCode.NO_SUCH_BUILDING);
         }
+
+        return buildingInfoRes;
     }
 
     public BuildingAccessibilityListRes getBuildingAccessibilityList(BuildingInfoReq req, String member) {
