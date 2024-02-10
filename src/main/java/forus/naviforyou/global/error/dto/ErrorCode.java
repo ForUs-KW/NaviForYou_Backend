@@ -69,7 +69,12 @@ public enum ErrorCode {
      * search : 8XXX
      */
     NO_MAPPING_ROUTE(HttpStatus.NOT_FOUND, 8000, "경로 입력이 올바르지 않습니다."),
-    NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다")
+    NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다"),
+
+    /**
+     * Building : 9XXX
+     */
+    NO_SUCH_BUILDING(HttpStatus.NOT_FOUND, 9000, "해당 건물 정보가 존재하지 않습니다.")
 
     ;
     private final HttpStatus status;
