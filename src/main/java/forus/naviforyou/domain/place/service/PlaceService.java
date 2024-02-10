@@ -88,7 +88,7 @@ public class PlaceService {
     }
 
     public BuildingAccessibilityListRes getBuildingAccessibilityList(BuildingInfoReq req, String member) {
-        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.location(), req.buildingName());
+        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.location(), req.roadAddress());
         String key = Constants.EDIT_FACILITY_FLAG + req.buildingName() + member;
 
         if(redisService.hasKey(key)) {
