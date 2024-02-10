@@ -77,7 +77,17 @@ public class PlaceService {
 
         ResponseEntity<String> result = restTemplate.exchange(apiReq, String.class);
         log.info("result={}",result);
-        return null;
+
+        LocationRes locationRes;
+        try {
+            locationRes = new ObjectMapper().readValue(result.getBody(), LocationRes.class);
+        }
+        catch (Exception e) {
+            log.info("e:",e);
+            throw new BaseException(ErrorCode.FAILED_CONVERT_LOCATION);
+        }
+
+        return locationRes;
     }
 
     public BuildingInfoRes getBuildingInfo(BuildingInfoReq buildingInfoReq) {

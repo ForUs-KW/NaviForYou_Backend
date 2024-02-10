@@ -2,8 +2,10 @@ package forus.naviforyou.domain.place.controller;
 
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
+import forus.naviforyou.domain.place.dto.request.LocationReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
-import forus.naviforyou.domain.place.dto.tmap.BuildingInfo;
+import forus.naviforyou.domain.place.dto.response.LocationRes;
+import forus.naviforyou.domain.place.dto.response.BuildingInfoRes;
 import forus.naviforyou.domain.place.service.PlaceService;
 import forus.naviforyou.global.common.BaseResponse;
 import forus.naviforyou.global.common.BaseResultRes;
@@ -23,10 +25,17 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
-    @ApiOperation(tags = "4. place", value = "편의 시설 정보", notes = "건물 정보 및 건물의 장애인 편의 시설 정보를 가져옵니다")
+    @ApiOperation(tags = "4. place", value = "좌표 주소 변환", notes = "좌표 정보를 주소 정보로 변환합니다")
     @PostMapping
+    public ResponseEntity<?> getBuildingInfo(@RequestBody LocationReq req){
+        LocationRes res = placeService.convertLocationToAddress(req);
+        return BaseResponse.ok(res);
+    }
+
+    @ApiOperation(tags = "4. place", value = "건물 정보", notes = "건물 정보 및 건물의 장애인 편의 시설 정보를 가져옵니다")
+    @PostMapping("/building")
     public ResponseEntity<?> getBuildingInfo(@RequestBody BuildingInfoReq req, @AuthenticationPrincipal Member member){
-        BuildingInfo res = placeService.getBuildingInfo(req);
+        BuildingInfoRes res = placeService.getBuildingInfo(req);
         res.setBuildingAccessibilityList(placeService.getBuildingAccessibilityList(req, (member == null) ? "guest" : member.getNickname()));
         return BaseResponse.ok(res);
     }
