@@ -1,8 +1,7 @@
-package forus.naviforyou.domain.place.dto.tmap;
+package forus.naviforyou.domain.place.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
 import forus.naviforyou.global.common.collection.building.Location;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,7 @@ import java.util.Map;
 @Getter
 @RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BuildingInfo {
+public class BuildingInfoRes {
     private String name;
     private String category;
     private String oldAddress;
