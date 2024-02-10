@@ -5,8 +5,10 @@ import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.publicData.BuildingAccessibilityListDto;
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
+import forus.naviforyou.domain.place.dto.request.LocationReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
-import forus.naviforyou.domain.place.dto.tmap.BuildingInfo;
+import forus.naviforyou.domain.place.dto.response.LocationRes;
+import forus.naviforyou.domain.place.dto.response.BuildingInfoRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
@@ -55,7 +57,30 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
-    public BuildingInfo getBuildingInfo(BuildingInfoReq buildingInfoReq) {
+    public LocationRes convertLocationToAddress(LocationReq req) {
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://apis.openapi.sk.com/")
+                .path("tmap/geo/reversegeocoding")
+                .queryParam("version",1)
+                .queryParam("lon", req.posX())
+                .queryParam("lat",req.posY())
+                .queryParam("appKey",tmapServiceKey)
+                .queryParam("addressType","A04")
+                .encode(StandardCharsets.UTF_8)
+                .build()
+                .toUri();
+
+        RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<Void> apiReq = RequestEntity
+                .get(uri)
+                .build();
+
+        ResponseEntity<String> result = restTemplate.exchange(apiReq, String.class);
+        log.info("result={}",result);
+        return null;
+    }
+
+    public BuildingInfoRes getBuildingInfo(BuildingInfoReq buildingInfoReq) {
         URI uri = UriComponentsBuilder
                 .fromUriString("https://apis.openapi.sk.com/")
                 .path("tmap/pois/" + buildingInfoReq.poi())
@@ -74,10 +99,10 @@ public class PlaceService {
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
 
         log.info("result={}",result);
-        BuildingInfo buildingInfoRes;
+        BuildingInfoRes buildingInfoRes;
         // 원하는 형태로 매핑
         try {
-            buildingInfoRes = new ObjectMapper().readValue(result.getBody(), BuildingInfo.class);
+            buildingInfoRes = new ObjectMapper().readValue(result.getBody(), BuildingInfoRes.class);
         }
         catch (Exception e) {
             log.info("e:",e);
@@ -248,4 +273,6 @@ public class PlaceService {
         }
         return getBuildingAccessibilityList(req, member);
     }
+
+
 }
