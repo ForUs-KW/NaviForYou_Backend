@@ -96,7 +96,7 @@ public class PlaceService {
             return res;
         }
 
-        BuildingIdDto managementBuildingId = getBuildingIdApi(req.buildingName(), req.roadAddress());
+        BuildingIdDto managementBuildingId = getBuildingIdApi(req.roadAddress());
         if(managementBuildingId != null){
             getBuildingAccessibilityList(managementBuildingId.getFacilityId(), res);
         }
@@ -122,12 +122,11 @@ public class PlaceService {
         }
     }
 
-    private BuildingIdDto getBuildingIdApi(String buildingName, String roadAddress) {
+    private BuildingIdDto getBuildingIdApi(String roadAddress) {
         UriComponents uriComponents = UriComponentsBuilder
                 .fromUriString(buildingIdUrl)
                 .queryParam("serviceKey",serviceKey)
                 .queryParam("numOfRows",1)
-                .queryParam("faclNm",buildingName)
                 .queryParam("roadNm",roadAddress)
                 .encode()
                 .build();
