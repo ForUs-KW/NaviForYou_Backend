@@ -5,6 +5,7 @@ import forus.naviforyou.domain.place.dto.publicData.BuildingAccessibilityListDto
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
+import forus.naviforyou.domain.place.dto.response.SubwayRealTimeRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
@@ -25,6 +26,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -208,5 +210,29 @@ public class PlaceService {
             return res;
         }
         return getBuildingAccessibilityList(req,member);
+    }
+
+    public SubwayRealTimeRes getSubwayRealTime(String name) {
+        final String subwayAppKey = "454c6a414c636b6434335752536f4b";
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://swopenapi.seoul.go.kr")
+                .path("/api/subway")
+                .path("/" + subwayAppKey)
+                .path("/json")
+                .path("/realtimeStationArrival")
+                .path("/0/10")
+                .path("/" + name)
+                .encode(StandardCharsets.UTF_8)
+                .build()
+                .toUri();
+
+        RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<Void> req = RequestEntity
+                .get(uri)
+                .build();
+
+        ResponseEntity<String> result = restTemplate.exchange(req, String.class);
+        log.info("result={}",result);
+        return null;
     }
 }
