@@ -141,7 +141,7 @@ public class NaverService {
                     OAuthSignUp.builder()
                             .nickname(userInfoOauthDto.getNickname())
                             .email(userInfoOauthDto.getEmail())
-                            .password("naver")
+                            .password(userInfoOauthDto.getId())
                             .build()
             );
         }
@@ -149,7 +149,7 @@ public class NaverService {
         return memberService.logIn(
                 LogInReq.builder()
                         .email(userInfoOauthDto.getEmail())
-                        .password("naver")
+                        .password(userInfoOauthDto.getId())
                         .build()
         );
     }
