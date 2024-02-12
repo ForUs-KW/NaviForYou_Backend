@@ -30,7 +30,6 @@ public class MailService {
             helper.setText(content,true);
             mailSender.send(message);
         } catch (MessagingException e) {
-            log.info("MessagingException: ",e);
             throw new BaseException(ErrorCode.UNABLE_TO_SEND_EMAIL);
         }
 

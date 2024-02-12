@@ -76,14 +76,12 @@ public class PlaceService {
                 .build();
 
         ResponseEntity<String> result = restTemplate.exchange(apiReq, String.class);
-        log.info("result={}",result);
 
         LocationRes locationRes;
         try {
             locationRes = new ObjectMapper().readValue(result.getBody(), LocationRes.class);
         }
         catch (Exception e) {
-            log.info("e:",e);
             throw new BaseException(ErrorCode.FAILED_CONVERT_LOCATION);
         }
 
@@ -108,14 +106,12 @@ public class PlaceService {
 
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
 
-        log.info("result={}",result);
         BuildingInfoRes buildingInfoRes;
         // 원하는 형태로 매핑
         try {
             buildingInfoRes = new ObjectMapper().readValue(result.getBody(), BuildingInfoRes.class);
         }
         catch (Exception e) {
-            log.info("e:",e);
             throw new BaseException(ErrorCode.NO_SUCH_BUILDING);
         }
 
@@ -184,8 +180,6 @@ public class PlaceService {
     private BuildingIdDto parsingBuildingId(String xml){
         BuildingIdDto buildingIdDto = null;
         try {
-            log.info("apiXml Response = {}",xml);
-
             InputStream stream = new ByteArrayInputStream(xml.getBytes());
             JAXBContext context = JAXBContext.newInstance(BuildingIdDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -232,14 +226,10 @@ public class PlaceService {
     private BuildingAccessibilityListDto parsingBuildingAccessibilityList(String xml){
         BuildingAccessibilityListDto facilityListDto = null;
         try {
-            log.info("Xml BuildingFacilityList = {}",xml);
-
             InputStream stream = new ByteArrayInputStream(xml.getBytes());
             JAXBContext context = JAXBContext.newInstance(BuildingAccessibilityListDto.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             facilityListDto = (BuildingAccessibilityListDto)unmarshaller.unmarshal(stream);
-
-            log.info("Parsing BuildingFacilityList={} ",facilityListDto);
         }catch (Exception e){
             log.info("Parsing BuildingFacilityList error: ",e);
         }
