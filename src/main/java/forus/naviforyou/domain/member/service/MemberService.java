@@ -133,20 +133,19 @@ public class MemberService {
 
     }
 
-    // 이부분 왜 오류,..?
-//    public void checkEmailCode(CheckSingUpCodeReq req){
-//        String key = req.getEmail()+Constants.SIGN_UP_FLAG;
-//        String code = req.getCode();
-//
-//        if(!redisService.hasKey(key)){
-//            throw new BaseException(ErrorCode.EXPIRED_VERIFICATION_CODE);
-//        }
-//
-//        if(!code.equals(redisService.getValues(key))){
-//            throw new BaseException(ErrorCode.INCORRECT_VERIFICATION_CODE);
-//        }
-//        redisService.deleteValues(key);
-//    }
+    public void checkEmailCode(CheckCodeReq req){
+        String key = req.getEmail()+Constants.SIGN_UP_FLAG;
+        String code = req.getCode();
+
+        if(!redisService.hasKey(key)){
+            throw new BaseException(ErrorCode.EXPIRED_VERIFICATION_CODE);
+        }
+
+        if(!code.equals(redisService.getValues(key))){
+            throw new BaseException(ErrorCode.INCORRECT_VERIFICATION_CODE);
+        }
+        redisService.deleteValues(key);
+    }
 
     private String makeRandomNumber() {
         Random r = new Random();
