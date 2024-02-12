@@ -217,7 +217,7 @@ public class PlaceService {
         return getBuildingAccessibilityList(req,member);
     }
 
-    public SubwayRealTimeRes getSubwayRealTime(String name) {
+    public SubwayRealTimeRes getSubwayRealTime(String name, String line) {
         final String subwayAppKey = "454c6a414c636b6434335752536f4b";
         URI uri = UriComponentsBuilder
                 .fromUriString("http://swopenapi.seoul.go.kr")
@@ -239,14 +239,30 @@ public class PlaceService {
         ResponseEntity<String> result = restTemplate.exchange(apiRes, String.class);
 
         SubwayInfoListDto subwayInfoListDto;
+        SubwayRealTimeRes res = new SubwayRealTimeRes();
+
         try {
             subwayInfoListDto = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(result.getBody(), SubwayInfoListDto.class);
+
+            subwayInfoListDto.getRealtimeArrivalList().forEach(
+                    subwayDto -> {
+                        if (subwayDto.getLine().equals(line)) {
+                            if (subwayDto.getDirection().equals("상행") || subwayDto.getDirection().equals("내선")) {
+                                res.addUphill(subwayDto);
+                            } else {
+                                res.addDownward(subwayDto);
+                            }
+                        }
+                    }
+            );
         }
         catch (Exception e) {
             log.info("e:",e);
             throw new BaseException(ErrorCode.FAILED_REAL_TIME_SUBWAY);
         }
 
-        return null;
+
+
+        return res;
     }
 }
