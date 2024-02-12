@@ -46,9 +46,9 @@ public class RealTimeController {
 
     @ApiOperation(tags = "6. Real Time", value = "실시간 저상버스 정보 ", notes = "정류장 좌표와 버스 번호를 통해 원하는 저상버스 실시간 정보를 보여줍니다")
     @GetMapping("/lowBusStation/detail")
-    public ResponseEntity<?> getLowBusInfoDetail(@RequestParam String busXum , @RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
+    public ResponseEntity<?> getLowBusInfoDetail(@RequestParam String busNum , @RequestBody BusStationReq busStationReq) throws UnsupportedEncodingException {
         List<ItemList> stationInfoRes = busService.stationInfo(busStationReq,true);
-        List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busXum);
+        List<ItemList> stationDetailInfoRes = busService.filterBusInfoList(stationInfoRes,busNum);
 
         return BaseResponse.ok(stationDetailInfoRes);
     }

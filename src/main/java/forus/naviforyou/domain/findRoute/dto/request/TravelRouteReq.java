@@ -2,10 +2,10 @@ package forus.naviforyou.domain.findRoute.dto.request;
 
 import lombok.*;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class TravelRouteReq {
     private String startX;
     private String startY;
