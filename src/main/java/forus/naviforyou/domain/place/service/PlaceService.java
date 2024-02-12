@@ -218,6 +218,36 @@ public class PlaceService {
     }
 
     public SubwayRealTimeRes getSubwayRealTime(String name, String line) {
+        ResponseEntity<String> result = getSubwayApi(name);
+        return parsingSubwayApi(line, result);
+    }
+
+    private SubwayRealTimeRes parsingSubwayApi(String line, ResponseEntity<String> result) {
+        SubwayRealTimeRes subwayRealTimeRes = new SubwayRealTimeRes();
+
+        try {
+            SubwayInfoListDto subwayInfoListDto = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(result.getBody(), SubwayInfoListDto.class);
+
+            subwayInfoListDto.getRealtimeArrivalList().forEach(
+                    subwayDto -> {
+                        if (subwayDto.getLine().equals(line)) {
+                            if (subwayDto.getDirection().equals("상행") || subwayDto.getDirection().equals("내선")) {
+                                subwayRealTimeRes.addUphill(subwayDto);
+                            } else {
+                                subwayRealTimeRes.addDownward(subwayDto);
+                            }
+                        }
+                    }
+            );
+        }
+        catch (Exception e) {
+            throw new BaseException(ErrorCode.FAILED_REAL_TIME_SUBWAY);
+        }
+
+        return subwayRealTimeRes;
+    }
+
+    private ResponseEntity<String> getSubwayApi(String name) {
         final String subwayAppKey = "454c6a414c636b6434335752536f4b";
         URI uri = UriComponentsBuilder
                 .fromUriString("http://swopenapi.seoul.go.kr")
@@ -236,33 +266,6 @@ public class PlaceService {
                 .get(uri)
                 .build();
 
-        ResponseEntity<String> result = restTemplate.exchange(apiRes, String.class);
-
-        SubwayInfoListDto subwayInfoListDto;
-        SubwayRealTimeRes res = new SubwayRealTimeRes();
-
-        try {
-            subwayInfoListDto = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(result.getBody(), SubwayInfoListDto.class);
-
-            subwayInfoListDto.getRealtimeArrivalList().forEach(
-                    subwayDto -> {
-                        if (subwayDto.getLine().equals(line)) {
-                            if (subwayDto.getDirection().equals("상행") || subwayDto.getDirection().equals("내선")) {
-                                res.addUphill(subwayDto);
-                            } else {
-                                res.addDownward(subwayDto);
-                            }
-                        }
-                    }
-            );
-        }
-        catch (Exception e) {
-            log.info("e:",e);
-            throw new BaseException(ErrorCode.FAILED_REAL_TIME_SUBWAY);
-        }
-
-
-
-        return res;
+        return restTemplate.exchange(apiRes, String.class);
     }
 }
