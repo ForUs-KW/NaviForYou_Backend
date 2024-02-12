@@ -1,5 +1,5 @@
 # (1)
-REPOSITORY=/home
+REPOSITORY=/home/ubuntu
 BUILD_PATH=$(ls -tr ${REPOSITORY}/build/lib/*.jar | tail -1)
 JAR_NAME=$(basename $BUILD_PATH)
 echo "> build file: $JAR_NAME"
