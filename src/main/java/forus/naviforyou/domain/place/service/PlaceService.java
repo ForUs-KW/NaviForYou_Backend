@@ -1,7 +1,10 @@
 package forus.naviforyou.domain.place.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.publicData.BuildingAccessibilityListDto;
+import forus.naviforyou.domain.place.dto.publicData.SubwayInfoListDto;
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
@@ -11,6 +14,8 @@ import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
 import forus.naviforyou.global.common.collection.enums.Accessibility;
 import forus.naviforyou.global.common.service.RedisService;
+import forus.naviforyou.global.error.dto.ErrorCode;
+import forus.naviforyou.global.error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -220,19 +225,28 @@ public class PlaceService {
                 .path("/" + subwayAppKey)
                 .path("/json")
                 .path("/realtimeStationArrival")
-                .path("/0/10")
+                .path("/0/100")
                 .path("/" + name)
                 .encode(StandardCharsets.UTF_8)
                 .build()
                 .toUri();
 
         RestTemplate restTemplate = new RestTemplate();
-        RequestEntity<Void> req = RequestEntity
+        RequestEntity<Void> apiRes = RequestEntity
                 .get(uri)
                 .build();
 
-        ResponseEntity<String> result = restTemplate.exchange(req, String.class);
-        log.info("result={}",result);
+        ResponseEntity<String> result = restTemplate.exchange(apiRes, String.class);
+
+        SubwayInfoListDto subwayInfoListDto;
+        try {
+            subwayInfoListDto = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(result.getBody(), SubwayInfoListDto.class);
+        }
+        catch (Exception e) {
+            log.info("e:",e);
+            throw new BaseException(ErrorCode.FAILED_REAL_TIME_SUBWAY);
+        }
+
         return null;
     }
 }
