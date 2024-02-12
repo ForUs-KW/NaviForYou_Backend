@@ -43,6 +43,7 @@ public class PlaceController {
         return BaseResponse.ok(new BaseResultRes(true));
     }
 
+    @ApiOperation(tags = "4. place", value = "실시간 지하철 도착 정보", notes = "지하철역의 특정 호선의 실시간 도착 정보를 가져옵니다.")
     @GetMapping("/subway/{name}/{line}")
     public ResponseEntity<?> getSubwayRealTime(@PathVariable String name, @PathVariable String line){
         SubwayRealTimeRes res = placeService.getSubwayRealTime(name,line);
