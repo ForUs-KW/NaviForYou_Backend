@@ -44,6 +44,9 @@ public enum ErrorCode {
     WRONG_PASSWORD(HttpStatus.BAD_REQUEST,3001 , "아이디와 비밀번호가 일치하지 않습니다."),
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, 3002, "이미 사용중인 이메일 입니다."),
     DUPLICATE_NICKNAME(HttpStatus.BAD_REQUEST, 3003, "이미 사용중인 닉네임 입니다."),
+    NO_SUCH_NAVER_USER(HttpStatus.BAD_REQUEST, 3004, "네이버 사용자를 불러올 수 없습니다"),
+    INVALID_NAVER_USER(HttpStatus.BAD_REQUEST, 3003, "유효하지 않은 네이버 사용자 입니다"),
+
     /**
      * OAUTH : 4XXX
      */
@@ -77,11 +80,17 @@ public enum ErrorCode {
     NO_MAPPING_STATION_NUM(HttpStatus.NOT_FOUND, 9000, "정류장 번호 정보를 불러오지 못했습니다"),
     NO_MAPPING_STATION_INFO(HttpStatus.NOT_FOUND, 9000, "현재 정류장 정보를 불러오지 못했습니다"),
 
+    /**   
+     * find-route : 10XXX
+     */
+    NO_MAPPING_ROUTE_INFO(HttpStatus.NOT_FOUND, 9000, "일부 구간의 길찾기 정보가 존재 하지 않습니다"),
+  
     /**
      * Building : 10XXX
      */
+    FAILED_REAL_TIME_SUBWAY(HttpStatus.BAD_REQUEST,10002,"지하철 도착 정보를 가져오는데 실패했습니다."),
     NO_SUCH_BUILDING(HttpStatus.NOT_FOUND, 9000, "해당 건물 정보가 존재하지 않습니다.")
-     
+
 
     ;
     private final HttpStatus status;

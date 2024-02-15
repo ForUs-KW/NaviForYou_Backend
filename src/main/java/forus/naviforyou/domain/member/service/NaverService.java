@@ -5,6 +5,8 @@ import forus.naviforyou.domain.member.dto.request.LogInReq;
 import forus.naviforyou.domain.member.dto.response.TokenRes;
 import forus.naviforyou.domain.member.dto.naver.NaverResInfo;
 import forus.naviforyou.domain.member.dto.naver.NaverResToken;
+import forus.naviforyou.global.error.dto.ErrorCode;
+import forus.naviforyou.global.error.exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -112,11 +114,10 @@ public class NaverService {
 
             return NaverResInfo.of(email, nickname, phoneNumber,id);
         } catch (JsonMappingException e) {
-            System.out.println(response);
+            throw new BaseException(ErrorCode.NO_SUCH_NAVER_USER);
         } catch (JsonProcessingException e) {
-            System.out.println(response);
+            throw new BaseException(ErrorCode.INVALID_NAVER_USER);
         }
-        return NaverResInfo.of();
     }
 
     public String requestUserInfo(String accessToken) {

@@ -6,6 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class WalkRouteReq {
     private String startX;
     private String startY;
@@ -15,4 +16,5 @@ public class WalkRouteReq {
     private String resCoordType;
     private String startName;
     private String endName;
+    private int searchOption;
 }
