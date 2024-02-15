@@ -8,6 +8,7 @@ import forus.naviforyou.domain.place.dto.publicData.SubwayInfoListDto;
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
+import forus.naviforyou.domain.place.dto.tmap.PoiBuildingInfo;
 import forus.naviforyou.domain.place.dto.response.SubwayRealTimeRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
@@ -45,6 +46,9 @@ public class PlaceService {
     private final BuildingRepository buildingRepository;
     private final RedisService redisService;
 
+    @Value("${tmap.app-key}")
+    private String tmapServiceKey;
+
     @Value("${social.publicData.params.serviceKey}")
     private String serviceKey;
 
@@ -54,21 +58,53 @@ public class PlaceService {
     @Value("${social.publicData.path.facilityListUrl}")
     private String facilityListUrl;
 
+    public PoiBuildingInfo getBuildingInfo(BuildingInfoReq buildingInfoReq) {
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://apis.openapi.sk.com/")
+                .path("tmap/pois/" + buildingInfoReq.poi())
+                .queryParam("version",1)
+                .queryParam("findOption","id")
+                .queryParam("appKey",tmapServiceKey)
+                .encode(StandardCharsets.UTF_8)
+                .build()
+                .toUri();
+
+        RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<Void> req = RequestEntity
+                .get(uri)
+                .build();
+
+        ResponseEntity<String> result = restTemplate.exchange(req, String.class);
+
+        log.info("result={}",result);
+        PoiBuildingInfo buildingInfoRes;
+        // 원하는 형태로 매핑
+        try {
+            buildingInfoRes = new ObjectMapper().readValue(result.getBody(), PoiBuildingInfo.class);
+        }
+        catch (Exception e) {
+            log.info("e:",e);
+            throw new BaseException(ErrorCode.NO_SUCH_BUILDING);
+        }
+
+        return buildingInfoRes;
+    }
+
     public BuildingAccessibilityListRes getBuildingAccessibilityList(BuildingInfoReq req, String member) {
-        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.getLocation(), req.getBuildingName());
-        String key = Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member;
+        BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.location(), req.buildingName());
+        String key = Constants.EDIT_FACILITY_FLAG + req.buildingName() + member;
 
         if(redisService.hasKey(key)) {
             res.stringToFacilityList(redisService.getValues(key));
             return res;
         }
 
-        BuildingIdDto managementBuildingId = getBuildingIdApi(req.getBuildingName(), req.getRoadAddress());
+        BuildingIdDto managementBuildingId = getBuildingIdApi(req.buildingName(), req.roadAddress());
         if(managementBuildingId != null){
             getBuildingAccessibilityList(managementBuildingId.getFacilityId(), res);
         }
 
-        buildingRepository.findByLocation(req.getLocation())
+        buildingRepository.findByLocation(req.location())
                 .ifPresent(building -> getBuildingAccessibilityListForDB(building, res));
 
         redisService.setValues(key, res.facilityListToString(), Duration.ofMinutes(10));
@@ -208,13 +244,13 @@ public class PlaceService {
     }
 
     public BuildingAccessibilityListRes getBuildingAccessibilityInfoList(BuildingInfoReq req, String member) {
-        String key = Constants.EDIT_FACILITY_FLAG + req.getBuildingName() + member;
-        if(redisService.hasKey(key)){
-            BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.getLocation(), req.getRoadAddress());
+        String key = Constants.EDIT_FACILITY_FLAG + req.buildingName() + member;
+        if (redisService.hasKey(key)) {
+            BuildingAccessibilityListRes res = new BuildingAccessibilityListRes(req.location(), req.roadAddress());
             res.stringToFacilityList(redisService.getValues(key));
             return res;
         }
-        return getBuildingAccessibilityList(req,member);
+        return getBuildingAccessibilityList(req, member);
     }
 
     public SubwayRealTimeRes getSubwayRealTime(String name, String line) {

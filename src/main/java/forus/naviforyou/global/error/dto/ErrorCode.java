@@ -75,20 +75,21 @@ public enum ErrorCode {
     NO_CLOSER_DISTANCE(HttpStatus.NOT_FOUND, 8000, "출발지/도착지 간 거리가 너무 가깝습니다"),
 
     /**
-     * real- time data : 9XXX
+    * real- time data : 9XXX
      */
     NO_MAPPING_STATION_NUM(HttpStatus.NOT_FOUND, 9000, "정류장 번호 정보를 불러오지 못했습니다"),
     NO_MAPPING_STATION_INFO(HttpStatus.NOT_FOUND, 9000, "현재 정류장 정보를 불러오지 못했습니다"),
 
-    /**
+    /**   
      * find-route : 10XXX
      */
     NO_MAPPING_ROUTE_INFO(HttpStatus.NOT_FOUND, 9000, "일부 구간의 길찾기 정보가 존재 하지 않습니다"),
   
     /**
-     * Place : 10XXX
+     * Building : 10XXX
      */
-    FAILED_REAL_TIME_SUBWAY(HttpStatus.BAD_REQUEST,10002,"지하철 도착 정보를 가져오는데 실패했습니다.")
+    FAILED_REAL_TIME_SUBWAY(HttpStatus.BAD_REQUEST,10002,"지하철 도착 정보를 가져오는데 실패했습니다."),
+    NO_SUCH_BUILDING(HttpStatus.NOT_FOUND, 9000, "해당 건물 정보가 존재하지 않습니다.")
 
 
     ;
