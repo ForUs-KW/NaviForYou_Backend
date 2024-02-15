@@ -89,7 +89,7 @@ public enum ErrorCode {
      * Place : 10XXX
      */
     NO_SUCH_BUILDING(HttpStatus.NOT_FOUND, 10000, "해당 건물 정보가 존재하지 않습니다."),
-    FAILED_CONVERT_LOCATION(HttpStatus.BAD_REQUEST,10001,"해당 좌표에 대한 주소를 불러오는데 실패했습니다.")
+    FAILED_CONVERT_LOCATION(HttpStatus.BAD_REQUEST,10001,"해당 좌표에 대한 주소를 불러오는데 실패했습니다."),
     FAILED_REAL_TIME_SUBWAY(HttpStatus.BAD_REQUEST,10002,"지하철 도착 정보를 가져오는데 실패했습니다.")
 
     ;
