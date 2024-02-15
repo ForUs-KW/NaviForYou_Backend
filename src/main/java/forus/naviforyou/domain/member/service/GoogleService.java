@@ -52,14 +52,14 @@ public class GoogleService {
     @Value("${social.google.path.tokenUrl}")
     private String tokenUrl;
 
-    public TokenRes googleLogin(String code, String registrationId) {
-        String accessToken = getAccessToken(code, registrationId);
-        GoogleResInfo userResourceNode = getUserResource(accessToken, registrationId);
+    public TokenRes googleLogin(String code) {
+        String accessToken = getAccessToken(code);
+        GoogleResInfo userResourceNode = getUserResource(accessToken);
         TokenRes requestUserInfo =  requestUserInfo(userResourceNode);
         return requestUserInfo;
     }
 
-    public String getAccessToken(String authorizationCode, String registrationId) {
+    public String getAccessToken(String authorizationCode) {
 
         LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
@@ -76,15 +76,13 @@ public class GoogleService {
         GoogleResToken oAuthToken = null;
         try {
             oAuthToken = objectMapper.readValue(response.getBody(), GoogleResToken.class);
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+        }catch (JsonProcessingException e) {
+            throw new BaseException(ErrorCode.GET_OAUTH_TOKEN_FAILED);
         }
         return oAuthToken.getAccess_token();
     }
 
-    private GoogleResInfo getUserResource(String accessToken, String registrationId) {
+    private GoogleResInfo getUserResource(String accessToken) {
 
         RestTemplate rt = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();

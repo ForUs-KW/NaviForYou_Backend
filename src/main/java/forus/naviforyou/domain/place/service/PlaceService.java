@@ -1,14 +1,18 @@
 package forus.naviforyou.domain.place.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import forus.naviforyou.domain.place.dto.publicData.BuildingIdDto;
 import forus.naviforyou.domain.place.dto.publicData.BuildingAccessibilityListDto;
+import forus.naviforyou.domain.place.dto.publicData.SubwayInfoListDto;
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
 import forus.naviforyou.domain.place.dto.request.LocationReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
 import forus.naviforyou.domain.place.dto.response.LocationRes;
 import forus.naviforyou.domain.place.dto.response.BuildingInfoRes;
+import forus.naviforyou.domain.place.dto.tmap.PoiBuildingInfo;
+import forus.naviforyou.domain.place.dto.response.SubwayRealTimeRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
 import forus.naviforyou.global.common.collection.building.Building;
@@ -274,5 +278,57 @@ public class PlaceService {
         return getBuildingAccessibilityList(req, member);
     }
 
+
+    public SubwayRealTimeRes getSubwayRealTime(String name, String line) {
+        ResponseEntity<String> result = getSubwayApi(name);
+        return parsingSubwayApi(line, result);
+    }
+
+    private SubwayRealTimeRes parsingSubwayApi(String line, ResponseEntity<String> result) {
+        SubwayRealTimeRes subwayRealTimeRes = new SubwayRealTimeRes();
+
+        try {
+            SubwayInfoListDto subwayInfoListDto = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(result.getBody(), SubwayInfoListDto.class);
+
+            subwayInfoListDto.getRealtimeArrivalList().forEach(
+                    subwayDto -> {
+                        if (subwayDto.getLine().equals(line)) {
+                            if (subwayDto.getDirection().equals("상행") || subwayDto.getDirection().equals("내선")) {
+                                subwayRealTimeRes.addUphill(subwayDto);
+                            } else {
+                                subwayRealTimeRes.addDownward(subwayDto);
+                            }
+                        }
+                    }
+            );
+        }
+        catch (Exception e) {
+            throw new BaseException(ErrorCode.FAILED_REAL_TIME_SUBWAY);
+        }
+
+        return subwayRealTimeRes;
+    }
+
+    private ResponseEntity<String> getSubwayApi(String name) {
+        final String subwayAppKey = "454c6a414c636b6434335752536f4b";
+        URI uri = UriComponentsBuilder
+                .fromUriString("http://swopenapi.seoul.go.kr")
+                .path("/api/subway")
+                .path("/" + subwayAppKey)
+                .path("/json")
+                .path("/realtimeStationArrival")
+                .path("/0/100")
+                .path("/" + name)
+                .encode(StandardCharsets.UTF_8)
+                .build()
+                .toUri();
+
+        RestTemplate restTemplate = new RestTemplate();
+        RequestEntity<Void> apiRes = RequestEntity
+                .get(uri)
+                .build();
+
+        return restTemplate.exchange(apiRes, String.class);
+    }
 
 }
