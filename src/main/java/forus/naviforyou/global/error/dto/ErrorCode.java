@@ -2,9 +2,12 @@ package forus.naviforyou.global.error.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 
 @Getter
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @RequiredArgsConstructor
 public enum ErrorCode {
     /**
@@ -81,6 +84,12 @@ public enum ErrorCode {
      * find-route : 10XXX
      */
     NO_MAPPING_ROUTE_INFO(HttpStatus.NOT_FOUND, 9000, "일부 구간의 길찾기 정보가 존재 하지 않습니다"),
+  
+    /**
+     * Place : 10XXX
+     */
+    FAILED_REAL_TIME_SUBWAY(HttpStatus.BAD_REQUEST,10002,"지하철 도착 정보를 가져오는데 실패했습니다.")
+
 
     ;
     private final HttpStatus status;

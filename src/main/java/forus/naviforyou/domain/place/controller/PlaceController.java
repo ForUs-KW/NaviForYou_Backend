@@ -3,6 +3,7 @@ package forus.naviforyou.domain.place.controller;
 import forus.naviforyou.domain.place.dto.request.BuildingInfoReq;
 import forus.naviforyou.domain.place.dto.request.EditAccessibilityReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
+import forus.naviforyou.domain.place.dto.response.SubwayRealTimeRes;
 import forus.naviforyou.domain.place.service.PlaceService;
 import forus.naviforyou.global.common.BaseResponse;
 import forus.naviforyou.global.common.BaseResultRes;
@@ -40,6 +41,13 @@ public class PlaceController {
     public ResponseEntity<?> editBuildingAccessibility(@RequestBody EditAccessibilityReq req, @AuthenticationPrincipal Member member){
         placeService.editBuildingAccessibility(req, member.getNickname());
         return BaseResponse.ok(new BaseResultRes(true));
+    }
+
+    @ApiOperation(tags = "4. place", value = "실시간 지하철 도착 정보", notes = "지하철역의 특정 호선의 실시간 도착 정보를 가져옵니다.")
+    @GetMapping("/subway/{name}/{line}")
+    public ResponseEntity<?> getSubwayRealTime(@PathVariable String name, @PathVariable String line){
+        SubwayRealTimeRes res = placeService.getSubwayRealTime(name,line);
+        return BaseResponse.ok(res);
     }
 
 }

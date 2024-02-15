@@ -88,7 +88,7 @@ public class TravelFindRouteService {
                 handleStatus(status);
 
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new BaseException(ErrorCode.NO_CLOSER_DISTANCE);
             }
         }
         else{
