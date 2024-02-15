@@ -37,7 +37,7 @@ public class WalkRouteRes {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Geometry {
         private String type;
-        private List<List<Double>> coordinates;
+        private List<List<String>> coordinates;
     }
 
     @Getter

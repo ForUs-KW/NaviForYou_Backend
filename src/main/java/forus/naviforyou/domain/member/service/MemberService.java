@@ -121,8 +121,11 @@ public class MemberService {
 
 
     public void sendEmailCode(String email) {
+        if(!memberRepository.existsByEmail(email))
+            throw new BaseException(ErrorCode.NO_SUCH_EMAIL);
+
         String code = makeRandomNumber();
-        String title = "회원 가입 인증 이메일 입니다.";
+        String title = "비밀번호 찾기 인증 이메일 입니다.";
         String content =
                 "인증번호 : " +  code +
                         "<br> 유효시간은 " + CODE_MINUTE + "분 입니다." +
