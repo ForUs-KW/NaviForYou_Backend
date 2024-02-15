@@ -47,7 +47,7 @@ public class SearchRes {
 
         @JsonCreator
         public Item(
-                @JsonProperty("id") String id,
+                @JsonProperty("pkey") String id,
                 @JsonProperty("name") String name,
                 @JsonSetter("lowerBizName") String category,
                 @JsonSetter("radius") String distance,

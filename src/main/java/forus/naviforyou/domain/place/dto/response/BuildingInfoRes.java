@@ -1,19 +1,17 @@
-package forus.naviforyou.domain.place.dto.tmap;
+package forus.naviforyou.domain.place.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import forus.naviforyou.global.common.collection.building.Location;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 import java.util.Map;
 
 @Getter
-@Setter
 @RequiredArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PoiBuildingInfo {
+public class BuildingInfoRes {
     private String name;
     private String category;
     private String oldAddress;
@@ -24,6 +22,8 @@ public class PoiBuildingInfo {
     private Boolean park;
     private Boolean twentyFourHour;
     private Boolean allDayOpen;
+
+    private BuildingAccessibilityListRes buildingAccessibilityList;
 
     @JsonProperty("poiDetailInfo")
     private void unpackedPoiBuildingInfo(Map<String,Object> poiDetailInfo){
@@ -58,4 +58,7 @@ public class PoiBuildingInfo {
                 .build();
     }
 
+    public void setBuildingAccessibilityList(BuildingAccessibilityListRes buildingAccessibilityList){
+        this.buildingAccessibilityList = buildingAccessibilityList;
+    }
 }

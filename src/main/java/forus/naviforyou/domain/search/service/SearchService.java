@@ -66,7 +66,6 @@ public class SearchService {
             searchRes = new ObjectMapper().readValue(result.getBody(), SearchRes.class);
         }
         catch (Exception e) {
-            log.info("e:",e);
             throw new BaseException(ErrorCode.NO_SUCH_SEARCH);
         }
         return searchRes;

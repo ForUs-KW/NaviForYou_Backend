@@ -13,6 +13,6 @@ public class SearchReq {
     private String searchType="A"; // 거리순 : R
     private String radius="0";
     //현재 x,y 좌표
-    private double x;
-    private double y;
+    private String x;
+    private String y;
 }
