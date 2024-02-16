@@ -11,7 +11,6 @@ import forus.naviforyou.domain.place.dto.request.LocationReq;
 import forus.naviforyou.domain.place.dto.response.BuildingAccessibilityListRes;
 import forus.naviforyou.domain.place.dto.response.LocationRes;
 import forus.naviforyou.domain.place.dto.response.BuildingInfoRes;
-import forus.naviforyou.domain.place.dto.tmap.PoiBuildingInfo;
 import forus.naviforyou.domain.place.dto.response.SubwayRealTimeRes;
 import forus.naviforyou.domain.place.repository.BuildingRepository;
 import forus.naviforyou.global.common.Constants;
