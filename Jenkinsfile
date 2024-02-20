@@ -20,12 +20,12 @@ def ssh_publisher(SERVER_CONFIG) {
                         removePrefix: "build/libs",
                         remoteDirectory: "/build/lib",
                         // Absolute path.
-                        execCommand: "sh /home/build/script/deploy_server.sh"
+                        execCommand: "sh /home/ubuntu/build/script/deploy_server.sh"
                     ),
                     // (5.3) Health check
 					sshTransfer(
                     	// Absolute path.
-                        execCommand: "sh /home/build/script/health_check.sh"
+                        execCommand: "sh /home/ubuntu/build/script/health_check.sh"
                     )
                 ]
             )
@@ -45,11 +45,9 @@ pipeline {
     stages {
 	stage('Add Env') {
 		steps {	
-        		dir('Epimetheus/backend/epimetheus') {
-				withCredentials([file(credentialsId: 'application', variable: 'application')]) {
-               			sh 'cp ${application}  src/main/resources/application.yml'
-            			}
-        		}	
+			withCredentials([file(credentialsId: 'application', variable: 'application')]) {
+			sh 'cp ${application}  src/main/resources/application.yml'
+			}
     		}
 	}
         stage("Build") {
