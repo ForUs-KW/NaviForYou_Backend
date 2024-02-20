@@ -37,7 +37,7 @@ def ssh_publisher(SERVER_CONFIG) {
 pipeline {
     environment {
         // (2) Registered in Jenkins
-        SERVER_LIST = "server1,server2"
+        SERVER_LIST = "NaviForYou"
     }
     
     agent any
