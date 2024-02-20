@@ -36,5 +36,5 @@ else
 fi
 
 # (4)
-echo "> Run application."
+echo "> Run application (success)."
 nohup java -jar -Dspring.profiles.active=local $APPLICATION_JAR > /dev/null 2> /dev/null < /dev/null &
