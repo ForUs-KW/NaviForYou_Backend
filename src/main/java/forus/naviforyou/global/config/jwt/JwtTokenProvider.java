@@ -87,6 +87,9 @@ public class JwtTokenProvider implements InitializingBean{
             throw new BaseException(ErrorCode.UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
             throw new BaseException(ErrorCode.INVALID_JWT_TOKEN);
+        } catch (Exception e){
+            log.info("jwt error: ",e);
         }
+        return false;
     }
 }
