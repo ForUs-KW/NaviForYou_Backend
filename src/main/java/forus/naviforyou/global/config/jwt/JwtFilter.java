@@ -15,12 +15,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class JwtFilter extends GenericFilterBean {
     private final JwtTokenProvider jwtTokenProvider;
+    private final PathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -30,10 +33,26 @@ public class JwtFilter extends GenericFilterBean {
         String requestURI = httpServletRequest.getRequestURI();
         String jwt = resolveToken(httpServletRequest);
 
-        if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+
+
+        boolean shouldAuthenticate = false;
+
+        for (String pattern : Constants.AUTHENTICATED_URIS) {
+            if (pathMatcher.match(pattern, requestURI)) {
+                shouldAuthenticate = true;
+                break;
+            }
+        }
+
+        if (shouldAuthenticate) {
+            log.info("jwt requestURI={}",requestURI);
+            if (jwt != null && jwtTokenProvider.validateToken(jwt)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+            }
+        }else{
+            log.info("not jwt requestURI={}",requestURI);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
