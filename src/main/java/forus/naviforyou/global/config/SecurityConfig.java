@@ -1,7 +1,8 @@
 package forus.naviforyou.global.config;
 
 import forus.naviforyou.global.common.Constants;
-import lombok.AllArgsConstructor;
+import forus.naviforyou.global.config.jwt.JwtFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,12 +15,13 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.CorsFilter;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsFilter corsFilter;
+    private final JwtFilter jwtFilter;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -32,19 +34,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
+
         http
                 .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(filter, CsrfFilter.class);
-
-
-        http
-                .csrf().disable().cors().disable();
-        http
+                .addFilterBefore(filter, CsrfFilter.class)
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf().disable()
+                .cors().disable()
                 .authorizeRequests()
                 .antMatchers(Constants.AUTHENTICATED_URIS).authenticated()
                 .anyRequest().permitAll();
-
     }
+
     @Bean
     public BCryptPasswordEncoder encodePassword() {
         return new BCryptPasswordEncoder();
